@@ -1,7 +1,6 @@
 #ifndef LOKI_FACTORYPARM_INC_
 #define LOKI_FACTORYPARM_INC_
-#include "BaseException.h"
-
+#include "BaseException.h"x
 template
 <
     class AbstractProduct,
