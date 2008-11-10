@@ -3,3 +3,4 @@ C-x v i ,  register 文件，也就是ss的 add into source safe control
 C-x v v , next step, 下一个操作，可能是 check in, 也可能是 check out.
 
 C-x v d ,  VC dired mode. 查看列表。
+
