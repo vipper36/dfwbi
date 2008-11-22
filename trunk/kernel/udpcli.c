@@ -1,5 +1,14 @@
-#include	"unp.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+
+#define MAXLINE 1024
+typedef struct socket_addr SA;
 int
 udp_client(const char *host, const char *serv, SA **saptr, socklen_t *lenp)
 {
@@ -11,8 +20,11 @@ udp_client(const char *host, const char *serv, SA **saptr, socklen_t *lenp)
 	hints.ai_socktype = SOCK_DGRAM;
 
 	if ( (n = getaddrinfo(host, serv, &hints, &res)) != 0)
-		err_quit("udp_client error for %s, %s: %s",
+	{
+		printf("udp_client error for %s, %s: %s\n",
 				 host, serv, gai_strerror(n));
+		exit(0);
+	}
 	ressave = res;
 
 	do {
@@ -22,7 +34,10 @@ udp_client(const char *host, const char *serv, SA **saptr, socklen_t *lenp)
 	} while ( (res = res->ai_next) != NULL);
 
 	if (res == NULL)	/* errno set from final socket() */
-		err_sys("udp_client error for %s, %s", host, serv);
+	{
+		printf("udp_client error for %s, %s\n", host, serv);
+		exit(0);
+	}
 
 	*saptr = (SA*)malloc(res->ai_addrlen);
 	memcpy(*saptr, res->ai_addr, res->ai_addrlen);
@@ -58,7 +73,10 @@ main(int argc, char **argv)
 	struct sockaddr		*sa;
 
 	if (argc != 3)
-		err_quit("usage: udpcli02 <hostname> <service>");
+	{
+		printf("usage: udpcli02 <hostname> <service>\n");
+		exit(0);
+	}
 
 	sockfd = udp_client(argv[1], argv[2], (void **) &sa, &salen);
 
