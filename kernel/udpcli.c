@@ -57,11 +57,11 @@ dg_cli(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
 	while (fgets(sendline, MAXLINE, fp) != NULL) {
 
 		sendto(sockfd, sendline, strlen(sendline), 0, pservaddr, servlen);
+		fputs(sendline, stdout);
+//		n = recvfrom(sockfd, recvline, MAXLINE, 0, NULL, NULL);
 
-		n = recvfrom(sockfd, recvline, MAXLINE, 0, NULL, NULL);
-
-		recvline[n] = 0;	/* null terminate */
-		fputs(recvline, stdout);
+		//	recvline[n] = 0;	/* null terminate */
+		//	fputs(recvline, stdout);
 	}
 }
 
