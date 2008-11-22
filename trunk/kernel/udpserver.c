@@ -108,6 +108,7 @@ static void ksocket_start(void)
 	       strcat(buf, "testing...");
 	       ksocket_send(kthread->sock_send, &kthread->addr_send, buf, strlen(buf));
 	  }
+	  printk("\nFineish a request!!\n");
      }
 
 close_and_out:
