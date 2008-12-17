@@ -1,5 +1,16 @@
 (load-file "/usr/share/emacs/site-lisp/cedet/common/cedet.el")
 (set-default-font "-adobe-courier-medium-r-normal--14-100-100-100-m-90-iso10646-1")
+(set-language-environment 'Chinese-GB)
+(set-keyboard-coding-system 'euc-cn)
+(set-clipboard-coding-system 'euc-cn)
+(set-terminal-coding-system 'euc-cn)
+(set-buffer-file-coding-system 'euc-cn)
+(set-selection-coding-system 'euc-cn)
+(modify-coding-system-alist 'process "*" 'euc-cn)
+(setq default-process-coding-system 
+            '(euc-cn . euc-cn))
+(setq-default pathname-coding-system 'euc-cn)
+
 (require 'ecb)
 (require 'ecb-autoloads)
 (semantic-load-enable-code-helpers)
@@ -32,10 +43,50 @@
 ;;(set-face-foreground 'tool-bar "Wheat")
 ;;(set-face-background 'tool-bar "lightgoldenrod2")
 ;;(set-face-foreground 'font-lock-builtin-face "Cyan")
-(set-face-background 'default "LightCyan3")
+;;(set-face-background 'default "LightCyan3")
+(set-face-background 'default "Black")
+(set-foreground-color "White")
+(set-cursor-color "White")
 (setq tab-width 8
 indent-tabs-mode t
 c-basic-offset 8)
+
+(setq semanticdb-project-roots 
+(list
+(expand-file-name "/")))
+(defun my-indent-or-complete ()
+   (interactive)
+   (if (looking-at "\\>")
+         (hippie-expand nil)
+       (indent-for-tab-command))
+ )
+(global-set-key [(control tab)] 'my-indent-or-complete)
+
+
+
+(autoload 'senator-try-expand-semantic "senator")
+
+(setq hippie-expand-try-functions-list
+        '(
+	  senator-try-expand-semantic
+	  try-expand-dabbrev
+	  try-expand-dabbrev-visible
+	  try-expand-dabbrev-all-buffers
+	  try-expand-dabbrev-from-kill
+	  try-expand-list
+	  try-expand-list-all-buffers
+	  try-expand-line
+        try-expand-line-all-buffers
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-whole-kill
+        )
+)
+(global-set-key [(control tab)] 'senator-complete-symbol);
+;;(global-set-key [(control tab)] ' senator-completion-menu-popup)
+;; (global-set-key [(control tab)] 'semantic-ia-complete-symbol-menu)
+(add-hook 'c-mode-hook 'imenu-add-menubar-index)
+(add-hook 'c++-mode-hook 'imenu-add-menubar-index)
 ;;(global-set-key [f4] 'ide-skel-proj-find-files-by-regexp)
 ;;(global-set-key [f5] 'ide-skel-proj-grep-files-by-regexp)
 ;;(global-set-key [f10] 'ide-skel-toggle-left-view-window)
