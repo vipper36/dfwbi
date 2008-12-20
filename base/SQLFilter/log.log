@@ -1,0 +1,271 @@
+10865 execve("./test", ["./test", "../pdf2txt/1999-12-31-gssh060000"...], [/* 94 vars */]) = 0
+10865 brk(0)                            = 0x602000
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9ac6000
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9ac5000
+10865 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+10865 open("/opt/software/bxviewer/tls/x86_64/libfilter.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+10865 stat("/opt/software/bxviewer/tls/x86_64", 0x7fffd1ac6ed0) = -1 ENOENT (No such file or directory)
+10865 open("/opt/software/bxviewer/tls/libfilter.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+10865 stat("/opt/software/bxviewer/tls", 0x7fffd1ac6ed0) = -1 ENOENT (No such file or directory)
+10865 open("/opt/software/bxviewer/x86_64/libfilter.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+10865 stat("/opt/software/bxviewer/x86_64", 0x7fffd1ac6ed0) = -1 ENOENT (No such file or directory)
+10865 open("/opt/software/bxviewer/libfilter.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+10865 stat("/opt/software/bxviewer", 0x7fffd1ac6ed0) = -1 ENOENT (No such file or directory)
+10865 open("/etc/ld.so.cache", O_RDONLY) = 5
+10865 fstat(5, {st_mode=S_IFREG|0644, st_size=137890, ...}) = 0
+10865 mmap(NULL, 137890, PROT_READ, MAP_PRIVATE, 5, 0) = 0x7febc9aa3000
+10865 close(5)                          = 0
+10865 open("/usr/lib/libfilter.so.1", O_RDONLY) = 5
+10865 read(5, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\20\31\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(5, {st_mode=S_IFREG|0755, st_size=66356, ...}) = 0
+10865 mmap(NULL, 2118552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0) = 0x7febc96a4000
+10865 fadvise64(5, 0, 2118552, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc96a9000, 2093056, PROT_NONE) = 0
+10865 mmap(0x7febc98a8000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x4000) = 0x7febc98a8000
+10865 close(5)                          = 0
+10865 open("/lib64/libc.so.6", O_RDONLY) = 5
+10865 read(5, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\345\1\0\0\0\0\0"..., 832) = 832
+10865 fstat(5, {st_mode=S_IFREG|0755, st_size=1495120, ...}) = 0
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9aa2000
+10865 mmap(NULL, 3506872, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0) = 0x7febc934b000
+10865 fadvise64(5, 0, 3506872, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc949a000, 2097152, PROT_NONE) = 0
+10865 mmap(0x7febc969a000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x14f000) = 0x7febc969a000
+10865 mmap(0x7febc969f000, 17080, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7febc969f000
+10865 close(5)                          = 0
+10865 open("/lib64/libm.so.6", O_RDONLY) = 5
+10865 read(5, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000>\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(5, {st_mode=S_IFREG|0755, st_size=380776, ...}) = 0
+10865 mmap(NULL, 2445496, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0) = 0x7febc90f5000
+10865 fadvise64(5, 0, 2445496, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc914a000, 2093056, PROT_NONE) = 0
+10865 mmap(0x7febc9349000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x54000) = 0x7febc9349000
+10865 close(5)                          = 0
+10865 open("/lib64/libdl.so.2", O_RDONLY) = 5
+10865 read(5, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\320\r\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(5, {st_mode=S_IFREG|0755, st_size=16040, ...}) = 0
+10865 mmap(NULL, 2109696, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 5, 0) = 0x7febc8ef1000
+10865 fadvise64(5, 0, 2109696, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8ef3000, 2097152, PROT_NONE) = 0
+10865 mmap(0x7febc90f3000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 5, 0x2000) = 0x7febc90f3000
+10865 close(5)                          = 0
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9aa1000
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9aa0000
+10865 arch_prctl(ARCH_SET_FS, 0x7febc9aa06f0) = 0
+10865 open("/dev/urandom", O_RDONLY)    = 5
+10865 read(5, "\310p\343\231\205\343Y\252", 8) = 8
+10865 close(5)                          = 0
+10865 mprotect(0x7febc90f3000, 4096, PROT_READ) = 0
+10865 mprotect(0x7febc9349000, 4096, PROT_READ) = 0
+10865 mprotect(0x7febc969a000, 16384, PROT_READ) = 0
+10865 mprotect(0x7febc98a8000, 4096, PROT_READ) = 0
+10865 mprotect(0x600000, 4096, PROT_READ) = 0
+10865 mprotect(0x7febc9ac7000, 4096, PROT_READ) = 0
+10865 munmap(0x7febc9aa3000, 137890)    = 0
+10865 brk(0)                            = 0x602000
+10865 brk(0x623000)                     = 0x623000
+10865 open("../pdf2txt/1999-12-31-gssh0600000-228615_228615_1999.pdf", O_RDONLY) = 5
+10865 open("../pdf2txt/1999-12-31-gssh0600000-228615_228615_1999.pdf.out", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 6
+10865 fstat(5, {st_mode=S_IFREG|0644, st_size=4746, ...}) = 0
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9ac4000
+10865 read(5, "%PDF-1.2\n1 0 obj\n<<\n/Creator (Xi"..., 1048576) = 4746
+10865 read(5, "", 1040384)              = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/kvfilter.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\240\230\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=221640, ...}) = 0
+10865 mmap(NULL, 1267464, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc996a000
+10865 fadvise64(7, 0, 1267464, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc999b000, 1048576, PROT_NONE) = 0
+10865 mmap(0x7febc9a9b000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x31000) = 0x7febc9a9b000
+10865 close(7)                          = 0
+10865 open("/etc/ld.so.cache", O_RDONLY) = 7
+10865 fstat(7, {st_mode=S_IFREG|0644, st_size=137890, ...}) = 0
+10865 mmap(NULL, 137890, PROT_READ, MAP_PRIVATE, 7, 0) = 0x7febc9948000
+10865 close(7)                          = 0
+10865 open("/usr/lib64/libstdc++.so.5", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\27\5\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=855856, ...}) = 0
+10865 mmap(NULL, 3020344, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc8c0f000
+10865 fadvise64(7, 0, 3020344, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8cd7000, 2093056, PROT_NONE) = 0
+10865 mmap(0x7febc8ed6000, 36864, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0xc7000) = 0x7febc8ed6000
+10865 mmap(0x7febc8edf000, 71224, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7febc8edf000
+10865 close(7)                          = 0
+10865 open("/lib64/libpthread.so.0", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\340W\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=142867, ...}) = 0
+10865 mmap(NULL, 2208624, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc89f3000
+10865 fadvise64(7, 0, 2208624, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8a09000, 2097152, PROT_NONE) = 0
+10865 mmap(0x7febc8c09000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x16000) = 0x7febc8c09000
+10865 mmap(0x7febc8c0b000, 13168, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7febc8c0b000
+10865 close(7)                          = 0
+10865 open("/lib64/libgcc_s.so.1", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0`,\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=101024, ...}) = 0
+10865 mmap(NULL, 2188280, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc87dc000
+10865 fadvise64(7, 0, 2188280, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc87f2000, 2093056, PROT_NONE) = 0
+10865 mmap(0x7febc89f1000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x15000) = 0x7febc89f1000
+10865 close(7)                          = 0
+10865 mprotect(0x7febc89f1000, 4096, PROT_READ) = 0
+10865 mprotect(0x7febc8c09000, 4096, PROT_READ) = 0
+10865 mprotect(0x7febc8ed6000, 8192, PROT_READ) = 0
+10865 set_tid_address(0x7febc9aa0780)   = 10865
+10865 set_robust_list(0x7febc9aa0790, 0x18) = 0
+10865 futex(0x7fffd18c651c, FUTEX_WAKE_PRIVATE, 1) = 0
+10865 rt_sigaction(SIGRTMIN, {0x7febc89f8670, [], SA_RESTORER|SA_SIGINFO, 0x7febc8a01b30}, NULL, 8) = 0
+10865 rt_sigaction(SIGRT_1, {0x7febc89f8700, [], SA_RESTORER|SA_RESTART|SA_SIGINFO, 0x7febc8a01b30}, NULL, 8) = 0
+10865 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+10865 getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM_INFINITY}) = 0
+10865 munmap(0x7febc9948000, 137890)    = 0
+10865 open("/etc/localtime", O_RDONLY)  = 7
+10865 fstat(7, {st_mode=S_IFREG|0644, st_size=311, ...}) = 0
+10865 fstat(7, {st_mode=S_IFREG|0644, st_size=311, ...}) = 0
+10865 mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7febc9ac3000
+10865 read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\2\0\0\0\2\0\0\0\0"..., 4096) = 311
+10865 lseek(7, -183, SEEK_CUR)          = 128
+10865 read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\2\0\0\0\2\0\0\0\0"..., 4096) = 183
+10865 close(7)                          = 0
+10865 munmap(0x7febc9ac3000, 4096)      = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/kv.lic", O_RDONLY) = 7
+10865 read(7, "Autonomy IDOL\n1SHTAGD-23K0G6N-0F"..., 512) = 46
+10865 close(7)                          = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/kvutil.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@\10\1\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=492256, ...}) = 0
+10865 mmap(NULL, 1538304, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc8664000
+10865 fadvise64(7, 0, 1538304, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc86d0000, 1048576, PROT_NONE) = 0
+10865 mmap(0x7febc87d0000, 49152, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x6c000) = 0x7febc87d0000
+10865 close(7)                          = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/kwad.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@\371\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=280288, ...}) = 0
+10865 mmap(NULL, 1424576, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc8508000
+10865 fadvise64(7, 0, 1424576, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8542000, 1048576, PROT_NONE) = 0
+10865 mmap(0x7febc8642000, 40960, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x3a000) = 0x7febc8642000
+10865 mmap(0x7febc864c000, 97472, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7febc864c000
+10865 close(7)                          = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/formats.ini", O_RDONLY|O_NONBLOCK) = 7
+10865 fcntl(7, F_DUPFD, 256)            = 256
+10865 close(7)                          = 0
+10865 lseek(256, 0, SEEK_END)           = 3031
+10865 lseek(256, 0, SEEK_SET)           = 0
+10865 read(256, "[General]\nversion=10.3.0.2\n\n[Kvo"..., 3031) = 3031
+10865 close(256)                        = 0
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/kvxtract.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0`(\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=38328, ...}) = 0
+10865 mmap(NULL, 1084944, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc83ff000
+10865 fadvise64(7, 0, 1084944, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8407000, 1048576, PROT_NONE) = 0
+10865 mmap(0x7febc8507000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x8000) = 0x7febc8507000
+10865 close(7)                          = 0
+10865 write(2, "mem open!\n", 10)       = 10
+10865 write(2, "mem open!-778274976:0:4746\n", 27) = 27
+10865 write(2, "mem rseek!0:0\n", 14)   = 14
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem read%PDF-1.2\n1 0 obj\n<<\n/Cre"..., 1039) = 1039
+10865 write(2, "mem close!\n", 11)      = 11
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/pdfsr.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000\362\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=647408, ...}) = 0
+10865 mmap(NULL, 1693368, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc8261000
+10865 fadvise64(7, 0, 1693368, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc82b4000, 1044480, PROT_NONE) = 0
+10865 mmap(0x7febc83b3000, 311296, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x52000) = 0x7febc83b3000
+10865 close(7)                          = 0
+10865 brk(0x646000)                     = 0x646000
+10865 write(2, "mem open!\n", 10)       = 10
+10865 write(2, "mem open!-778274976:0:4746\n", 27) = 27
+10865 write(2, "mem rseek!0:2\n", 14)   = 14
+10865 write(2, "mem tell!4746 :4746\n", 20) = 20
+10865 write(2, "mem rseek!0:0\n", 14)   = 14
+10865 write(2, "mem rseek!-25:2\n", 16) = 16
+10865 write(2, "mem read:50!\n", 13)    = 13
+10865 write(2, "mem readxref\n4436\n%%EOF\n%%PDF EN"..., 38) = 38
+10865 write(2, "mem rseek!-50:2\n", 16) = 16
+10865 write(2, "mem read:50!\n", 13)    = 13
+10865 write(2, "mem readR\n/Info 1 0 R\n>>\n>>\nstar"..., 63) = 63
+10865 write(2, "mem rseek!4436:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readxref\n0 11\n0000000000 655"..., 324) = 324
+10865 write(2, "mem rseek!4436:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readxref\n0 11\n0000000000 655"..., 324) = 324
+10865 write(2, "mem rseek!4436:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readxref\n0 11\n0000000000 655"..., 324) = 324
+10865 write(2, "mem rseek!4666:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readtrailer\n<<\n/Size 11\n/Roo"..., 323) = 323
+10865 write(2, "mem rseek!4436:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readxref\n0 11\n0000000000 655"..., 324) = 324
+10865 write(2, "mem rseek!4666:0\n", 17) = 17
+10865 write(2, "mem read:1024!\n", 15)  = 15
+10865 write(2, "mem readtrailer\n<<\n/Size 11\n/Roo"..., 323) = 323
+10865 write(2, "mem rseek!9:0\n", 14)   = 14
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read1 0 obj\n<<\n/Creator (Xin"..., 4111) = 4111
+10865 write(2, "mem rseek!206:0\n", 16) = 16
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read2 0 obj\n<<\n/Type /Catalo"..., 4111) = 4111
+10865 write(2, "mem rseek!290:0\n", 16) = 16
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read3 0 obj\n<<\n/Type /Pages\n"..., 4111) = 4111
+10865 open("/opt/autonomy/FilterSDK/_xlnx64/bin/txtcnv.so", O_RDONLY) = 7
+10865 read(7, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0P\n\0\0\0\0\0\0"..., 832) = 832
+10865 fstat(7, {st_mode=S_IFREG|0755, st_size=9016, ...}) = 0
+10865 mmap(NULL, 1055792, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 7, 0) = 0x7febc815f000
+10865 fadvise64(7, 0, 1055792, POSIX_FADV_WILLNEED) = 0
+10865 mprotect(0x7febc8161000, 1044480, PROT_NONE) = 0
+10865 mmap(0x7febc8260000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 7, 0x1000) = 0x7febc8260000
+10865 close(7)                          = 0
+10865 write(2, "mem rseek!2791:0\n", 17) = 17
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read6 0 obj\n<<\n/Type /Outlin"..., 4111) = 4111
+10865 write(2, "mem rseek!2862:0\n", 17) = 17
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read7 0 obj\n<<\n/Parent 6 0 R"..., 4111) = 4111
+10865 write(2, "mem rseek!349:0\n", 16) = 16
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read4 0 obj\n<< /Type /Page\n/"..., 4111) = 4111
+10865 write(2, "mem rseek!508:0\n", 16) = 16
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read5 0 obj\n<< /Length 2195 "..., 4111) = 4111
+10865 write(2, "mem rseek!3039:0\n", 17) = 17
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read9 0 obj\n<<\n/Type /Font\n/"..., 4111) = 4111
+10865 write(2, "mem rseek!4241:0\n", 17) = 17
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read10 0 obj\n<<\n/Type /FontD"..., 4110) = 4110
+10865 brk(0x667000)                     = 0x667000
+10865 write(2, "mem rseek!2959:0\n", 17) = 17
+10865 write(2, "mem read:4096!\n", 15)  = 15
+10865 write(2, "mem read8 0 obj\n<<\n/Type /Font\n/"..., 4111) = 4111
+10865 brk(0x65a000)                     = 0x65a000
+10865 close(4294967295)                 = -1 EBADF (Bad file descriptor)
+10865 unlink("")                        = -1 ENOENT (No such file or directory)
+10865 write(2, "mem close!\n", 11)      = 11
+10865 brk(0x657000)                     = 0x657000
+10865 open("/dev/tty", O_RDWR|O_NOCTTY|O_NONBLOCK) = 7
+10865 writev(7, [{"*** glibc detected *** ", 23}, {"./test", 6}, {": ", 2}, {"double free or corruption (out)", 31}, {": 0x", 4}, {"00000000006398d0", 16}, {" ***\n", 5}], 7) = 87
+10865 mmap(NULL, 134217728, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_NORESERVE, -1, 0) = 0x7febc015f000
+10865 munmap(0x7febc015f000, 65671168)  = 0
+10865 munmap(0x7febc8000000, 1437696)   = 0
+10865 mprotect(0x7febc4000000, 135168, PROT_READ|PROT_WRITE) = 0
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 --- SIGINT (Interrupt) @ 0 (0) ---
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 --- SIGINT (Interrupt) @ 0 (0) ---
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 --- SIGINT (Interrupt) @ 0 (0) ---
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 --- SIGINT (Interrupt) @ 0 (0) ---
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 --- SIGINT (Interrupt) @ 0 (0) ---
+10865 futex(0x7febc969fa00, FUTEX_WAIT_PRIVATE, 2, NULL) = ? ERESTARTSYS (To be restarted)
+10865 +++ killed by SIGKILL +++
