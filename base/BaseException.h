@@ -10,11 +10,7 @@
 
 #ifndef __BASE_EXCEPTION_H__
 #define __BASE_EXCEPTION_H__
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include "XMLConfiger.h"
-#include "Logger.h"
+#include <errno.h>
 #include <string>
 
 enum ErrorCode {
@@ -65,46 +61,5 @@ private:
     ErrorCode      m_error_code;
     std::string    m_what;
 };
-/** 
- * 
- * @brief When use a DOMWriter, need to write a error handler for it.
- * @author xiaofei
- */
-class DOMWriterHandler : public DOMErrorHandler 
-{
-  public:
-    DOMWriterHandler() {};
-    ~DOMWriterHandler() {};
-    bool handleError(const DOMError &error) 
-    {
-        char *message = 0;
-         MAINLOG.errorStream()<< "Error occurred in DOMBuilder!  Message:  "
-                                  <<(message = XMLString::transcode(error.getMessage()))
-                                  << " of severity "<< error.getSeverity()
-                                  << "." << MAINEND;
-        XMLString::release(&message);
-        return true;
-    }
-};
-/** 
- * 
- * @brief When use a DOMBuilder, need to write a error handler for it.
- * @author xiaofei
- */
-class DOMBuilderHandler : public DOMErrorHandler 
-{
-  public:
-    DOMBuilderHandler() {};
-    ~DOMBuilderHandler() {};
-    bool handleError(const DOMError &error) 
-    {
-        char *message = 0;
-        MAINLOG.errorStream()<< "Error occurred in DOMBuilder!  Message:  "
-                                  <<(message = XMLString::transcode(error.getMessage()))
-                                  << " of severity "<< error.getSeverity()
-                                  << "." << MAINEND;
-        XMLString::release(&message);
-        return true;
-    }
-};
+#define LOG(a,b) printf(b)
 #endif
