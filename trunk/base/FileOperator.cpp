@@ -7,7 +7,7 @@
  * 
  * 
  */
-#include "Logger.h"
+#include <memory>
 #include "BaseException.h"
 #include "FileOperator.h"
 #include <sys/stat.h>
@@ -15,6 +15,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <sstream>
 #include <iconv.h>
 /** 
  * @brief This is the default constructor of FileOperator.
@@ -248,7 +250,6 @@ int FileOperator::ReadAll(char* buf)
     }
     if(m_size<0)
         GetFileSize();
-    MAINLOG.debugStream()<<"The file size is:"<<m_size<<MAINEND;
     std::auto_ptr<char> tmpBuf(new char[m_size+1]);
     if(tmpBuf.get()==NULL)
     {
@@ -259,7 +260,7 @@ int FileOperator::ReadAll(char* buf)
     if(rtn>0)
     {
         dos2unix(tmpBuf.get());
-        MAINLOG.debugStream()<<"The encode setting is:"<<m_fileEncode<<MAINEND;
+       
         if(m_fileEncode=="GB2312"||m_fileEncode=="")
         {
             LOG(DEBUG,"Don't need convert!");
@@ -308,8 +309,8 @@ int FileOperator::Write(char* buf,int buf_len)
         throw BaseException(FileWriteError,"The file is not open");
     }
     int ret;
-//    MAINLOG.debugStream()<<"The Buffer is:"<<buf<<"The buffer length is:"<<buf_len<<MAINEND;
-    MAINLOG.debugStream()<<"The encode setting is:"<<m_fileEncode<<MAINEND;
+
+
     if(m_fileEncode=="GB2312"||m_fileEncode=="")
     {
         LOG(DEBUG,"Don't need convert!");
@@ -382,7 +383,7 @@ bool FileOperator::SetEncodeName(std::string &encodeName)
 bool FileOperator::Other_2_GB2312(const char* encodeName,char *in, int inLen, char *out, int outLen)
 {
     iconv_t cd = iconv_open( "GBK", encodeName );
-    if( (int)cd == -1 )
+    if( cd == (iconv_t)-1 )
     {
         throw BaseException(CodeConvertError,"Can't open convert");
     }
@@ -409,7 +410,7 @@ bool FileOperator::Other_2_GB2312(const char* encodeName,char *in, int inLen, ch
 bool FileOperator::GB2312_2_Other(const char* encodeName,char *in, int inLen, char *out, int outLen)
 {
     iconv_t cd = iconv_open( encodeName,"GBK" );
-    if( (int)cd == -1 )
+    if( cd == (iconv_t)-1 )
     {
         throw BaseException(CodeConvertError,"Can't open convert");
     }
