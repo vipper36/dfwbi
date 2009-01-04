@@ -1,0 +1,47 @@
+Dec 18, 2008 公告数据导入步骤：
+1、kvfilter安装
+2、编译动态库libfilter.so
+3、创建oracle外部库调用
+4、声明外部函数
+5、构建UTL_FILE读写文件目录
+6、创建http访问acl
+7、导入存储过程
+Dec 26, 2008 today's shell
+#determine the existence of the file
+#! /bin/sh
+
+if [ ! -e $1.txt ]; then
+    echo $1
+    
+fi
+#use the shell to find the pdf without txt
+ls -la pdf/2006/02/|grep pdf$|awk '{print $8}'|xargs -n 1 ./testTxt.sh
+ls -la|awk '$5==0 {printf("%s\t%s\n",$5,$8)}'
+ls -la pdf99/*.pdf|awk '{print $8}'|sed 's/.pdf//'|xargs -n 1 ./testTxt.sh|awk '{printf("%s.pdf\n",substr($1,7,13))}'
+
+
+Dec 30, 2008 
+ALTER SYSTEM KILL SESSION '952,621' IMMEDIATE
+Dec 31, 2008 
+------------oracle sql trace!!
+alter system set sql_trace=true
+select 
+  u_dump.value   || '/'     || 
+  db_name.value  || '_ora_' || 
+  v$process.spid || 
+  nvl2(v$process.traceid,  '_' || v$process.traceid, null ) 
+  || '.trc'  "Trace File"
+from 
+             v$parameter u_dump 
+  cross join v$parameter db_name
+  cross join v$process 
+        join v$session 
+          on v$process.addr = v$session.paddr
+where 
+ u_dump.name   = 'user_dump_dest' and 
+ db_name.name  = 'db_name'        and
+ v$session.audsid=sys_context('userenv','sessionid');
+
+Jan 4, 2009 
+---------sqlldr usage
+sqlldr cninfo/cninfo control=a.ctl direct=true log=real111.log bad=real1111.bad bindsize=999999999 rows=99999999 errors=9999999
