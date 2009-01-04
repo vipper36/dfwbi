@@ -45,3 +45,4 @@ where
 Jan 4, 2009 
 ---------sqlldr usage
 sqlldr cninfo/cninfo control=a.ctl direct=true log=real111.log bad=real1111.bad bindsize=999999999 rows=99999999 errors=9999999
+
