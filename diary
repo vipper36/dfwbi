@@ -33,7 +33,7 @@ select
   || '.trc'  "Trace File"
 from 
              v$parameter u_dump 
-  cross join v$parameter db_name
+  cross join v$xparameter db_name
   cross join v$process 
         join v$session 
           on v$process.addr = v$session.paddr
@@ -46,3 +46,20 @@ Jan 4, 2009
 ---------sqlldr usage
 sqlldr cninfo/cninfo control=a.ctl direct=true log=real111.log bad=real1111.bad bindsize=999999999 rows=99999999 errors=9999999
 
+union
+Feb 3, 2009 
+-----------查询数据库所有外键
+select a.table_name 外键表名,a.column_name 外键列名,b.table_name 主键表名,b.column_name 主键列名
+from
+(select a.constraint_name,b.table_name,b.column_name,a.r_constraint_name
+from user_constraints a, user_cons_columns b
+WHERE a.constraint_type='R'
+and a.constraint_name=b.constraint_name
+) a,
+(select distinct a.r_constraint_name,b.table_name,b.column_name
+from user_constraints a, user_cons_columns b
+WHERE   a.constraint_type='R'
+and
+a.r_constraint_name=b.constraint_name)
+b
+where a.r_constraint_name=b.r_constraint_name
