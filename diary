@@ -63,3 +63,7 @@ and
 a.r_constraint_name=b.constraint_name)
 b
 where a.r_constraint_name=b.r_constraint_name
+Feb 4, 2009 
+gdb:
+attach 线程号
+detach 线程号
