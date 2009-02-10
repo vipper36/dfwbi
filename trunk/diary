@@ -1,11 +1,11 @@
-Dec 18, 2008 �������ݵ��벽�裺
-1��kvfilter��װ
-2�����붯̬��libfilter.so
-3������oracle�ⲿ�����
-4�������ⲿ����
-5������UTL_FILE��д�ļ�Ŀ¼
-6������http����acl
-7������洢����
+Dec 18, 2008 公告数据导入步骤：
+1、kvfilter安装
+2、编译动态库libfilter.so
+3、创建oracle外部库调用
+4、声明外部函数
+5、构建UTL_FILE读写文件目录
+6、创建http访问acl
+7、导入存储过程
 Dec 26, 2008 today's shell
 #determine the existence of the file
 #! /bin/sh
@@ -48,8 +48,8 @@ sqlldr cninfo/cninfo control=a.ctl direct=true log=real111.log bad=real1111.bad 
 
 union
 Feb 3, 2009 
------------��ѯ���ݿ��������
-select a.table_name �������,a.column_name �������,b.table_name ��������,b.column_name ��������
+-----------查询数据库所有外键
+select a.table_name 外键表名,a.column_name 外键列名,b.table_name 主键表名,b.column_name 主键列名
 from
 (select a.constraint_name,b.table_name,b.column_name,a.r_constraint_name
 from user_constraints a, user_cons_columns b
@@ -65,13 +65,34 @@ b
 where a.r_constraint_name=b.r_constraint_name
 Feb 4, 2009 
 gdb:
-attach �̺߳�
-detach �̺߳�
+attach 线程号
+detach 线程号
 
 
 java -classpath binarynotesd.jar:. AsnComm.AsnClient 127.0.0.1 10021
 Feb 5, 2009 
-����coredump
+生成coredump
 ulimit -c unlimited
 dos shell
 FOR %i IN (*.pdf) DO pdftotext.exe %i
+Feb 6, 2009 
+FreeBSD的math ports里提供的超级优秀数学、统计软件大汇集
+[1] R（与AT&T的S语言兼容，最伟大的统计软件之一）
+[2] maxima（符号计算）
+[3] octave（matlab的替代品，octave-forge提供了很多包）
+[4] fbm（flexible Bayesian modelling，贝叶斯统计推断工具和贝叶斯神经网络）
+[5] jags（Gibbs sampler，随机模拟工具）
+[6] surf（代数几何工具软件，画曲线曲面，只要奇点个数不是太多，都不在话下。algebraic geometry是数学里最难的分支，FB的ports里竟然连这个工具都有，真是牛×。）
+[7] gap（强有力的有限群计算工具，包括群表示、自动机理论等）
+[8] gnuplot（强大的画图工具）
+[9] xgraph（古老、简单的数据显示工具，fbm缺省用它）
+[10]qhull（计算几何工具，实现凸包、三角剖分等算法，matlab和octave都用它）。
+[11]fftw（快速傅立叶变换，octave用到它）、atlas、lapack……都是非常优秀的。
+[12] femlab（偏微分方程），xppaut（常微分方程、随机微分方程），pari（数论）我没用过，有人说好，就把它们列在最后吧。
+
+在Win平台下，，除了R以外，主要有两个开源的数学工具：
+Maxima
+Maxima is a system for the manipulation of symbolic and numerical expressions, including differentiation, integration, Taylor series, Laplace transforms, ordinary differential equations, systems of linear equations, polynomials, and sets, lists, vectors, matrices, and tensors. Maxima yields high precision numeric results by using exact fractions, arbitrary precision integers, and arbitrarily precision floating point numbers. Maxima can plot functions and data in two and three dimensions.
+
+Scilab
+Scilab is a scientific software package for numerical computations providing a powerful open computing environment for engineering and scientific applications.
