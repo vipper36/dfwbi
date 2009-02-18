@@ -21,7 +21,12 @@ void testfun()
      Factory<testProduct> *fact=Factory<testProduct>::Instance();
      std::string proName="testpro/testpro";
      fact-> Register(proName);
-     testProduct *tp=fact->CreateObject(proName);
+     std::string funName;
+     printf("%s\n",proName.c_str());
+     size_t idx=proName.rfind("/");
+     funName=proName.substr(idx+1)+"_create";
+     printf("%s\n",funName.c_str());
+     testProduct *tp=fact->CreateObject(proName,funName);
      tp->print();
     }
   catch(BaseException e)
