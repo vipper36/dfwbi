@@ -1,33 +1,20 @@
+#ifndef __YAHOO__
+#define __YAHOO__
 #include <string>
-class Yahoo :
+#include <list>
+#include <map>
+#include "HttpClient.h"
+#include "HttpResponse.h"
+
+class Yahoo
 {
   public:
-     Yahoo ();
-     ~Yahoo ();
-     void update()
-     std::string parseDate (std::string &);
-     void parseHistory ();
-     void parseQuote ();
-     void cancelUpdate ();
-     void parseFundamental ();
-     void loadAllSymbols ();
-     void createHistoryUrls (std::string &);
-     void createAutoHistoryUrls (std::string &, std::string &);
-     void createQuoteUrls (std::string &);
-     void createFundamentalUrls (std::string &);
-      
+     Yahoo(){};
+     ~Yahoo(){};
+     std::list<std::string> GetHisData(std::string &stockName,std::string &startdate);
+     std::map<std::string,std::string>  GetDayData(std::list<std::string> &nameList);
+     std::string GetDayData(std::string &name);
   public:
-     void startDownload ();
-     void fileDone (bool);
-     void timeoutError ();
-     void newStock ();
-     void methodChanged (int);
-     void allSymbolsChecked (bool);
-
-  private:
-     std::list<std::string> symbolList;
-     std::string<std::string> SetList;
-     std::string dataPath;
-     std::list<std::string> fileList;
-     std::list<std::string> monthList;
+     HttpClient htc;
 };
+#endif

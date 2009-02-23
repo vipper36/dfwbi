@@ -5,10 +5,11 @@ AR=ar -r
 CXX=g++
 LINK=ld
 CFLAGS=-g -DBOOSTEST
-DESC=stock
+LDESC=libhttp.a
+TDESC=HttpTest
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-BOOSTOBJ=async_client.o
+LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o Yahoo.o
 
 .SUFFIXES: .h .cpp .o
 
@@ -20,11 +21,15 @@ BOOSTOBJ=async_client.o
 	@echo Compiling cc program $< ......
 	@echo c to o
 	$(CC) $(CFLAGS) $(INCLUDE)  -c $<
-all: $(DESC)
+all: $(LDESC) $(TDESC)
 	@echo $@ update to date
-$(DESC):$(BOOSTOBJ)
+$(LDESC):$(LIBOBJ)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB}
+	$(AR) -o $@ $^
+$(TDESC):main.o $(LDESC)
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ $(BOOSTLIB)
+
 clean:
 	@-rm $(DESC)
 	@-rm -fr *.o *.a *~ "*#"
