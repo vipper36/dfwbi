@@ -1,7 +1,9 @@
 #ifndef __STOCK__
 #define __STOCK__
 #include <map>
-std::string HISTAG[]=
+#include <list>
+#include <string>
+static std::string HISTAG[]=
 {
      "Open",
      "High",
@@ -52,18 +54,24 @@ private:
      std::string stockName;
      std::string stockCode;
 public:
-     Stoct()
+     Stock()
 	  :HisPrices(),
 	   DayPrices(),
 	   stockName(),
 	   stockCode()
-	  {};
-     ~Stoct(){};
+	  {}
+     Stock(std::string name)
+	  :HisPrices(),
+	   DayPrices(),
+	   stockName(name),
+	   stockCode()
+	  {}
+     ~Stock(){}
      void SetName(std::string &name)
 	  {
 	       stockName=name;
 	  }
-     std::string GetName()
+     std::string &GetName()
 	  {
 	       return stockName;
 	  }
@@ -71,16 +79,16 @@ public:
 	  {
 	       stockCode=code;
 	  }
-     std::string GetCode()
+     std::string &GetCode()
 	  {
 	       return stockCode;
 	  }
      void AddDayPrice(DayPrice price);
      void AddHisPrice(StockPrice price);
-     std::map<std::string,double> getHisValuePair(std::string &colName);
-     std::map<std::string,double> getDayValuePair(std::string &colName);
-     std::list<double> getHisValueList(std::string &colName);
-     std::list<double> getDayValueList(std::string &colName);
+     std::map<std::string,double> getHisValuePair(std::string colName);
+     std::map<std::string,double> getDayValuePair(std::string colName);
+     std::list<double> getHisValueList(std::string colName);
+     std::list<double> getDayValueList(std::string colName);
 
 };
 #endif
