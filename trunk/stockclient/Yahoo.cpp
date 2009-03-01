@@ -6,6 +6,7 @@
 //query the history data from yahoo,the history data from startdat to now. startdate must be format like this "2008-12-22"
 std::list<std::string> Yahoo::GetHisData(std::string &stockName,std::string &startdate)
 {
+     bool hasTitle=false;
      std::list<std::string> result;
      size_t idx1=startdate.find('-');
      size_t idx2=startdate.find('-',idx1+1);
@@ -16,7 +17,7 @@ std::list<std::string> Yahoo::GetHisData(std::string &stockName,std::string &sta
      std::string url="http://ichart.yahoo.com/table.csv?s=";
      
      std::stringstream ssadd;
-     ssadd<<stockName<<"&a="<<imon-1<<"&b="<<startdate.substr(idx2+1)<<startdate.substr(0,idx1);
+     ssadd<<stockName<<"&a="<<imon-1<<"&b="<<startdate.substr(idx2+1)<<"&c="<<startdate.substr(0,idx1);
      url=url+ssadd.str();
      if(!htc.connect(url))
 	  return result;
@@ -30,7 +31,19 @@ std::list<std::string> Yahoo::GetHisData(std::string &stockName,std::string &sta
 	  while(!retStream.eof())
 	  {
 	       std::getline(retStream,line);
-	       result.push_back(line);
+	       if(hasTitle)
+	       {
+		    result.push_back(line);
+	       }else
+	       {
+		    if(line.find("Date")!=std::string::npos)
+		    {
+			 hasTitle=true;
+		    }else
+		    {
+			 result.push_back(line);
+		    }
+	       }
 	  }
      }
      return result;

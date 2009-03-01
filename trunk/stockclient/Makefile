@@ -9,7 +9,7 @@ LDESC=libhttp.a
 TDESC=HttpTest
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o Yahoo.o
+LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o Yahoo.o Stock.o StockDataAdaptor.o
 
 .SUFFIXES: .h .cpp .o
 
