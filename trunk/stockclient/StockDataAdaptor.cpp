@@ -1,7 +1,10 @@
 #include "StockDataAdaptor.h"
 #include <boost/algorithm/string.hpp> 
+#include <boost/spirit.hpp>
 #include <cstdlib>
 #include <list>
+using namespace boost;
+using namespace boost::spirit;
 bool StockDataAdaptor::FillHisdata(Stock *st,std::string &fromDate)
 {
       Yahoo yh;
@@ -10,92 +13,22 @@ bool StockDataAdaptor::FillHisdata(Stock *st,std::string &fromDate)
       for(;Itr!=sl.end();++Itr)
       {
 	   StockPrice sp;
-	   std::list<std::string> results;    
-	   boost::split(results, *Itr, boost::is_any_of(","));
-	   std::list<std::string>::const_iterator p = results.begin( );
-	   if(p==results.end())
-		continue;
-
-	   sp.Day=*p;
-	   ++p;
-	   if(p==results.end())
-		continue;
-	   
-	   sp.Open=strtod(p->c_str(),NULL);
-	   ++p;
-	   if(p==results.end())
-		continue;   
-	   
-	   sp.High=strtod(p->c_str(),NULL);
-	   ++p;
-	   if(p==results.end())
-		continue;
-
-	   sp.Low=strtod(p->c_str(),NULL);
-	   ++p;
-	   if(p==results.end())
-		continue;
-
-	   sp.Close=strtod(p->c_str(),NULL);
-	   ++p;
-	   if(p==results.end())
-		continue;
-
-	   sp.Volume=strtod(p->c_str(),NULL);
-	   ++p;
-	   if(p==results.end())
-		continue;
-
-	   sp.Adj_Close=strtod(p->c_str(),NULL);
-	   st->AddHisPrice(sp);
+	   parse_info<const char*> ret=parse(Itr->c_str(), (+(~ch_p(',')))[assign_a(sp.Day)] >> ch_p(',') >> (real_p[assign_a(sp.Open)]) >> ch_p(',') >> (real_p[assign_a(sp.High)]) >> ch_p(',') >> (real_p[assign_a(sp.Low)]) >> ch_p(',') >> (real_p[assign_a(sp.Close)]) >> ch_p(',') >> (real_p[assign_a(sp.Volume)]) >> ch_p(',') >> (real_p[assign_a(sp.Adj_Close)]), cntrl_p);
+	   bool parCor=ret.full;
+	   if(!parCor)
+		std::cout<<"parse error!"<<std::endl;
+	   else
+		st->AddHisPrice(sp);
       }
       return true;
 }
 bool StockDataAdaptor::FillCurentData(Stock *st)
 {
-     DayPrice dp;
+     DayPrice sp;
      std::string pr=yh.GetDayData(st->GetName());
-
-     std::list<std::string> results;    
-     boost::split(results, pr, boost::is_any_of(","));
-     std::list<std::string>::const_iterator p = results.begin( );
-     if(p==results.end())
-	  return false;
-     
-     dp.Close=strtod(p->c_str(),NULL);
-     ++p;
-     if(p==results.end())
-	  return false;
-     std::string date=*p;
-     dp.Day=date.substr(1,date.length()-2);
-     ++p;
-     if(p==results.end())
-	  return false;
-     std::string time=*p;
-     dp.tm=time.substr(1,time.length()-2);
-     ++p;
-     if(p==results.end())
-	  return false;
-     ++p;
-     if(p==results.end())
-	  return false;
-     
-     dp.Open=strtod(p->c_str(),NULL);
-     ++p;
-     if(p==results.end())
-	  return false;   
-     
-     dp.High=strtod(p->c_str(),NULL);
-     ++p;
-     if(p==results.end())
-	  return false;
-
-     dp.Low=strtod(p->c_str(),NULL);
-     ++p;
-     if(p==results.end())
-	  return false;
-
-     dp.Volume=strtod(p->c_str(),NULL);
-     st->AddDayPrice(dp);
-     return true;
+     parse_info<const char*> ret=parse(pr.c_str(), real_p[assign_a(sp.Close)]>> ch_p(',') >> (+(~ch_p(',')))[assign_a(sp.Day)] >> ch_p(',') >> (+(~ch_p(',')))[assign_a(sp.tm)] >>ch_p(',')>> (+alpha_p) >> ch_p(',') >> real_p[assign_a(sp.Open)] >> ch_p(',') >> real_p[assign_a(sp.High)] >> ch_p(',') >> real_p[assign_a(sp.Low)] >> ch_p(',') >> real_p[assign_a(sp.Volume)], cntrl_p);
+     sp.Day=sp.Day.substr(1,sp.Day.length()-2);
+     sp.tm=sp.tm.substr(1,sp.tm.length()-2);
+     st->AddDayPrice(sp);
+     return ret.full;
 }
