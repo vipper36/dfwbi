@@ -6,11 +6,11 @@ CXX=g++
 LINK=ld
 CFLAGS=-g -DBOOSTEST
 LDESC=libhttp.a
-TDESC=HttpTest
+SDESC=Stock
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o Yahoo.o Stock.o StockDataAdaptor.o
-
+LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o
+STOCKOBJ=Yahoo.o Stock.o StockDataAdaptor.o
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -21,12 +21,12 @@ LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o Yahoo.o Stock.o Sto
 	@echo Compiling cc program $< ......
 	@echo c to o
 	$(CC) $(CFLAGS) $(INCLUDE)  -c $<
-all: $(LDESC) $(TDESC)
+all: $(LDESC) $(SDESC)
 	@echo $@ update to date
 $(LDESC):$(LIBOBJ)
 	@echo Linking $@ ...
 	$(AR) -o $@ $^
-$(TDESC):main.o $(LDESC)
+$(SDESC):main.o $(STOCKOBJ) $(LDESC)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ $(BOOSTLIB)
 
