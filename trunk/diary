@@ -96,3 +96,115 @@ Maxima is a system for the manipulation of symbolic and numerical expressions, i
 
 Scilab
 Scilab is a scientific software package for numerical computations providing a powerful open computing environment for engineering and scientific applications.
+Feb 10, 2009 
+VC++ Toolbar 图片的大小在资源文件中，若改为大图标，需要更改相应的资源文件
+Feb 12, 2009 
+libnnz10 oracle 10的连接库，对于oracle 11应该是相应的:libnnz11
+
+mapguide need thirdparty:
+	 ACE:The ADAPTIVE Communication Environment
+	 CppUnit:C++ port of JUnit
+	 DWFTK:not open source
+	 apache-tomcat-6.0.14
+	 tomcat-connectors-1.2.25
+	 httpd-2.2.4
+	 SQLite
+	 agg:C++ SVG Rendering Library 
+	 dbxml:Oracle Berkeley DB XML
+	 gdal:translator library for raster geospatial data formats
+	 DMSG fusion:Fusion is a web-mapping application development framework for MapGuide Open Source
+	 swig:software development tool that connects programs written in C and C++ with a variety of high-level programming languages
+	 gd:open source code library for the dynamic creation of images by programmer---------the jpeg lib is a collection c jpeg lib,need to compile independently.
+	 libpng:official PNG reference library
+	 zlib:general purpose data compression library
+	 freetype:freetype library.
+	 geos:Geometry Engine Open Source 
+	 jsoncpp:lightweight data-interchange format.
+	 php:
+	 proj-4: Cartographic Projections Library 
+
+FDO need thirdparty:
+    Sqlite:database
+    xerces-c:XML for C++ parser 
+    xalan-c:XSLT Processor written in C++
+    boost:c++ library
+    cppunit::C++ port of JUnit
+    gdal:translator library for raster geospatial data formats
+    gsar:general search and replace utility for windows
+    libcurl:free and easy-to-use client-side URL transfer library
+    mkcatdefs:The mkcatdefs utility preprocesses a message source file for input to the gencat utility. 
+    openssl:
+    postgresql:database
+    UpdateVersion: command-line utility that can update .NET AssemblyInfo files in any language
+    stampver:Win32 Version Resource Stamping
+Feb 13, 2009 
+    DWFtk install:go into the build directry,run build_setup.
+    I can not find a good framework for asio test.
+    vs2005 0xC0000005: 读取位置 0xcdcdcde1 时发生访问冲突 解决方案:
+    	  1、 Application用console模式时，是默认方式用的是MLd/ML编译的，而DLL文件一般都是用MDd/MD编译的，这样会导致没有初始化iostream使用的_Mutex::Lock()，而出现异常。
+把你的Application修改为MDd/MD就可以了。
+Feb 16, 2009 
+    Each pattern is a three-part rule,which expresses a relation between a certain context, a problem, and a solution.
+    MVC:
+	The model component encapsulates core data and functionality.
+	View components display information to the user. 
+	Each view has an associated controller component. Controllers receive input, usually as events that denote mouse movement, activation of mouse buttons or keyboard input.
+    patten:
+	A pattern addresses a recurring design problem that arises in specific design situations, and presents a solution to it.
+	Patterns identify and specify abstractions that are above the level of single classes and instances
+	Patterns provide a common vocabulary and understanding for design principles
+	Patterns are a means of documenting soffware architectures
+	Patterns help you build complex and heterogeneous sofhoare architectures
+	Patterns help you to manage somare complexity	
+	Pattern
+	|__ Context
+	|   |__Design situation giving rise to a design problem
+	|__Problem
+	|  |__Set of forces repeatedly arising in the context
+	|__Solution
+	   |__Configuration to balance the forces
+	      |__Structure with components and relationships
+	      |__Run-time behaviour	  
+	An architectural pattern expresses a fundamental structural organization
+	schema for software systems. It provides a set of predefined
+	subsystems, specifies their responsibilities, and includes rules and
+	guidelines for organizing the relationships between them.
+	
+	A design pattern provides a scheme for refining the subsystems or
+	components of a software system, or the relationships between them.
+	It describes a commonly-recumng structure of communicating components
+	that solves a general design problem within a particular
+	context
+
+	An idiom is a low-level pattern specific to a programming language.
+	An idiom describes how to implement particular aspects of
+	components or the relationships between them using the features of
+	the given language.
+Feb 16, 2009 
+    easy odbc oracle driver license
+    MJBRP-BDUJQ-3X9PA-XHHPA-UUCN2-VJNWQ-WRGXH-J4WUN-73LRC-JBPVC
+Feb 25, 2009 
+    Google defaults to searching for occurrences of your specified keywords anywhere in the page, whether side by side or scattered throughout.
+    Google's Boolean default is AND, which means that if you enter query words without modifiers, Google will search for all your query words
+    Google does offer a full-word wildcard. 
+Mar 1, 2009 
+    Has to add the language analysis for " and '.
+Mar 2, 2009 
+    "-" operator can not be easily suported.
+Mar 11, 2009 
+    http://192.168.4.54:9000/a=query&text=低利率背景下万能寿险产品的发展策略投保选公司应遵循四大指标农民工养老险踯躅前行 方案出台到最后时刻瑞士再保更换&fieldtext=RANGE{01/01/2009,05/03/2009}:publishdate&minscore=70&print=all
+    http://192.168.4.54:9000/a=SuggestOnText&fieldtext=MATCHALL{开基放量杀跌 资金脱逃明显}:DRETITLE&fieldtext=RANGE{01/01/2009,05/03/2009}:publishdate&minscore=50&print=all
+Mar 17, 2009 
+N=1; 名词	T=2; 时间词	S=3; 处所词	F=4; 方位词
+M=5; 数词	Q=6; 量词	B=7; 区别词	R=8; 代词
+V=9; 动词	A=10; 形容词	Z=11; 状态词	D=12; 副词
+P=13; 介词	C=14; 连词	U=15; 助词	Y=16; 语气词
+E=17; 叹词	O=18; 拟声词	I=19; 成语	L=20; 习用语
+J=21; 简称	H=22; 前接成分	K=23; 后接成分	G=24; 语素
+X=25; 非语素字	W=26; 标点符号	NR=27; 人名	NS=28; 地名
+NT=29; 团体机关单位名称		NZ=30; 专有名词	NX=31; 外文字符
+NG=33; 名语素	VG=34; 动语素	AG=35; 形容语素	TG=36; 时间语素
+DG=37; 副语素	OG=38; 拟声语素	AUX=39;辅助词	VN=40; 名动词
+AN=41; 名形词	VD=42; 副动词	AD=43; 副形词	UNKOWN=44; 未知
+Mar 18, 2009 
+    Install and test MapServer.

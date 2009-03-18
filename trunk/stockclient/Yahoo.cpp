@@ -23,10 +23,10 @@ std::list<std::string> Yahoo::GetHisData(std::string &stockName,std::string &sta
 	  return result;
      if(!htc.SendRequest())
 	  return result;
-     HttpResponse res=htc.getResponse();
-     if(res.getBody().length()>0)
+     HttpResponse &res=htc.getResponse();
+     if(!res.getBody().eof())
      {
-       std::stringstream retStream(res.getBody());
+       std::stringstream &retStream=res.getBody();
 	  std::string line;
 	  while(!retStream.eof())
 	  {
@@ -69,10 +69,10 @@ std::map<std::string,std::string>  Yahoo::GetDayData(std::list<std::string> &nam
 	  return result;
      if(!htc.SendRequest())
 	  return result;
-     HttpResponse res=htc.getResponse();
-     if(res.getBody().length()>0)
+     HttpResponse &res=htc.getResponse();
+     if(!res.getBody().eof())
      {
-       std::stringstream retStream(res.getBody());
+       std::stringstream &retStream=res.getBody();
 	  std::string line;
 	  while(!retStream.eof())
 	  {
@@ -96,10 +96,10 @@ std::string Yahoo::GetDayData(std::string &name)
 	  return result;
      if(!htc.SendRequest())
 	  return result;
-     HttpResponse res=htc.getResponse();
-     if(res.getBody().length()>0)
+     HttpResponse &res=htc.getResponse();
+     if(!res.getBody().eof())
      {
-       std::stringstream retStream(res.getBody());
+       std::stringstream &retStream=res.getBody();
 	  std::string line;
 	  while(!retStream.eof())
 	  {

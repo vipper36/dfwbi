@@ -20,14 +20,13 @@ std::string HttpResponse::getHeadAtt(std::string &headTag)
 	  return std::string("");
      
 }
-std::string &HttpResponse::getBody()
+std::stringstream &HttpResponse::getBody()
 {
      return _body;
 }
 std::istream& operator>>(std::istream& in,HttpResponse &res)
 {
      bool bodyStart=false;
-     std::stringstream ss;
      std::string line;
      while(!in.eof())
      {
@@ -39,7 +38,7 @@ std::istream& operator>>(std::istream& in,HttpResponse &res)
 	  else
 	  {
 	       if(bodyStart)
-		    ss<<line<<std::endl;
+		    res._body<<line<<std::endl;
 	       else
 	       {
 		    size_t idx=line.find(':');
@@ -71,7 +70,6 @@ std::istream& operator>>(std::istream& in,HttpResponse &res)
 	       }
 	  }
      }
-     res._body=ss.str();
      return in;
     
 }
