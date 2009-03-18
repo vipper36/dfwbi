@@ -7,6 +7,7 @@ LINK=ld
 CFLAGS=-g -DBOOSTEST
 LDESC=libhttp.a
 SDESC=Stock
+GDESC=Google
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
 LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o
@@ -21,12 +22,15 @@ STOCKOBJ=Yahoo.o Stock.o StockDataAdaptor.o
 	@echo Compiling cc program $< ......
 	@echo c to o
 	$(CC) $(CFLAGS) $(INCLUDE)  -c $<
-all: $(LDESC) $(SDESC)
+all: $(LDESC) $(SDESC) $(GDESC)
 	@echo $@ update to date
 $(LDESC):$(LIBOBJ)
 	@echo Linking $@ ...
 	$(AR) -o $@ $^
 $(SDESC):main.o $(STOCKOBJ) $(LDESC)
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ $(BOOSTLIB)
+$(GDESC):Google.o $(LDESC)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ $(BOOSTLIB)
 

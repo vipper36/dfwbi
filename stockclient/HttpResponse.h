@@ -3,6 +3,7 @@
 #include <map>
 #include <istream>
 #include <string>
+#include <sstream>
 class HttpResponse
 {
 private:
@@ -10,7 +11,7 @@ private:
      int _stat_code;
      std::string _reason_phrase;
      std::map<std::string,std::string> _heads;
-     std::string _body;
+     std::stringstream _body;
 public:
      HttpResponse()
 	  :_http_ver(),
@@ -25,7 +26,7 @@ public:
      std::string &getVersion();
      int getStat();
      std::string getHeadAtt(std::string &headTag);
-     std::string &getBody();
+     std::stringstream &getBody();
      friend std::istream& operator>>(std::istream& in,HttpResponse &res);
 };
 #endif

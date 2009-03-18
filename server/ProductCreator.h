@@ -59,6 +59,6 @@ public:
 	  {
 	       myFreeLibrary(funHandle);
 	  }
-     typedef boost::shared_ptr<ProductCreator<AbstractProduct> > _ptr;
+     typedef boost::shared_ptr<ProductCreator<AbstractProduct> > Creator_ptr;
 };
 #endif
