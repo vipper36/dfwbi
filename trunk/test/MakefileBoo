@@ -1,0 +1,29 @@
+BOOSTLIB=-L/usr/local/lib -lboost_system-gcc43-mt -lboost_filesystem-gcc43-mt -lboost_program_options-gcc43-mt
+BOOSTINC=-I/usr/local/include/boost-1_37
+CC=gcc
+AR=ar -r
+CXX=g++
+LINK=ld
+CFLAGS=-O1
+GDESC=replace
+INCLUDE=$(BOOSTINC)
+DESCOBJ=replaceName.o
+.SUFFIXES: .h .cpp .o
+
+.cpp.o:
+	@echo Compiling cc program $< ......
+	@echo c to o
+	$(CXX) $(CFLAGS) $(INCLUDE) -c $<
+.c.o:
+	@echo Compiling cc program $< ......
+	@echo c to o
+	$(CC) $(CFLAGS) $(INCLUDE)  -c $<
+all: $(GDESC)
+	@echo $@ update to date
+$(GDESC):$(DESCOBJ)
+	@echo Linking $@ ...
+	$(CXX) --static -O1 -o $@ $^ $(BOOSTLIB)
+
+clean:
+	@-rm $(GDESC)
+	@-rm -fr *.o *.a *~ "*#"
