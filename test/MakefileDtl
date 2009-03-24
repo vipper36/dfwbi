@@ -1,0 +1,30 @@
+DTLLIB=/usr/local/dtl/libDTL.a
+DTLINCLUDE=/usr/local/dtl/include
+ODBC_LIB=-lodbc
+CC=gcc
+AR=ar -r
+CXX=g++
+LINK=ld
+CFLAGS=-g -c -fPIC -D_XLNX64
+DESC=DtlTest
+LFLAGS=
+INCLUDE= -I$(DTLINCLUDE)
+PUBOBJECT= DtlTest.o
+.SUFFIXES: .h .cpp .o
+
+.cpp.o:
+	@echo Compiling cc program $< ......
+	@echo c to o
+	$(CXX) $(CFLAGS) $(INCLUDE) -c $<
+.c.o:
+	@echo Compiling cc program $< ......
+	@echo c to o
+	$(CC) $(CFLAGS) $(INCLUDE) -c $<
+all: $(DESC)
+	@echo $@ update to date
+$(DESC):$(PUBOBJECT)
+	@echo Linking $@ ...
+	$(CXX) $(LFLAGS) -o $(DESC) ${PUBOBJECT} ${DTLLIB} ${ODBC_LIB}
+clean:
+	@-rm $(DESC)
+	@-rm -fr *.o *.a *~ "*#"
