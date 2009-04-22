@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(99424107-692a-4df6-9577-5869311b12b0)]
+interface nsIUrlCollector:nsISupports
+{
+     boolean IsEmpty();
+     void GetURL(out AUTF8String url);
+};
