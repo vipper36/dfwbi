@@ -921,3 +921,16 @@ Apr 14, 2009
 Apr 17, 2009 
     R load CSV 
     rec<-read.table("ee",FALSE,",")
+Apr 22, 2009 
+    Web information extration:
+    1、page layout model:
+    	    Formally, the model of the page layout can be denoted as a graph: Ml = (Vl,El) (1)
+	    where Vl = {0, 1, . . . n−1} is the set of all area identifiers and (vi, vj) 2 El
+	    iff vi and vj are the visual area identifiers and the area identified by vj is
+	    contained in the area identified by vi.
+	    
+    2、Text attribute model:
+    	    D = T1s1T2s2T3s3 . . . TnsnTn+1
+	   
+Apr 23, 2009 
+    Xvfb :2 -screen 0 1024x768x24 -fbdir /tmp -nolisten inet6 &
