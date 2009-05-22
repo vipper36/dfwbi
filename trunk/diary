@@ -946,3 +946,15 @@ Apr 30, 2009
 May 6, 2009 
     R 绘制柱状图:
     hist()
+May 8, 2009 
+    R K-means
+    km<-kmeans(t(scale(t(rec))), 3)
+May 22, 2009 
+    FDO compile:
+    	cd Thirdparty 
+	./build_linux.sh
+	./build_linux.sh
+	when error modify makefile.am for other lib and include.
+   mapguide compile
+   	DWFTK7.1 modify the ansi/Core.h for dwf_max    
+	arch and cpu x86-64
