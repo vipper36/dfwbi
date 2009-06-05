@@ -958,3 +958,7 @@ May 22, 2009
    mapguide compile
    	DWFTK7.1 modify the ansi/Core.h for dwf_max    
 	arch and cpu x86-64
+Jun 4, 2009 
+    问题求解：
+    1、状态空间法
+    2、问题归纳法
