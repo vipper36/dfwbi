@@ -962,3 +962,6 @@ Jun 4, 2009
     问题求解：
     1、状态空间法
     2、问题归纳法
+Jun 15, 2009 
+    Multifactor dimensionality reduction (MDR) is a data mining approach for detecting and characterizing combinations of attributes or independent variables that interact to influence a dependent or class variable. MDR was designed specifically to identify interactions among discrete variables that influence a binary outcome and is considered a nonparametric alternative to traditional statistical methods such as logistic regression.
+    
