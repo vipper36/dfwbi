@@ -1,0 +1,14 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(3062b651-6ba3-4e6d-8bdc-d83b0095b864)]
+interface nsIColAtt:nsISupports
+{
+     attribute long Id;
+     attribute long ChlId;
+     attribute AUTF8String Hash;
+     attribute AUTF8String Url;
+     attribute AUTF8String Name;
+     attribute AUTF8String Alias;
+     void SetCOL(in AUTF8String name,in AUTF8String url,in long chlId);
+};

@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+
+interface nsIColAtt;
+interface nsIChlAtt;
+interface nsIDOMDocument;
+interface nsIPersistentProperties;
+[scriptable, uuid(8024a42d-2bc3-4bb5-9cc5-55c7309d217b)]
+interface nsIChlFetcher:nsISupports
+{
+     void SetChl(in nsIChlAtt chl);
+     void SetDocument(in nsIDOMDocument doc);
+     void SetProperty(in nsIPersistentProperties prop);
+     long GetColLength();
+     void GetColItem(in long index,out nsIColAtt col);
+};

@@ -1,0 +1,7 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(d81543f3-6434-42d6-a524-1692276e6858)]
+interface nsIDOMCluster:nsISupports
+{
+	void Analysis(in AUTF8String location);
+};
