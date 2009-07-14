@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+
+interface nsITreeNode;
+interface nsIDOMDocument;
+[scriptable, uuid(2366dbed-ebdd-44e7-a08c-40cc1402e156)]
+interface nsIChlWrapper:nsISupports
+{
+     const unsigned short ABS   = 1;
+     const unsigned short REL   = 2;
+     const unsigned short DUL   = 2;
+     void SetTree(in nsITreeNode tree);
+     void GetWrapper(out AUTF8String xpath);
+     void SetXType(in unsigned short type);
+     void SetDocument(in nsIDOMDocument tree);
+};

@@ -1,0 +1,13 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(e737af45-9b30-4dcd-ae4d-2d355a6f13b3)]
+interface nsIChlAtt:nsISupports
+{
+     attribute long Id;
+     attribute AUTF8String Hash;
+     attribute AUTF8String Url;
+     attribute AUTF8String Name;
+     attribute AUTF8String XPath;
+     void SetCHL(in AUTF8String name,in AUTF8String url);
+};

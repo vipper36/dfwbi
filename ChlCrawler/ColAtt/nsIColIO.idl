@@ -1,0 +1,18 @@
+#include "nsISupports.idl"
+
+interface nsIColAtt;
+[scriptable, uuid(d046d058-af28-4f47-8c9b-7707b2d34b27)]
+interface nsIColIO:nsISupports
+{
+     const unsigned short LOCAL_FILE   = 1;
+     const unsigned short DATABASE     = 2;
+     const unsigned short NETWORK      = 3;
+     void GetCol(out nsIColAtt col);
+     void SetLocation(in AUTF8String location);
+     void GetType(out unsigned short type);
+     void PutCol(in nsIColAtt col);
+     void GetColByID(out nsIColAtt col,in long id);
+     void UpdateByID(in long id,in AUTF8String colName,in AUTF8String value);
+     void UpdateStat(in nsIColAtt col,in unsigned short stat);
+     void GetColByStat(in unsigned short stat,out nsIColAtt col);
+};
