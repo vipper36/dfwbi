@@ -9,17 +9,21 @@
 #include <sstream>
 #include <map>
 #include <list>
+#include <stack>
 #include <vector>
 #include "nsIDOM3Node.h"
 #include "nsIDOMHTMLAnchorElement.h"
 #include "nsIDOMHTMLLinkElement.h"
+#include "mozIJSSubScriptLoader.h"
+#include "nsIDOMDocumentEvent.h"
+#include "nsIDOMEvent.h"
 #include "nsIColAtt.h"
 #include "sha1.h"
 #include "property.h"
 #include <regex.h>
 #include <stdlib.h>
 static NS_DEFINE_CID(kIOServiceCID, NS_IOSERVICE_CID);
-NS_IMPL_ISUPPORTS1(nsColNextPageFetcher, nsIColFetcher)
+NS_IMPL_ISUPPORTS1(nsColNextPageFetcher, nsIColNextPageFetcher)
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(nsColNextPageFetcher)
 
@@ -39,7 +43,8 @@ NS_IMPL_NSGETMODULE("nsColNextPageFetcherModule", components)
 
 
 nsColNextPageFetcher::nsColNextPageFetcher()
-:pageCount(1)
+:hasLoadJs(false),
+     mNextPage(nsnull)
 {
      /* member initializers and constructor code */
 }
@@ -66,8 +71,9 @@ NS_IMETHODIMP nsColNextPageFetcher::SetCol(nsIColAtt * aCol)
 NS_IMETHODIMP nsColNextPageFetcher::SetDocument(nsIDOMDocument *doc)
 {
      mDoc=doc;
-     urls.Clear();
-     FillUrls();
+     mNextPage=nsnull;
+     mEvtEle=nsnull;
+     FillPages();
      return NS_OK;
 }
 
@@ -75,123 +81,139 @@ NS_IMETHODIMP nsColNextPageFetcher::SetDocument(nsIDOMDocument *doc)
 NS_IMETHODIMP nsColNextPageFetcher::SetProperty(nsIPersistentProperties *prop)
 {
      property=prop;
-     nsString strCount;
-     property->GetStringProperty(COL_PAGE_COUNT,strCount);
-     pageCount=atol(NS_ConvertUTF16toUTF8(strCount).get());
+
 
      return NS_OK;
 }
-
-/* long GetColLength (); */
-NS_IMETHODIMP nsColNextPageFetcher::GetUrlLength(PRInt32 *_retval)
+/* attribute nsIColAtt nextPage; */
+NS_IMETHODIMP nsColNextPageFetcher::GetNextPage(nsIColAtt * *aNextPage)
 {
-     *_retval=urls.Count();
-     return NS_OK;
-}
-
-/* void GetColItem (in long index, out nsIColAtt col); */
-NS_IMETHODIMP nsColNextPageFetcher::GetUrlItem(PRInt32 index, nsIUrlAtt **url)
-{
-     if(index<urls.Count())
+     if(mNextPage!=nsnull)
      {
-	  *url = urls[index];
-	  NS_ADDREF(*url);
-     }
-     else
-     {
-	  *url=nsnull;
+	  *aNextPage=mNextPage;
+	  NS_ADDREF(*aNextPage);
      }
      return NS_OK;
 }
-NS_IMETHODIMP nsColNextPageFetcher::FillUrls()
+/* void GetEventEle (out nsIDOMElement ele); */
+NS_IMETHODIMP nsColNextPageFetcher::GetEventEle(nsIDOMElement **ele)
 {
-     nsCOMPtr<nsIDOMHTMLDocument> domhtml=do_QueryInterface(mDoc);
-     nsCOMPtr<nsIDOMHTMLCollection> links;
-     domhtml->GetLinks(getter_AddRefs(links));
-     PRInt32 colId;
-     mCol->GetId(&colId);
-
-     PRUint32 len;
-     links->GetLength(&len);
-           
-     for(int i=0;i<len;i++)
+     if(mEvtEle!=nsnull)
      {
-	  nsCOMPtr<nsIDOMNode> aLink(nsnull);
-	  links->Item(i,getter_AddRefs(aLink));
-	  if(aLink!=nsnull)
+	  *ele=mEvtEle;
+	  NS_ADDREF(*ele);
+     }
+     return NS_OK;
+}
+/** 
+ * @brief Get the urls on the other page or Get the next page url and create a new Colum. 
+ * 
+ * 
+ * @return 
+ */
+NS_IMETHODIMP nsColNextPageFetcher::FillPages()
+{
+     nsCOMPtr<nsIDOMElement> domele;
+     mDoc->GetDocumentElement(getter_AddRefs(domele));
+     nsIDOMNode *domnode;
+     CallQueryInterface(domele,&domnode);
+     std::list<nsIDOMNode*> leafList;
+     std::stack<nsIDOMNode*> eleStack;
+     eleStack.push(domnode);
+     while(!eleStack.empty())
+     {
+	  nsIDOMNode *domele=eleStack.top();
+	  eleStack.pop();
+	  nsCOMPtr<nsIDOMElement> tmpEle=do_QueryInterface(domele);
+	  bool isLeaf=true;
+	  domnode=nsnull;
+	  for(domele->GetFirstChild(&domnode);domnode!=nsnull;domnode->GetNextSibling(&domnode))
 	  {
-	       nsString Value;
+	       PRUint16 type;
+	       domnode->GetNodeType(&type);
+	       if(type==nsIDOMNode::ELEMENT_NODE)
+	       {
+		    isLeaf=false;
+		    break;
+	       }
+	  }
+	  if(isLeaf)
+	       leafList.push_back(domele);
+	  else
+	  {
+	       domnode=nsnull;
+	       for(domele->GetFirstChild(&domnode);domnode!=nsnull;domnode->GetNextSibling(&domnode))
+	       {
+		    PRUint16 type;
+		    domnode->GetNodeType(&type);
+		    if(type==nsIDOMNode::ELEMENT_NODE)
+		    {
+			 eleStack.push(domnode);
+		    }
+	       }
+	  }
+     }
+     for(std::list<nsIDOMNode*>::iterator it=leafList.begin();it!=leafList.end();++it)
+     {
+	  nsCOMPtr<nsIDOMElement> tmpEle=do_QueryInterface(*it);
+	  
+	  nsString Text;
+	  nsCOMPtr<nsIDOM3Node> nsEle=do_QueryInterface(tmpEle);
+	  nsEle->GetTextContent(Text);
+	  std::string eleTextStr(NS_ConvertUTF16toUTF8(Text).get());
+	  LOG<<"title:"<<eleTextStr<<"\n";
+	  if(is_nextpage_text(eleTextStr))
+	  {
 	       nsString linkUrl;
-	       nsCOMPtr<nsIDOM3Node> nsEle=do_QueryInterface(aLink);
-	       nsEle->GetTextContent(Value);
-					
-	       nsCOMPtr<nsIDOMHTMLAnchorElement> linkEle=do_QueryInterface(aLink);
+	       nsCOMPtr<nsIDOMHTMLAnchorElement> linkEle=do_QueryInterface(tmpEle);
 	       if(linkEle!=nsnull)
 	       {
 		    linkEle->GetHref(linkUrl);
 	       }else
 	       {
-		    nsCOMPtr<nsIDOMHTMLLinkElement>  linkEle2=do_QueryInterface(aLink);
+		    nsCOMPtr<nsIDOMHTMLLinkElement>  linkEle2=do_QueryInterface(tmpEle);
 		    if(linkEle2!=nsnull)
 		    {
 			 linkEle2->GetHref(linkUrl);
 		    }
 	       }
-
-	  
-	       std::string tmpTitle(NS_ConvertUTF16toUTF8(Value).get());
-	       std::string tmpUrl(NS_ConvertUTF16toUTF8(linkUrl).get());
-	       std::string expStr("#\\|javascript");
-	       LOG<<"title"<<tmpTitle<<" url:"<<tmpUrl<<"\n";
-	       if(is_nextpage_text(tmpTitle)&&!StrMatch(tmpUrl,expStr))
+	       nsresult rv;
+	       if(linkUrl.Length()>0&&linkUrl.Find(NS_ConvertUTF8toUTF16("javascript:"))<0&&linkUrl.Find(NS_ConvertUTF8toUTF16("#"))<0)
 	       {
-				   
-		    nsresult rv;
-		    nsCOMPtr<nsIUrlAtt> url=do_CreateInstance("@nyapc.com/XPCOM/nsUrlAtt;1", &rv);
+		    mNextPage=do_CreateInstance("@nyapc.com/XPCOM/nsColAtt;1", &rv);
 		    if (NS_FAILED(rv))
 		    {
 			 LOG<<"Get nsWebChannel Error:"<<rv<<"\n";
 		    }else
 		    {
-			 nsCString strName(tmpTitle.c_str());
-			 nsCString strUrl(tmpUrl.c_str());
-			 LOG<<"name:"<<strName.get()<<" url:"<<strUrl.get()<<" chl id:"<<colId<<"\n";
-		    
-			 url->SetURL(strName, strUrl,colId);
-			 urls.AppendObject(url);
+			  PRInt32 chlId;
+			  nsCString strName,strAlias;
+			  mCol->GetChlId(&chlId);
+			  mCol->GetName(strName);
+			  mCol->GetAlias(strAlias);
+			  nsCString strUrl(NS_ConvertUTF16toUTF8(linkUrl).get());
+			  LOG<<"name:"<<strName.get()<<" url:"<<strUrl.get()<<" chl id:"<<chlId<<"\n";
+			  mNextPage->SetCOL(strName,strUrl ,chlId);
+			  mNextPage->SetAlias(strAlias);
 		    }
+		    break;
 	       }
+	       else
+	       {
+		    nsString onclick;
+		    tmpEle->GetAttribute(NS_ConvertUTF8toUTF16("onclick"),onclick);
+		    if(onclick.Length()>0)
+		    {
+			 mEvtEle=tmpEle;
+		    }
+		    break;
+	       }
+	       
 	  }
      }
-
      return NS_OK;
 }
 
-bool nsColNextPageFetcher::StrMatch(const std::string &src,const std::string &match)
-{
-     bool b = false;
-     int flag = 0;
-     regex_t reg;
-     int r = regcomp(&reg, match.c_str(), flag);
-     if(r != 0)
-     {
-	  char ebuf[128];
-	  regerror(r, &reg, ebuf, sizeof(ebuf));
-	  LOG<<"regexp pattern error: "<<ebuf<<"\n";
-     }
-     else
-     {
-	  size_t nmatch = 1;
-	  regmatch_t pm;
-	  int r = regexec(&reg, src.c_str(), nmatch, &pm, 0);
-	  if(r==0)
-	  {
-	       b = true;
-	  }
-     }
-     regfree(&reg);
-     return b;
-}
 
 bool nsColNextPageFetcher::is_nextpage_text(std::string text)
 {
@@ -199,12 +221,11 @@ bool nsColNextPageFetcher::is_nextpage_text(std::string text)
 
      int flag = 0;
      regex_t reg;
-     int r = regcomp(&reg, "^\\([0-9]\\+\\|上.\\{,6\\}页\\|下.\\{,6\\}页\\|>\\+\\|<\\+\\)$", flag);
+     int r = regcomp(&reg, "^\\(下.\\{,6\\}页.\\?>*\\|>\\+\\)$", flag);
      if(r != 0)
      {
 	  char ebuf[128];
 	  regerror(r, &reg, ebuf, sizeof(ebuf));
-	  LOG<<"regexp pattern error: "<<ebuf<<"\n";
      }
      else
      {
@@ -215,21 +236,13 @@ bool nsColNextPageFetcher::is_nextpage_text(std::string text)
 	  if(!r)
 	  {
 	       b = true;
-	       /*
-		 int pos = 0;
-		 if(pm.rm_so != -1)
-		 {
-		 int len = pm.rm_eo - pm.rm_so;
-		 s.erase(pm.rm_so, len);
-		 string_filter2(s);
-		 }
-	       */
 	  }
      }
      regfree(&reg);
 
      return b;
 }
+
 void nsColNextPageFetcher::string_filter(std::string & s)
 {
      int flag = 0;

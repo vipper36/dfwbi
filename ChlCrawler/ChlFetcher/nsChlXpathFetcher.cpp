@@ -244,8 +244,6 @@ int nsChlXpathFetcher::GetColums()
 			      {
 				   LOG<<"name:"<<strName.get()<<" url:"<<strUrl.get()<<" chl id:"<<chlId<<"\n";
 				   col->SetCOL(strName, strUrl,chlId);
-				   nsCString tpName;
-				   col->GetName(tpName);
 				   cols.AppendObject(col);
 			      }
 			 }

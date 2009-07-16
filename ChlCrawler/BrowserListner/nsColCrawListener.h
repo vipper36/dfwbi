@@ -9,7 +9,7 @@
 #include "nsIColAtt.h"
 #include "nsIUrlAtt.h"
 #include "ILayoutAnalysis.h"
-#include "nsIColBridge.h"
+#include "nsIColNextPageFetcher.h"
 #include <stack>
 #include <set>
 
@@ -33,10 +33,9 @@ public:
 protected:
      nsCOMPtr<nsIColIO> ColSrc;
      nsCOMPtr<nsIColFetcher> ColFetch;
-     nsCOMPtr<nsIColFetcher> ColPageFetch;
+     nsCOMPtr<nsIColNextPageFetcher> ColPageFetch;
      nsCOMPtr<nsIUrlIO> urlTarget;
      
-     nsCOMPtr<nsIColBridge> bridge;
 
      nsCOMPtr<nsIColAtt> mCol;
      nsString AliasPath;

@@ -7,6 +7,7 @@
 #define OS                  LINUX_SUSE
 
 #define IDX_COM             nsCString("IdxCom")
+#define SCROOLWAIT nsCString("ScroolWait")
 
 #define MUST_HAVE_CSV       nsCString("MustHaveCSV")
 #define DONT_MUST_HAVE_CSV  nsCString("DontMustHaveCSV")

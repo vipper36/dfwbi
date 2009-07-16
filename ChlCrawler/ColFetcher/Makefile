@@ -41,6 +41,7 @@ DESC3=libColBridge.so
 PUBOBJECT3= nsColBridge.o
 IDLH= nsIColFetcher.idl
 IDLI= nsIColBridge.idl
+IDLJ= nsIColNextPageFetcher.idl
 .cpp.o:
 	@echo Compiling cc program $< ......
 	@echo c to o
@@ -63,6 +64,8 @@ idl:$(IDLH) $(IDLI)
 	$(IDL) -m typelib -I /usr/local/xulrunner-sdk/idl $(IDLH)
 	$(IDL) -m header -I /usr/local/xulrunner-sdk/idl $(IDLI)
 	$(IDL) -m typelib -I /usr/local/xulrunner-sdk/idl $(IDLI)
+	$(IDL) -m header -I /usr/local/xulrunner-sdk/idl $(IDLJ)
+	$(IDL) -m typelib -I /usr/local/xulrunner-sdk/idl $(IDLJ)
 install:
 	@cp *.so *.xpt $(GECKO_SDK_PATH)/bin/components/
 clean: 
