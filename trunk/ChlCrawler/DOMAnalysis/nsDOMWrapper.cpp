@@ -223,6 +223,7 @@ NS_IMETHODIMP nsDOMWrapper::LoadConfig() {
             n.Cut(0,n.Length());
             property->GetStringProperty(COL_BRIDGE_SOURCE, n);
             nsCString tmpSrc = NS_ConvertUTF16toUTF8(n);
+            LOG << "col bridge database: " << tmpSrc.get() << "\n";
             nsCString tmpComN("@nyapc.com/XPCOM/nsUrlDBIO;1");
             bridge->SetUrlSource(tmpSrc,tmpComN);
             tmpComN=nsCString("@nyapc.com/XPCOM/nsColDBIO;1");

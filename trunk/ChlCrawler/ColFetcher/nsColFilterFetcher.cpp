@@ -54,8 +54,11 @@ nsColFilterFetcher::~nsColFilterFetcher()
 /* attribute nsIColAtt col; */
 NS_IMETHODIMP nsColFilterFetcher::GetCol(nsIColAtt * *aCol)
 {
-     *aCol=mCol;
-     NS_ADDREF(*aCol);
+     if(mCol!=nsnull)
+     {
+	  *aCol=mCol;
+	  NS_ADDREF(*aCol);
+     }
      return NS_OK;
 }
 NS_IMETHODIMP nsColFilterFetcher::SetCol(nsIColAtt * aCol)
@@ -353,43 +356,6 @@ int nsColFilterFetcher::distance(const std::string source, const std::string tar
      // Step 7
 
      return matrix[n][m];
-}
-bool nsColFilterFetcher::is_nextpage_text(std::string text)
-{
-	bool b = false;
-
-	int flag = 0;
-	regex_t reg;
-	int r = regcomp(&reg, "^\\([0-9]\\+\\|上.\\{,6\\}页\\|下.\\{,6\\}页\\|>\\+\\|<\\+\\)$", flag);
-	if(r != 0)
-	{
-		char ebuf[128];
-		regerror(r, &reg, ebuf, sizeof(ebuf));
-		LOG<<"regexp pattern error: "<<ebuf<<"\n";
-	}
-	else
-	{
-		size_t nmatch = 1;
-		regmatch_t pm;
-		string_filter(text);
-		int r = regexec(&reg, text.c_str(), nmatch, &pm, 0);
-		if(!r)
-		{
-			b = true;
-			/*
-			int pos = 0;
-			if(pm.rm_so != -1)
-			{
-				int len = pm.rm_eo - pm.rm_so;
-				s.erase(pm.rm_so, len);
-				string_filter2(s);
-			}
-			*/
-		}
-	}
-	regfree(&reg);
-
-	return b;
 }
 /** 
  * @brief Mapping the url to the right one 

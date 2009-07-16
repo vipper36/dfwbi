@@ -15,6 +15,12 @@
 #include "nsIUrlAtt.h"
 #include "nsIWebProgress.h"
 #include "nsIBaseWindow.h"
+#include "nsIScrollable.h"
+#include "nsIDOMMouseEvent.h"
+#include "nsIDOMDocumentView.h"
+#include "nsIDOMAbstractView.h"
+#include "nsIDOMEventTarget.h"
+#include "nsIDOMDocumentEvent.h"
 #include "property.h"
 #include <iostream>
 #include <stdlib.h>
@@ -37,7 +43,8 @@ NS_IMPL_ISUPPORTS4(nsBrowserListener,
  */
 NS_IMETHODIMP nsBrowserListener::Notify(nsITimer  *timer)
 {
-     LOG<<"timmer start:"<<running<<"\n";
+     LOG<<"timmer start:"<<running<<"count"<<timeCount<<"isScroll"<<isScrolled<<"\n";
+     int breTime=(int)(interTime*(float)1000);
      if(running==NOT_RUN)
      {
 	  if(brwStop)
@@ -48,21 +55,42 @@ NS_IMETHODIMP nsBrowserListener::Notify(nsITimer  *timer)
 	  {
 	       if(docStop&&WinStop)
 	       {
-		    nsCOMPtr<nsIWebNavigation> nav = do_QueryInterface(mBro);
-		    if(!browError)
-			 Excute(nav);
-		    else
-			 Update(LINK_STAT_ERROR);
-//	       nav->Stop(nsIWebNavigation::STOP_ALL);
-		    nsCString tmpUrl;
-		    GetUrl(tmpUrl);
-		    if(tmpUrl.Length()>0)
+		    if(scroolWait>0&&!isScrolled)
 		    {
+			 ScrollWin();
 			 SetRunning(RUNNING);
-			 WebNav(nav,tmpUrl);
+			 isScrolled=true;
+			 breTime=scroolWait*1000;
 		    }else
 		    {
-			 StopBrows();
+			 //Init event stat.
+			 SetEventWait(false);
+			 
+			 nsCOMPtr<nsIWebNavigation> nav = do_QueryInterface(mBro);
+			 if(!browError)
+			      Excute(nav);
+			 else
+			      Update(LINK_STAT_ERROR);
+			 //if the evenWait has set, do not change the web site.
+			 if(evenWait)
+			 {
+			      breTime=1000;
+			 }else
+			 {
+			      nsCString tmpUrl;
+			      GetUrl(tmpUrl);
+			      if(tmpUrl.Length()>0)
+			      {
+				   //init running stat and scrool stat.
+				   SetRunning(RUNNING);
+				   isScrolled=false;
+				   //navigate the web site.
+				   WebNav(nav,tmpUrl);
+			      }else
+			      {
+				   StopBrows();
+			      }
+			 }
 		    }    
 	       }else
 	       {
@@ -70,6 +98,7 @@ NS_IMETHODIMP nsBrowserListener::Notify(nsITimer  *timer)
 		    {
 			 docStop=true;
 			 WinStop=true;
+			 timeCount=0;
 		    }else
 		    {
 			 timeCount++;
@@ -78,18 +107,66 @@ NS_IMETHODIMP nsBrowserListener::Notify(nsITimer  *timer)
 	  }
      }else
      {
+	  timeCount=0;
 	  SetRunning(NOT_RUN);
      }
      timeOut->Cancel();
-     int breTime=(int)(interTime*(float)1000);
-     LOG<<"timmer stop:"<<running<<"\n";
 
+     LOG<<"timmer stop:"<<running<<"inter time:"<<breTime<<"\n";
      timeOut->InitWithCallback(this, breTime, 0);
 
 
      return NS_OK;
 }
-
+void nsBrowserListener::SetEventWait(bool ew)
+{
+     evenWait=ew;
+}
+/** 
+ * @brief Send a mouse click event to the element.
+ * 
+ * @param ele the element which has a "onclick" event.
+ * @param doc The owner document.
+ * 
+ * @return 
+ */
+NS_IMETHODIMP nsBrowserListener::SendEvent(nsIDOMElement* ele,nsIDOMDocument *doc)
+{
+     nsresult rv;
+     nsCOMPtr<nsIDOMDocumentView> docView =do_QueryInterface(doc); 
+     nsCOMPtr<nsIDOMDocumentEvent> docEvent = do_QueryInterface(doc);
+     nsCOMPtr<nsIDOMAbstractView> view;        
+     docView->GetDefaultView(getter_AddRefs(view)); 
+     nsCOMPtr<nsIDOMEvent> event;
+     docEvent->CreateEvent(NS_LITERAL_STRING("MouseEvents"),getter_AddRefs(event));
+     nsCOMPtr<nsIDOMMouseEvent> mouseEvt=do_QueryInterface(event,&rv); 
+     mouseEvt->InitMouseEvent(NS_LITERAL_STRING("click"),PR_TRUE,PR_TRUE,view,0,0,0,0,0,PR_FALSE,PR_FALSE,PR_FALSE,PR_FALSE,1,nsnull); 
+     nsCOMPtr<nsIDOMEventTarget> evtTarget=do_QueryInterface(ele);
+     PRBool clickStatus;
+     evtTarget->DispatchEvent(mouseEvt,&clickStatus);
+     return NS_OK;
+}
+/** 
+ * @brief Set the Vertical scroll to the max position.
+ * 
+ */
+NS_IMETHODIMP nsBrowserListener::ScrollWin()
+{
+     nsCOMPtr<nsIScrollable> scoll= do_QueryInterface(mBro);
+     PRInt32 minPos,maxPos;
+     nsresult rv=scoll->GetScrollRange(nsIScrollable::ScrollOrientation_Y,&minPos,&maxPos);
+     if (NS_FAILED(rv))
+     {
+	  return rv;
+     }
+     rv= scoll->SetCurScrollPos(nsIScrollable::ScrollOrientation_Y,maxPos);
+     if (NS_FAILED(rv))
+     {
+	  return rv;
+     }
+     LOG<<"Scroll the browser!\n";
+     return NS_OK;
+}
 NS_IMETHODIMP nsBrowserListener::SetBrowser(nsIWebBrowser * aBrowser)
 {
      mBro=aBrowser;
@@ -161,6 +238,13 @@ NS_IMETHODIMP nsBrowserListener::SetWorkSpace(const nsACString & workspace)
      property->GetStringProperty(INTERTIME,strTime);
      if(strTime.Length()>0)
 	  interTime=atof(NS_ConvertUTF16toUTF8(strTime).get());
+     LOG<<"interTime:"<<interTime<<"\n";
+     nsString strScrool;
+     property->GetStringProperty(SCROOLWAIT,strScrool);
+     if(strScrool.Length()>0)
+	  scroolWait=atof(NS_ConvertUTF16toUTF8(strScrool).get());
+     LOG<<"scrool:"<<scroolWait<<"\n";
+     return NS_OK;
 
 }
 NS_IMETHODIMP nsBrowserListener::WebNav(nsIWebNavigation *nav,const nsACString &url)
@@ -191,7 +275,10 @@ nsBrowserListener::nsBrowserListener()
       endLayer(0),
       browError(true),
       interTime(0.3),
-      timeCount(0)
+      timeCount(0),
+      isScrolled(false),
+      scroolWait(-1),
+      evenWait(false)
 {
      nsresult rv = NS_GetServiceManager(getter_AddRefs(servMan));
      if (NS_FAILED(rv))

@@ -43,7 +43,7 @@ private:
   std::string RepTo;
   bool StrMatch(const std::string &src,const std::string &match);
   NS_IMETHODIMP FillUrls();
-  bool is_nextpage_text(std::string text);
+
   int distance(const std::string source, const std::string target);
   void string_filter(std::string & s);
   void ReplaceString(std::string & s,const std::string &from,const std::string &to,int type);

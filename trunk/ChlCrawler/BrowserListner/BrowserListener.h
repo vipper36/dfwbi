@@ -56,6 +56,8 @@ protected:
      virtual NS_IMETHODIMP GetUrl(nsACString &url)=0;
 
      void SetCurrentUrl(const nsACString &url);
+     NS_IMETHODIMP ScrollWin();
+     NS_IMETHODIMP SendEvent(nsIDOMElement* ele,nsIDOMDocument *doc);
      bool WinStop;
      bool docStop;
      bool NetStop;
@@ -67,6 +69,10 @@ protected:
      PRUint16 endLayer;
      float interTime;
      bool browError;
+     bool isScrolled;
+     float scroolWait;
+     bool evenWait;
+     void SetEventWait(bool ew);
 };
 
 #endif

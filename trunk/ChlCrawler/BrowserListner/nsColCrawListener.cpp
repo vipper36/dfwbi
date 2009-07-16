@@ -85,19 +85,6 @@ NS_IMETHODIMP nsColCrawListener::SetWorkSpace(const nsACString & workspace)
      property->GetStringProperty(COL_ALIAS_PATH,AliasPath);
 
      
-     rv = servMan->GetServiceByContractID("@nyapc.com/XPCOM/nsColBridge;1", NS_GET_IID(nsIColBridge), getter_AddRefs(bridge));
-
-     if (NS_FAILED(rv))
-     {
- 	  LOG<<"Get  nsIColBridge  Error:"<<rv<<"\n";
-	  return rv;
-     }
-     nsCString tmpSrc("/root/workspace/ChlCrawler/blog/chl/tt.sqlite");
-     nsCString tmpComN("@nyapc.com/XPCOM/nsUrlDBIO;1");
-     bridge->SetUrlSource(tmpSrc,tmpComN);
-     tmpComN=nsCString("@nyapc.com/XPCOM/nsColDBIO;1");
-     bridge->SetColSource(tmpSrc,tmpComN);
-
      nsString comName;
      //create nsIColIO com
      property->GetStringProperty(COL_IO_COM,comName);
@@ -150,11 +137,11 @@ NS_IMETHODIMP nsColCrawListener::SetWorkSpace(const nsACString & workspace)
 
      std::cout<<"comName:"<<NS_ConvertUTF16toUTF8(comName).get()<<std::endl;
 
-     rv = servMan->GetServiceByContractID(NS_ConvertUTF16toUTF8(comName).get(), NS_GET_IID(nsIColFetcher), getter_AddRefs(ColPageFetch));
+     rv = servMan->GetServiceByContractID(NS_ConvertUTF16toUTF8(comName).get(), NS_GET_IID(nsIColNextPageFetcher), getter_AddRefs(ColPageFetch));
 
      if (NS_FAILED(rv))
      {
- 	  LOG<<"Get  nsIChlFetcher  Error:"<<rv<<"\n";
+ 	  LOG<<"Get  nsIChlPageFetcher  Error:"<<rv<<"\n";
 	  return rv;
      }
      ColPageFetch->SetProperty(property);
@@ -233,8 +220,6 @@ NS_IMETHODIMP nsColCrawListener::Excute(nsIWebNavigation *nav)
 		    ColFetch->GetUrlItem(i,getter_AddRefs(url));
 		    nsCString urlStr,name;
 		    url->GetLink(urlStr);
-		    bridge->GetColName(urlStr,name);
-		    LOG<<"title:"<<name.get()<<"\n";
 		    urlTarget->PutURL(url);
 	       }
 	       nsCString alias;
@@ -281,32 +266,25 @@ NS_IMETHODIMP nsColCrawListener::Excute(nsIWebNavigation *nav)
 		    }
 		    
 	       }
-	       // len=0;
-// 	       ColPageFetch->SetCol(mCol);
-// 	       ColPageFetch->SetDocument(domdoc);
-// 	       ColPageFetch->GetUrlLength(&len);
-// 	       LOG<<"page len"<<len<<"\n";
-// 	       for(PRInt32 i=0;i<len;i++)
-// 	       {
-// 		    nsCOMPtr<nsIUrlAtt> url;
-// 		    ColPageFetch->GetUrlItem(i,getter_AddRefs(url));
-// 		    nsCString urlStr;
-// 		    url->GetLink(urlStr);
-// 		    nsCOMPtr<nsIColAtt> col=do_CreateInstance("@nyapc.com/XPCOM/nsColAtt;1", &rv);
-// 		    if (NS_FAILED(rv))
-// 		    {
-// 			 LOG<<"Get nsWebChannel Error:"<<rv<<"\n";
-// 		    }else
-// 		    {
-// 			 PRInt32 chlId;
-// 			 mCol->GetChlId(&chlId);
-// 			 nsCString tmpName;
-// 			 mCol->GetName(tmpName);
-// 			 col->SetCOL(tmpName, urlStr,chlId);
-// 			 col->SetAlias(alias);
-// 			 ColSrc->PutCol(col);
-// 		    }
-// 	       }
+	       ColPageFetch->SetCol(mCol);
+	       ColPageFetch->SetDocument(domdoc);
+	       nsCOMPtr<nsIColAtt> nextPage(nsnull);
+	       ColPageFetch->GetNextPage(getter_AddRefs(nextPage));
+	       if(nextPage!=nsnull)
+	       {
+		    ColSrc->PutCol(nextPage);
+	       }else
+	       {
+		    nsCOMPtr<nsIDOMElement> entEle(nsnull);
+		    ColPageFetch->GetEventEle(getter_AddRefs(entEle));
+		    if(entEle!=nsnull)
+		    {
+			 LOG<<"send the event\n";
+			 SendEvent(entEle,domdoc);
+			 SetEventWait(true);
+		    }
+	       }
+	       
 	       Update(LINK_STAT_GET);
 	  }
      }else

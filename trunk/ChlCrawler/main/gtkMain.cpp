@@ -87,32 +87,35 @@ bool mozilla_prefs_set_string(nsIServiceManager *servMan,const char *preference_
 
 static void xsimulate_key(GtkWidget *widget, guint uval)
 {
-     XKeyEvent xev;
-     memset(&xev, 0, sizeof(xev));
-     xev.serial = 0;
-     xev.send_event = 0;
-     xev.type = KeyPress;
-     xev.display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
-     xev.keycode= XKeysymToKeycode(xev.display, uval);
-     xev.root = None;
+     if(widget!=NULL)
+     {
+	  XKeyEvent xev;
+	  memset(&xev, 0, sizeof(xev));
+	  xev.serial = 0;
+	  xev.send_event = 0;
+	  xev.type = KeyPress;
+	  xev.display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
+	  xev.keycode= XKeysymToKeycode(xev.display, uval);
+	  xev.root = None;
 //     xev.subwindow = GDK_WINDOW_XWINDOW(widget);
-     xev.window = GDK_WINDOW_XWINDOW(widget->window);
-     xev.time = 0;
-     xev.same_screen = 1;
-     xev.state = 0;
-     xev.x = 1;
-     xev.y = 1;
-     xev.x_root = 1;
-     xev.y_root = 1;
-     (void) XSendEvent(xev.display, xev.window, True, KeyPressMask,
-		       (XEvent *)&xev);
-     XFlush(xev.display);
+	  xev.window = GDK_WINDOW_XWINDOW(widget->window);
+	  xev.time = 0;
+	  xev.same_screen = 1;
+	  xev.state = 0;
+	  xev.x = 1;
+	  xev.y = 1;
+	  xev.x_root = 1;
+	  xev.y_root = 1;
+	  (void) XSendEvent(xev.display, xev.window, True, KeyPressMask,
+			    (XEvent *)&xev);
+	  XFlush(xev.display);
 
 /* Key release may be needed for some programs */
-     xev.type = KeyRelease;
-     (void) XSendEvent(xev.display, xev.window, True, KeyReleaseMask,
-		       (XEvent *)&xev);
-     XFlush(xev.display); 
+	  xev.type = KeyRelease;
+	  (void) XSendEvent(xev.display, xev.window, True, KeyReleaseMask,
+			    (XEvent *)&xev);
+	  XFlush(xev.display); 
+     }
      std::cout<<"send key press.........."<<std::endl;
 }
 void * inputsim(void *win)
@@ -126,7 +129,8 @@ void * inputsim(void *win)
 	  timeout.tv_sec = now.tv_sec+1;
 	  timeout.tv_nsec = now.tv_usec * 1000;
 	  int retcode = pthread_cond_timedwait(&cond_i, &mutex_i, &timeout);
-	  xsimulate_key((GtkWidget*)win, XK_Tab);
+	  if(win!=NULL)
+	       xsimulate_key((GtkWidget*)win, XK_Tab);
 	  pthread_mutex_unlock( &mutex_i );
      }
 }
@@ -240,7 +244,7 @@ int main(int argc, char** argv) {
 	  std::cout<<"webBrowser load error "<<std::endl;
 	  return 0;
      }
- 	gtk_widget_hide(mozembed);
+     gtk_widget_hide(mozembed);
  	gtk_widget_hide(window);
      /**********set listener***********/
      nsCOMPtr<nsIWebProgressListener> webl;
