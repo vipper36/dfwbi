@@ -965,3 +965,17 @@ Jun 4, 2009
 Jun 15, 2009 
     Multifactor dimensionality reduction (MDR) is a data mining approach for detecting and characterizing combinations of attributes or independent variables that interact to influence a dependent or class variable. MDR was designed specifically to identify interactions among discrete variables that influence a binary outcome and is considered a nonparametric alternative to traditional statistical methods such as logistic regression.
     
+Jul 21, 2009 
+ 获取子进程号   
+function get_child_pids ( )
+{
+    c_pid=$1
+    while [ ! -z ${c_pid} ]; do
+        c_pids=${c_pid}" "${c_pids}
+        c_pid=`ps -ef|awk '{print $2" "$3}'|grep " ${c_pid}"|awk '{print $1}'`
+        [ -z "${c_pid}" ] && return
+        for i in ${c_pid}; do
+            get_child_pids $i
+        done
+    done
+}
