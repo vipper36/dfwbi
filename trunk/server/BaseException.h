@@ -61,5 +61,4 @@ private:
     ErrorCode      m_error_code;
     std::string    m_what;
 };
-#define LOG(a,b) printf(b)
 #endif
