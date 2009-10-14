@@ -1,33 +1,28 @@
-#include "Logger.h"
-#include <iostream>
-namespace common
-{
-     Logger * Logger::m_instance=NULL;
-// Constructors/Destructors
-//  
-     Logger::Logger ( ) {
-     }
+// my_app_log.cpp
+#include "my_app_log.h"
+#include <boost/logging/format.hpp>
+#include <boost/logging/format/formatter/tags.hpp>
 
-     Logger::~Logger ( ) { }
+// uncomment if you're using Named Formatters and Destinations
+// #include <boost/logging/format/named_write.hpp>
 
-//  
-// Methods
-//  
-     void Logger::log(std::string log)
-     {
-	  std::cout<<log<<std::endl;
-     }
-     void Logger::log(int log)
-     {
-	  std::cout<<log<<std::endl;
-     }
+using namespace boost::logging;
 
-     Logger* Logger::Instance()
-     {
-	  if(m_instance==0)
-	  {
-	       m_instance=new Logger();
-	  }
-	  return m_instance;
-     }
+BOOST_DEFINE_LOG_FILTER(g_log_filter, finder::filter ) 
+BOOST_DEFINE_LOG(g_l, finder::logger) 
+
+
+void init_logs(std::string filename) {
+    // Add formatters and destinations
+    // That is, how the message is to be formatted...
+    g_l()->writer().add_formatter( formatter::tag::thread_id() );
+    g_l()->writer().add_formatter( formatter::tag::time("$hh:$mm.$ss ") );
+    g_l()->writer().add_formatter( formatter::idx() );
+    g_l()->writer().add_formatter( formatter::append_newline() );
+
+    //        ... and where should it be written to
+    g_l()->writer().add_destination( destination::cout() );
+    g_l()->writer().add_destination( destination::dbg_window() );
+    g_l()->writer().add_destination( destination::file(filename.c_str()) );
+    g_l()->mark_as_initialized();
 }
