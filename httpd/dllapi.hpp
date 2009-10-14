@@ -8,7 +8,7 @@
 #ifndef _DLLAPI_H_
 #define _DLLAPI_H_
 
-#include "os.h"
+#include "os.hpp"
 #ifdef __cplusplus
 extern "C"
 {

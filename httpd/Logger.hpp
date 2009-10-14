@@ -1,41 +1,26 @@
 #ifndef __LOG_H_header
 #define __LOG_H_header
-
 #include <boost/logging/format_fwd.hpp>
 
-// uncomment if you're using Named Formatters and Destinations
-//#include <boost/logging/format/named_write_fwd.hpp>
+// Step 1: Optimize : use a cache string, to make formatting the message faster
+BOOST_LOG_FORMAT_MSG( optimize::cache_string_one_str<> ) 
 
-// uncomment if you want to do logging on a dedicated thread
-// #include <boost/logging/writer/on_dedicated_thread.hpp>
+#ifndef BOOST_LOG_COMPILE_FAST
+#include <boost/logging/format.hpp>
+#include <boost/logging/writer/ts_write.hpp>
+#endif
 
+// Step 3 : Specify your logging class(es)
+typedef boost::logging::logger_format_write< > log_type;
 
-namespace bl = boost::logging;
-typedef bl::tag::holder<
-    // string class
-    bl::optimize::cache_string_one_str<>,
-    // tags
-    bl::tag::thread_id, bl::tag::time> log_string_type;
-// note: if you don't use tags, you can simply use a string class:
-// typedef bl::optimize::cache_string_one_str<> log_string_type;
-BOOST_LOG_FORMAT_MSG( log_string_type )
+// Step 4: declare which filters and loggers you'll use
+BOOST_DECLARE_LOG_FILTER(g_l_filter, boost::logging::level::holder)
+BOOST_DECLARE_LOG(g_l, log_type)
 
-
-using namespace boost::logging::scenario::usage;
-typedef use<
-        //  how often do you manipulate (change) the filter?
-        filter_::change::often<10>,
-        //  does the filter use levels?
-        filter_::level::no_levels,
-        // how often do you manipulate (change) the logger?
-        logger_::change::often<10>,
-        // for the logger: do you favor speed or correctness?
-        logger_::favor::correctness> finder;
-
-BOOST_DECLARE_LOG_FILTER(g_l_filter, finder::filter)
-BOOST_DECLARE_LOG(g_l, finder::logger)
-
-#define L_ BOOST_LOG_USE_LOG_IF_FILTER(g_l(), g_log_filter()->is_enabled() ) 
+// Step 5: define the macros through which you'll log
+#define LOG_DBG BOOST_LOG_USE_LOG_IF_LEVEL(g_l(), g_l_filter(), debug ) << "[dbg] "
+#define LOG_ERR BOOST_LOG_USE_LOG_IF_LEVEL(g_l(), g_l_filter(), error ) << "[ERR] "
+#define LOG_APP BOOST_LOG_USE_LOG_IF_LEVEL(g_l(), g_l_filter(), info )
 
 // initialize thy logs..
 void init_logs(std::string filename);
