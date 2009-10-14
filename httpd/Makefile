@@ -11,8 +11,8 @@ CXXFLAGS=-g -DBOOSTEST -fPIC -D_XLNX64
 DESC=server boostest
 LFLAGS=-shared -O2 -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-BOOSTOBJ=Connection.o ControlService.o Listener.o Logger.o RequestHandler.o Server.o main.o
-TESTOBJ=boostest.o dllapi.o
+BOOSTOBJ=Logger.o connection.o mime_types.o posix_main.o reply.o request_handler.o request_parser.o server.o
+TESTOBJ=boostest.o dllapi.o Logger.o
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
