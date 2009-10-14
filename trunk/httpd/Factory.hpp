@@ -2,8 +2,8 @@
 #define LOKI_FACTORYPARM_INC_
 #include <string>
 #include <map>
-#include "BaseException.h"
-#include "ProductCreator.h"
+#include "BaseException.hpp"
+#include "ProductCreator.hpp"
 template
 <
      typename AbstractProduct,

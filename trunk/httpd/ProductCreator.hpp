@@ -2,7 +2,7 @@
 #define _PRODUCT_CREATOR_
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include "dllapi.h"
+#include "dllapi.hpp"
 #include "stdio.h"
 typedef void* (*DLLFUN)();
 template<typename AbstractProduct>

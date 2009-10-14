@@ -1,28 +1,24 @@
-// my_app_log.cpp
-#include "my_app_log.h"
+#include "Logger.hpp"
 #include <boost/logging/format.hpp>
-#include <boost/logging/format/formatter/tags.hpp>
-
-// uncomment if you're using Named Formatters and Destinations
-// #include <boost/logging/format/named_write.hpp>
+#include <boost/logging/writer/ts_write.hpp>
 
 using namespace boost::logging;
 
-BOOST_DEFINE_LOG_FILTER(g_log_filter, finder::filter ) 
-BOOST_DEFINE_LOG(g_l, finder::logger) 
+// Step 6: Define the filters and loggers you'll use
+BOOST_DEFINE_LOG(g_l, log_type)
+BOOST_DEFINE_LOG_FILTER(g_l_filter, level::holder)
 
 
 void init_logs(std::string filename) {
     // Add formatters and destinations
     // That is, how the message is to be formatted...
-    g_l()->writer().add_formatter( formatter::tag::thread_id() );
-    g_l()->writer().add_formatter( formatter::tag::time("$hh:$mm.$ss ") );
     g_l()->writer().add_formatter( formatter::idx() );
+    g_l()->writer().add_formatter( formatter::time("$hh:$mm.$ss ") );
     g_l()->writer().add_formatter( formatter::append_newline() );
 
     //        ... and where should it be written to
     g_l()->writer().add_destination( destination::cout() );
     g_l()->writer().add_destination( destination::dbg_window() );
     g_l()->writer().add_destination( destination::file(filename.c_str()) );
-    g_l()->mark_as_initialized();
+    g_l()->turn_cache_off();
 }
