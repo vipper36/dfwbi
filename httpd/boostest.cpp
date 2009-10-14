@@ -7,6 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp>
 #include <iostream>
 #include <string>
 #include "Logger.hpp"
@@ -15,6 +16,7 @@
 using namespace boost;
 using namespace boost::unit_test;
 using namespace std;
+namespace po = boost::program_options;
 void testfun()
 {
      try
@@ -29,6 +31,16 @@ void testfun()
 	  LOG_APP<<funName;
 	  testProduct *tp=fact->CreateObject(proName,funName);
 	  tp->print();
+	  std::stringstream ss;
+	  ss  << "CurrentX=1234"<<std::endl
+	      <<"CurrentY=456"<<std::endl;
+	  po::options_description desc;
+
+	  po::variables_map vm;       
+	  po::store(po::parse_config_file(ss, desc, true), vm);
+	  po::variable_value vv=vm["CurrentX"];
+
+	  LOG_APP<<any_cast<int>(vv.value());
      }
      catch(BaseException e)
      {
