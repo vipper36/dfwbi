@@ -19,21 +19,29 @@
 #include "Logger.hpp"
 #include <pthread.h>
 #include <signal.h>
+#include "config_file.hpp"
+#include <boost/assign/list_of.hpp>
+#include "config_file.hpp"
+
+
+template<typename T1,typename T2,template<typename,typename> class Con=std::pair>
+class printPair
+{
+public:
+     void operator()(Con<T1,T2> con)
+	  {
+	       LOG_APP<<con.first<<"--"<<con.second;
+	  }
+};
+
 namespace po = boost::program_options;
+using namespace boost::assign;
+
 int main(int argc, char* argv[])
 {
+     init_logs("log.log");
      try
      {
-	  // Check command line arguments.
-	  // if (argc != 5)
-//     {
-//       std::cerr << "Usage: http_server <address> <port> <threads> <doc_root>\n";
-//       std::cerr << "  For IPv4, try:\n";
-//       std::cerr << "    receiver 0.0.0.0 80 1 .\n";
-//       std::cerr << "  For IPv6, try:\n";
-//       std::cerr << "    receiver 0::0 80 1 .\n";
-//       return 1;
-//     }
 	  std::string configFile;
 	  po::options_description desc("Allowed options");
 	  desc.add_options()
@@ -47,6 +55,17 @@ int main(int argc, char* argv[])
 	       std::cout << "usage:httpd -f <config file>" << "\n";
 	       return 0;
 	  }
+	  po::notify(vm);
+	  LOG_APP<<"config file:"<<configFile;
+
+	  Configer* conf=Configer::Instance();
+	  
+	  std::list<std::string> sysconf=list_of("address")("port")("threads")("root");
+	  std::map<std::string,std::string> remap=conf->GetConfig(configFile,"sys",sysconf);
+	  //Test config
+	  printPair<std::string,std::string> prn;
+	  std::for_each(remap.begin(),remap.end(), prn);
+	  
 	  
 	  // Block all signals for background thread.
 	  sigset_t new_mask;
@@ -55,8 +74,8 @@ int main(int argc, char* argv[])
 	  pthread_sigmask(SIG_BLOCK, &new_mask, &old_mask);
 
 	  // Run server in background thread.
-	  std::size_t num_threads = boost::lexical_cast<std::size_t>(argv[3]);
-	  http::server3::server s(argv[1], argv[2], argv[4], num_threads);
+	  std::size_t num_threads = boost::lexical_cast<std::size_t>(remap["sys.threads"]);
+	  http::server3::server s(remap["sys.address"].c_str(),remap["sys.port"].c_str(), remap["sys.root"].c_str(), num_threads);
 	  boost::thread t(boost::bind(&http::server3::server::run, &s));
 
 	  // Restore previous signals.
