@@ -39,29 +39,32 @@ using namespace boost::assign;
 
 int main(int argc, char* argv[])
 {
-     init_logs("log.log");
      try
      {
 	  std::string configFile;
+	  std::string logFile("log.log");
 	  po::options_description desc("Allowed options");
 	  desc.add_options()
 	       ("help,h", "usage message")
 	       ("config,f", po::value(&configFile), "config file")
+	       ("log,l", po::value(&logFile), "log file")
 	       ;
 	  po::variables_map vm;
 	  po::store(parse_command_line(argc, argv, desc), vm);
-	  if (argc<2||vm.count("help")) {
+	  if (argc<2||vm.count("help")||!vm.count("config")) {
 	       std::cout << desc << "\n";
-	       std::cout << "usage:httpd -f <config file>" << "\n";
+	       std::cout << "usage:httpd -f <config file> [-l <log file>]" << "\n";
 	       return 0;
 	  }
 	  po::notify(vm);
+	  std::cout<<"log file:"<<logFile<<std::endl;
+	  init_logs(logFile);
 	  LOG_APP<<"config file:"<<configFile;
 
 	  Configer* conf=Configer::Instance();
-	  
+	  conf->SetDefaultConfig(configFile);
 	  std::list<std::string> sysconf=list_of("address")("port")("threads")("root");
-	  std::map<std::string,std::string> remap=conf->GetConfig(configFile,"sys",sysconf);
+	  std::map<std::string,std::string> remap=conf->GetConfig("sys",sysconf);
 	  //Test config
 	  printPair<std::string,std::string> prn;
 	  std::for_each(remap.begin(),remap.end(), prn);

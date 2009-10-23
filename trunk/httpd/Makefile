@@ -1,17 +1,17 @@
-BOOSTLIB=-L/usr/local/lib -lboost_thread-gcc43-mt -lboost_system-gcc43-mt -lboost_program_options-gcc43-mt -lpthread
-TESTLIB=-L/usr/local/lib -lboost_unit_test_framework-gcc43-mt-s
+BOOSTLIB=-lboost_thread-mt -lboost_system-mt -lboost_program_options-mt -lpthread
+TESTLIB=-lboost_unit_test_framework-mt
 DLLLIB=-ldl
-BOOSTINC=-I/usr/local/include/boost-1_37 -I./log
+BOOSTINC= -I./log
 CC=gcc
 AR=ar -r
 CXX=g++
 LINK=ld
-CFLAGS=-g -DBOOSTEST -fPIC -D_XLNX64
-CXXFLAGS=-g -DBOOSTEST -fPIC -D_XLNX64
+CFLAGS=-DBOOSTEST -fPIC -D_XLNX64
+CXXFLAGS=-DBOOSTEST -fPIC -D_XLNX64
 DESC=httpd boostest
 LFLAGS=-shared -O2 -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-BOOSTOBJ=Logger.o connection.o mime_types.o posix_main.o reply.o request_handler.o request_parser.o server.o config_file.o
+BOOSTOBJ=Logger.o connection.o mime_types.o posix_main.o reply.o request_handler.o request_parser.o server.o config_file.o  dllapi.o
 TESTOBJ=boostest.o dllapi.o Logger.o config_file.o
 .SUFFIXES: .h .cpp .o
 
@@ -27,10 +27,10 @@ all: $(DESC)
 	@echo $@ update to date
 httpd:$(BOOSTOBJ)
 	@echo Linking $@ ...
-	$(CXX) -g -o $@ $^ ${BOOSTLIB}
+	$(CXX) -O3 -o $@ $^ ${BOOSTLIB} ${DLLLIB}
 boostest:$(TESTOBJ)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB} ${TESTLIB} ${DLLLIB}
+	$(CXX)  -o $@ $^ ${BOOSTLIB} ${TESTLIB} ${DLLLIB}
 clean:
 	@-rm $(DESC)
 	@-rm -fr *.o *.a *~ "*#"
