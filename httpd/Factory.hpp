@@ -1,5 +1,5 @@
-#ifndef LOKI_FACTORYPARM_INC_
-#define LOKI_FACTORYPARM_INC_
+#ifndef __LOKI_FACTORYPARM_INC_
+#define __LOKI_FACTORYPARM_INC_
 #include <string>
 #include <map>
 #include "BaseException.hpp"

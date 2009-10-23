@@ -1,4 +1,4 @@
-#include <boost/test/unit_test.hpp>
+#include <boost/test/included/unit_test.hpp>
 #include <boost/test/framework.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <boost/functional.hpp>
@@ -16,6 +16,9 @@
 #include "Factory.hpp"
 #include "testpro/testpro.h"
 #include "config_file.hpp"
+#include "command_inter.hpp"
+#include "handle_command.hpp"
+
 using namespace boost;
 using namespace boost::unit_test;
 using namespace boost::assign;
@@ -34,16 +37,28 @@ void testfun()
 {
      try
      {
-	  Factory<testProduct> *fact=Factory<testProduct>::Instance();
-	  std::string proName="testpro/testpro";
+	  Factory<command_inter> *fact=Factory<command_inter>::Instance();
+	  std::string proName="commands/status.so";
 	  fact-> Register(proName);
 	  std::string funName;
 	  LOG_APP<<proName;
-	  size_t idx=proName.rfind("/");
-	  funName=proName.substr(idx+1)+"_create";
+	  funName="status_create";
 	  LOG_APP<<funName;
-	  testProduct *tp=fact->CreateObject(proName,funName);
-	  tp->print();
+	  command_inter *tp=fact->CreateObject(proName,funName);
+	  LOG_APP<<tp->handle(proName,funName);
+	  
+	  Configer* conf=Configer::Instance();
+	  std::string filename="httpd.conf";
+	  conf->SetDefaultConfig(filename);
+	  http::server3::handle_command<command_inter> hc;
+	  std::string cmd("status");
+	  std::string param("rr");
+	  std::string cont("");
+	  std::string ret;
+	  hc.SigCommand(cmd,param,cont,ret);
+	  
+	  LOG_APP<<ret;
+
 	  std::stringstream ss;
 	  ss  << "CurrentX=1234"<<std::endl
 	      <<"CurrentY=456"<<std::endl;
@@ -69,22 +84,22 @@ void testfun()
 	  LOG_APP<<"Domain count:"<<vm1.count("General.Domain");
 	  LOG_APP<<vm1["General.Domain"].as<std::string>();
 	  
-	  Configer* conf=Configer::Instance();
-	  std::string res=conf->GetConfig("idmapd.conf","General.Domain");
+	  
+	  std::string res=conf->GetFileConfig("idmapd.conf","General.Domain");
 	  LOG_APP<<res;
-	  res=conf->GetConfig("idmapd.conf","General","Domain");
+	  res=conf->GetFileConfig("idmapd.conf","General","Domain");
 	  LOG_APP<<res;
 	  std::list<std::string> name=list_of("Verbosity")("Pipefs-Directory")("Domain");
-	  std::map<std::string,std::string> remap=conf->GetConfig("idmapd.conf","General",name);
+	  std::map<std::string,std::string> remap=conf->GetFileConfig("idmapd.conf","General",name);
 	  printPair<std::string,std::string> prn;
 	  std::for_each(remap.begin(),remap.end(), prn);
 
 	  std::list<std::string> name1=list_of("General.Verbosity")("General.Pipefs-Directory")("General.Domain");
-	  remap=conf->GetConfig("idmapd.conf",name1);
+	  remap=conf->GetFileConfig("idmapd.conf",name1);
 	  std::for_each(remap.begin(),remap.end(), prn);
 
 	  std::list<std::string> sysconf=list_of("address")("port")("thread");
-	  remap=conf->GetConfig("httpd.conf","sys",sysconf);
+	  remap=conf->GetFileConfig("httpd.conf","sys",sysconf);
 	  std::for_each(remap.begin(),remap.end(), prn);
      }
      catch(BaseException e)
