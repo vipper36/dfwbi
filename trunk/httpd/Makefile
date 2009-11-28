@@ -1,4 +1,4 @@
-BOOSTLIB=-lboost_thread-mt -lboost_system-mt -lboost_program_options-mt -lpthread
+BOOSTLIB=-lboost_thread-mt -lboost_system-mt -lboost_program_options-mt -lboost_signals-mt -lpthread
 TESTLIB=-lboost_unit_test_framework-mt
 DLLLIB=-ldl
 BOOSTINC= -I./log
@@ -9,10 +9,14 @@ LINK=ld
 CFLAGS=-DBOOSTEST -fPIC -D_XLNX64
 CXXFLAGS=-DBOOSTEST -fPIC -D_XLNX64
 DESC=httpd boostest
-LFLAGS=-shared -O2 -Wl,-soname,$(DESC).1
+
 INCLUDE=$(BOOSTINC)
-BOOSTOBJ=Logger.o connection.o mime_types.o posix_main.o reply.o request_handler.o request_parser.o server.o config_file.o  dllapi.o
+BOOSTOBJ= connection.o mime_types.o posix_main.o reply.o request_handler.o request_parser.o server.o   
+BASELIB=libmybase.so
+BASEOBJ=Logger.o config_file.o dllapi.o
 TESTOBJ=boostest.o dllapi.o Logger.o config_file.o
+
+LFLAGS=-shared -O2 -Wl,-soname,$(BASELIB)
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -25,12 +29,17 @@ TESTOBJ=boostest.o dllapi.o Logger.o config_file.o
 	$(CXX) $(CFLAGS) $(INCLUDE)  -c $<
 all: $(DESC)
 	@echo $@ update to date
-httpd:$(BOOSTOBJ)
+	@ldconfig
+httpd:$(BOOSTOBJ) $(BASELIB)
 	@echo Linking $@ ...
-	$(CXX) -O3 -o $@ $^ ${BOOSTLIB} ${DLLLIB}
-boostest:$(TESTOBJ)
+	$(CXX) -O3 -o $@ $^ ${BOOSTLIB} ${DLLLIB} -L. -lmybase
+$(BASELIB):$(BASEOBJ)
 	@echo Linking $@ ...
-	$(CXX)  -o $@ $^ ${BOOSTLIB} ${TESTLIB} ${DLLLIB}
+	$(CXX) -O3 $(LFLAGS) -o $@ $^ ${BOOSTLIB} ${DLLLIB}
+	@ln -s `pwd`/libmybase.so /usr/local/lib/libmybase.so
+boostest:$(TESTOBJ) $(BASELIB)
+	@echo Linking $@ ...
+	$(CXX)  -o $@ $^ ${BOOSTLIB} ${TESTLIB} ${DLLLIB} -L. -lmybase
 clean:
 	@-rm $(DESC)
-	@-rm -fr *.o *.a *~ "*#"
+	@-rm -fr *.o *.a *~ "*#" /usr/local/lib/libmybase.so
