@@ -1,9 +1,11 @@
-INCLUDE=-I../
-LIB=-ldl
+INCLUDE=-I../ -I./libscws -I../log
+LIB=-ldl -L./libscws -lscws -L../ -lmybase
 CC=g++
 LIBTAR=status.so
 LIBOBJ=status.o
-DEST=$(LIBTAR) 
+LIBTAR1=Segment.so
+LIBOBJ1=Segment.o
+DEST=$(LIBTAR) $(LIBTAR1) 
 CFLAGS=-g -c -fPIC -D_XLNX64
 LFLAGS=-shared -Wl,-soname,$(LIBTAR).1
 .cpp.o:
@@ -14,5 +16,7 @@ all:$(DEST)
 
 $(LIBTAR):$(LIBOBJ)
 	$(CC) $(LFLAGS) -o $(LIBTAR) $(LIBOBJ) $(LIB)
+$(LIBTAR1):$(LIBOBJ1)
+	$(CC) $(LFLAGS) -o $(LIBTAR1) $(LIBOBJ1) $(LIB)
 clean: 
 	rm -rf *.o *.so $(DEST) *~
