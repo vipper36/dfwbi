@@ -33,7 +33,6 @@ namespace http {
 	  {
 	       // Decode url to path.
 	       std::string request_path;
-  
 	       if (!url_decode(req.uri, request_path))
 	       {
 		    rep = reply::stock_reply(reply::bad_request);
@@ -53,7 +52,11 @@ namespace http {
 		    std::stringstream ss;
 		    for(std::map<std::string,std::string>::iterator it=cmds.begin();it!=cmds.end();++it)
 		    {
-			 std::string cont("");
+			 std::string cont;
+			 if(req.method=="POST")
+			      cont=req.content;
+			 else
+			      cont="";
 			 std::string ret;
 			 if(handle_command_.SigCommand(it->first,it->second,cont,ret))
 			 {

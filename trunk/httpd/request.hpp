@@ -16,19 +16,20 @@
 #include "header.hpp"
 
 namespace http {
-namespace server3 {
+     namespace server3 {
 
 /// A request received from a client.
-struct request
-{
-  std::string method;
-  std::string uri;
-  int http_version_major;
-  int http_version_minor;
-  std::vector<header> headers;
-};
+	  struct request
+	  {
+	       std::string method;
+	       std::string uri;
+	       int http_version_major;
+	       int http_version_minor;
+	       std::vector<header> headers;
+	       std::string content;
+	  };
 
-} // namespace server3
+     } // namespace server3
 } // namespace http
 
 #endif // HTTP_SERVER3_REQUEST_HPP
