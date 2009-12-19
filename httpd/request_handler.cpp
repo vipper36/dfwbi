@@ -57,6 +57,7 @@ namespace http {
 			      cont=req.content;
 			 else
 			      cont="";
+			LOG_DBG<<"request:"<<cont;
 			 std::string ret;
 			 if(handle_command_.SigCommand(it->first,it->second,cont,ret))
 			 {

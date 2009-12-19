@@ -1,5 +1,5 @@
-BOOSTLIB=-lboost_thread-mt -lboost_system-mt -lboost_program_options-mt -lboost_signals-mt -lpthread
-TESTLIB=-lboost_unit_test_framework-mt
+BOOSTLIB=-lboost_thread -lboost_system -lboost_program_options -lpthread
+TESTLIB=-lboost_unit_test_framework
 DLLLIB=-ldl
 BOOSTINC= -I./log
 CC=gcc

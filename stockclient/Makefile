@@ -1,5 +1,5 @@
-BOOSTLIB=-L/usr/local/lib -lboost_thread-gcc43-mt -lboost_system-gcc43-mt -lpthread
-BOOSTINC=-I/usr/local/include/boost-1_37
+BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lpthread
+BOOSTINC=-I/usr/local/include/boost
 CC=gcc
 AR=ar -r
 CXX=g++

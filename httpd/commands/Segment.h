@@ -15,14 +15,11 @@ extern "C"
 class Segment_cmd:public command_inter
 {
 public:
-     static Segment_cmd* Instance();
      
      virtual std::string handle(const std::string& param,const std::string& content);
-protected:
      ~Segment_cmd();
      Segment_cmd();
 private:
-     static Segment_cmd* m_instance;
      scws_t m_s;
      std::string m_param;
 };

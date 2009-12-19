@@ -2,7 +2,7 @@
 #define __HANDLE_COMMAND_H__
 #include <string>
 #include <map>
-#include <boost/signals/signal.hpp>
+#include <boost/signals2/signal.hpp>
 #include <boost/assign/list_of.hpp>
 #include "command_inter.hpp"
 #include "Factory.hpp"
@@ -11,7 +11,7 @@ using namespace boost::assign;
 namespace http {
      namespace server3 {
 
-	  typedef boost::signals::signal<std::string (const std::string &param, const std::string& content)> SigType;
+	  typedef boost::signals2::signal<std::string (const std::string &param, const std::string& content)> SigType;
 	  typedef boost::function<std::string (const std::string&,const std::string&)> funType;
 	  template<typename T>
 	  class handle_command

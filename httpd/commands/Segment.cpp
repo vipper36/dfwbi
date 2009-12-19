@@ -6,19 +6,10 @@
 #include <map>
 #include <boost/assign/list_of.hpp>
 using namespace boost::assign;
-Segment_cmd* Segment_cmd::m_instance=0;
 void *Segment_create()
 {
-     Segment_cmd *ret=Segment_cmd::Instance();
+     Segment_cmd *ret=new Segment_cmd();
      return (void*)ret;
-}
-Segment_cmd* Segment_cmd::Instance()
-{
-     if(m_instance==0)
-     {
-	  m_instance=new Segment_cmd();
-     }
-     return m_instance;
 }
 Segment_cmd::~Segment_cmd()
 {     
@@ -89,7 +80,6 @@ std::string Segment_cmd::handle(const std::string& param,const std::string& cont
      //      }
      //      scws_free_result(res);
      // }
-
      std::string ret(ss.str());
      return ret;
 }
