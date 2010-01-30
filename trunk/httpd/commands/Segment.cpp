@@ -6,6 +6,7 @@
 #include <map>
 #include <boost/assign/list_of.hpp>
 using namespace boost::assign;
+using namespace Base;
 void *Segment_create()
 {
      Segment_cmd *ret=new Segment_cmd();
@@ -34,11 +35,9 @@ std::string Segment_cmd::handle(const std::string& param,const std::string& cont
      {
 	  m_param=param;
 	  Configer* conf=Configer::Instance();
-	  std::list<std::string> segconf=list_of("dict")("rules");
 
-	  std::map<std::string,std::string> remap=conf->GetConfig(m_param,segconf);
-	  std::string dict=remap[m_param+".dict"];
-	  std::string rules=remap[m_param+".rules"];
+	  std::string dict=conf->GetConfig(m_param+".dict");
+	  std::string rules=conf->GetConfig(m_param+".rules");
 	  if(dict.length()>0)
 	  {
 	  

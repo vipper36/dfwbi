@@ -48,8 +48,8 @@ void testfun()
 	  
 	  Configer* conf=Configer::Instance();
 	  std::string filename="httpd.conf";
-	  conf->SetDefaultConfig(filename);
-	  http::server3::handle_command<command_inter> hc;
+	  conf->LoadIni(filename);
+	  http::server3::handle_command hc;
 	  std::string cmd("status");
 	  std::string param("rr");
 	  std::string cont("");
@@ -84,22 +84,7 @@ void testfun()
 	  LOG_APP<<vm1["General.Domain"].as<std::string>();
 	  
 	  
-	  std::string res=conf->GetFileConfig("idmapd.conf","General.Domain");
-	  LOG_APP<<res;
-	  res=conf->GetFileConfig("idmapd.conf","General","Domain");
-	  LOG_APP<<res;
-	  std::list<std::string> name=list_of("Verbosity")("Pipefs-Directory")("Domain");
-	  std::map<std::string,std::string> remap=conf->GetFileConfig("idmapd.conf","General",name);
-	  printPair<std::string,std::string> prn;
-	  std::for_each(remap.begin(),remap.end(), prn);
 
-	  std::list<std::string> name1=list_of("General.Verbosity")("General.Pipefs-Directory")("General.Domain");
-	  remap=conf->GetFileConfig("idmapd.conf",name1);
-	  std::for_each(remap.begin(),remap.end(), prn);
-
-	  std::list<std::string> sysconf=list_of("address")("port")("thread");
-	  remap=conf->GetFileConfig("httpd.conf","sys",sysconf);
-	  std::for_each(remap.begin(),remap.end(), prn);
      }
      catch(BaseException e)
      {

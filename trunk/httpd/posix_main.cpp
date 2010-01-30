@@ -24,50 +24,36 @@
 #include "config_file.hpp"
 
 
-template<typename T1,typename T2,template<typename,typename> class Con=std::pair>
-class printPair
-{
-public:
-     void operator()(Con<T1,T2> con)
-	  {
-	       LOG_APP<<con.first<<"--"<<con.second;
-	  }
-};
 
 namespace po = boost::program_options;
 using namespace boost::assign;
-
+using namespace Base;
 int main(int argc, char* argv[])
 {
      try
      {
-	  std::string configFile;
-	  std::string logFile("log.log");
+       std::string configFile("httpd.conf");
 	  po::options_description desc("Allowed options");
 	  desc.add_options()
 	       ("help,h", "usage message")
 	       ("config,f", po::value(&configFile), "config file")
-	       ("log,l", po::value(&logFile), "log file")
 	       ;
 	  po::variables_map vm;
-	  po::store(parse_command_line(argc, argv, desc), vm);
-	  if (argc<2||vm.count("help")||!vm.count("config")) {
+	  po::store(po::parse_command_line(argc, argv, desc), vm);
+	  po::notify(vm);
+	  if (vm.count("help")) {
 	       std::cout << desc << "\n";
-	       std::cout << "usage:httpd -f <config file> [-l <log file>]" << "\n";
+	       std::cout << "usage:httpd -f [config file] [-l <log file>]" << "\n";
 	       return 0;
 	  }
-	  po::notify(vm);
-	  std::cout<<"log file:"<<logFile<<std::endl;
-	  init_logs(logFile);
-	  LOG_APP<<"config file:"<<configFile;
-
+	  std::cout<<"config file:"<<configFile<<std::endl;
 	  Configer* conf=Configer::Instance();
-	  conf->SetDefaultConfig(configFile);
-	  std::list<std::string> sysconf=list_of("address")("port")("threads")("root");
-	  std::map<std::string,std::string> remap=conf->GetConfig("sys",sysconf);
-	  //Test config
-	  printPair<std::string,std::string> prn;
-	  std::for_each(remap.begin(),remap.end(), prn);
+	  conf->LoadIni(configFile);
+	std::cout<<conf->GetConfig("sys.threads")<<std::endl;
+	std::cout<<conf->GetConfig("sys.threads1")<<std::endl;
+	  init_logs();
+
+
 	  
 	  
 	  // Block all signals for background thread.
@@ -77,8 +63,8 @@ int main(int argc, char* argv[])
 	  pthread_sigmask(SIG_BLOCK, &new_mask, &old_mask);
 
 	  // Run server in background thread.
-	  std::size_t num_threads = boost::lexical_cast<std::size_t>(remap["sys.threads"]);
-	  http::server3::server s(remap["sys.address"].c_str(),remap["sys.port"].c_str(), remap["sys.root"].c_str(), num_threads);
+	  std::size_t num_threads = boost::lexical_cast<std::size_t>(conf->GetConfig("sys.threads"));
+	  http::server3::server s(conf->GetConfig("sys.address").c_str(),conf->GetConfig("sys.port").c_str(), conf->GetConfig("sys.root").c_str(), num_threads);
 	  boost::thread t(boost::bind(&http::server3::server::run, &s));
 
 	  // Restore previous signals.
@@ -100,7 +86,7 @@ int main(int argc, char* argv[])
      }
      catch (std::exception& e)
      {
-	  LOG_ERR << "exception: " << e.what();
+	 std::cout<< "exception: " << e.what()<<std::endl;
      }
 
      return 0;

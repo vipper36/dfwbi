@@ -36,7 +36,7 @@ namespace http {
 	  private:
 	       /// The directory containing the files to be served.
 	       std::string doc_root_;
-	       handle_command<command_inter> handle_command_; 
+	       handle_command handle_command_; 
 	       /// Perform URL-decoding on a string. Returns false if the encoding was
 	       /// invalid.
 	       void handle_doc(const std::string& request_path,reply& rep);
