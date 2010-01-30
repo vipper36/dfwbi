@@ -1,5 +1,5 @@
-INCLUDE=-I../ -I./libscws -I../log
-LIB=-ldl -L./libscws -lscws -L../ -lmybase -lboost_iostreams
+INCLUDE=-I../ -I./libscws -I../log -I/usr/local/include -I ../factory
+LIB=-ldl -L./libscws -lscws -L../ -L/usr/local/lib -L../factory -lboost_iostreams -lfactory
 CC=g++
 LIBTAR=status.so
 LIBOBJ=status.o
