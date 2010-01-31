@@ -59,6 +59,7 @@ namespace http {
 			      cont="";
 			LOG_DBG<<"request:"<<cont;
 			 std::string ret;
+			 LOG_DBG<<it->first<<":"<<it->second<<std::endl;
 			 if(handle_command_.SigCommand(it->first,it->second,cont,ret))
 			 {
 			      ss<<ret<<std::endl;

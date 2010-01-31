@@ -58,7 +58,7 @@ namespace Base
       return true;
     }
     template<typename Object>
-    Object *CreateObject(std::string name)
+    Object *CreateObject(const std::string& name)
     {
       Factory<Object> *fact=Factory<Object>::Instance();
       std::string dllName;
@@ -68,12 +68,12 @@ namespace Base
 	{
 	case XML:
 	case JSON:
-	  dllName=pt.get<std::string>("conf.object."+name+".create_fun");
-	  funName=pt.get<std::string>("conf.object."+name+".dlfile");
+	  funName=pt.get<std::string>("conf.object."+name+".create_fun");
+	  dllName=pt.get<std::string>("conf.object."+name+".dlfile");
 	  break;
 	case INI:
-	  dllName=pt.get<std::string>(name+".create_fun");
-	  funName=pt.get<std::string>(name+".dlfile");
+	  funName=pt.get<std::string>(name+".create_fun");
+	  dllName=pt.get<std::string>(name+".dlfile");
 	  break;
 	default:
 	  break;

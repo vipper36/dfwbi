@@ -7,8 +7,8 @@ AR=ar -r
 CXX=g++
 LINK=ld
 FACLIB=-L./factory -lfactory
-CFLAGS= -g -D_XLNX64
-CXXFLAGS= -g -D_XLNX64
+CFLAGS= -g -fPIC -D_XLNX64
+CXXFLAGS= -g -fPIC -D_XLNX64
 DESC=httpd boostest
 
 INCLUDE=$(BOOSTINC)

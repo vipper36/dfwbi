@@ -6,6 +6,7 @@
 #include <boost/assign/list_of.hpp>
 #include "command_inter.hpp"
 #include "Factory.hpp"
+#include "Logger.hpp"
 #include "config_file.hpp"
 using namespace Base;
 using namespace boost::assign;
@@ -49,6 +50,7 @@ namespace http {
 		    }
 	       bool RegisterCmd(const std::string& cmd)
 		    {
+		      LOG_DBG<<"command:"<<cmd;
 		      command_inter *tp=conf->CreateObject<command_inter>(cmd);
 		      if(tp!=NULL)
 			{
