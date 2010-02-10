@@ -5,6 +5,8 @@
 #include "Logger.hpp"
 #include <map>
 #include <boost/assign/list_of.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include "word.hpp"
 using namespace boost::assign;
 using namespace Base;
 void *Segment_create()
@@ -25,10 +27,9 @@ Segment_cmd::Segment_cmd()
 }
 std::string Segment_cmd::handle(const std::string& param,const std::string& content)
 {
-    
 //     scws_res_t res, cur;
      scws_top_t top, xtop;
-     LOG_APP << "param:"<<param;
+     LOG_DBG << "param:"<<param;
      LOG_APP << "content:"<<content;
      
      if(m_param!=param)
@@ -51,24 +52,20 @@ std::string Segment_cmd::handle(const std::string& param,const std::string& cont
      
      int tlimit=content.length();
      std::stringstream ss;
+     words ws;
      scws_send_text(m_s, content.c_str(), content.length());
-     ss<<"No. WordString               Attr  Weight(times)"<<std::endl;
-     ss<<"-------------------------------------------------"<<std::endl;
      if ((top = xtop = scws_get_tops(m_s, tlimit, NULL)) != NULL)
      {
-	  tlimit = 1;
 	  while (xtop != NULL)
 	  {
-	       ss<< tlimit
-		 << ". "<<xtop->word
-		 << "              "<< xtop->attr
-		 << " "<<xtop->weight
-		 << "("<<xtop->times<<")"<<std::endl;
-	       xtop = xtop->next;
-	       tlimit++;
+	    aword aw(xtop->word,xtop->weight,xtop->times,xtop->attr);
+	    ws.addWord(aw);
+	    xtop = xtop->next;
 	  }
 	  scws_free_tops(top);
      }
+     boost::archive::xml_oarchive oa(ss);
+     oa << BOOST_SERIALIZATION_NVP(ws);
      // if ((cur = res = scws_get_result(s)) != NULL)
      // {
      //      while (cur != NULL)
