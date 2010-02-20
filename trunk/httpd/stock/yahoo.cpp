@@ -1,3 +1,4 @@
+#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <sstream>
 #include "yahoo.h"
@@ -49,5 +50,15 @@ std::string yahoo_stock::CalUrl(std::string stockName,boost::posix_time::ptime &
 }
 std::string TransName(std::string stockName)
 {
- 
+  std::stringstream ss;
+  std::vector<std::string> resv;
+  boost::algorithm::split( SplitVec, stockName, is_any_of(".") );
+  if(resv[1]=="ss")
+    {
+      ss<<"SHHQ"<<resv[0];
+    }else if(resv[1]=="sz")
+    {
+      ss<<"SZHQ"<<resv[0];
+    }
+  return ss.str();
 }
