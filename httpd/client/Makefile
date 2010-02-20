@@ -1,11 +1,11 @@
 BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lpthread
-BOOSTINC=-I/usr/local/include/boost
+BOOSTINC=-I/usr/local/include/
 CC=gcc
 AR=ar -r
 CXX=g++
 LINK=ld
 CFLAGS=-g -DBOOSTEST
-LDESC=libhttp.a
+LDESC=libclient.a
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
 LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o
