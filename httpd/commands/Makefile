@@ -1,4 +1,4 @@
-INCLUDE=-I../ -I./libscws -I../log -I/usr/local/include -I ../factory
+INCLUDE=-I./libscws -I../log -I/usr/local/include -I ../factory
 LIB=-ldl -L./libscws -lscws -L../ -L/usr/local/lib -L../factory -lboost_iostreams -lboost_serialization -lfactory
 CC=g++
 LIBTAR=status.so
