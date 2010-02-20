@@ -14,13 +14,16 @@ class stock_inter
 {
 enum data_type
   {
-    DAY,
-    M5,
-    M60
+    DAY=0,
+    M1=1,
+    M5=5,
+    M15=15,
+    M30=30,
+    M60=60
   };
 public:
   virtual ~stock_inter(){};
-  virtual std::list<StockPrice> GetHisPrice(std::string stockName,boost::posix_time::ptime &from, boost::posix_time::ptime& to,data_type type)=0;
+  virtual std::list<StockPrice> &GetHisPrice(std::string stockName,boost::posix_time::ptime &from, boost::posix_time::ptime& to,data_type type)=0;
   virtual StockPrice GetCurPrice(std::string stockName)=0;
 };
 #endif
