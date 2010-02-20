@@ -1,4 +1,4 @@
-BOOSTINC= -I../log -I/usr/local/include
+BOOSTINC= -I../log -I/home/fly/usr/include
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -23,7 +23,6 @@ LFLAGS=-shared -O2 -Wl,-soname,$(BASELIB)
 	$(CXX) $(CFLAGS) $(INCLUDE)  -c $<
 all: $(DESC)
 	@echo $@ update to date
-	@ldconfig
 $(DESC):$(BASEOBJ)
 	@echo Linking $@ ...
 	@ar -r $@ $^ 
