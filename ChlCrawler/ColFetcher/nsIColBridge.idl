@@ -1,9 +1,0 @@
-#include "nsISupports.idl"
-
-[scriptable, uuid(f709726c-9599-44a2-a9aa-8595e6f6e204)]
-interface nsIColBridge:nsISupports
-{
-     void SetColSource(in AUTF8String src,in AUTF8String comName);
-     void SetUrlSource(in AUTF8String src,in AUTF8String comName);
-     void GetColName(in Autf8string url,out Autf8string name);
-};
