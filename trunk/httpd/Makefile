@@ -1,7 +1,7 @@
-BOOSTLIB=-L/home/fly/usr/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
+BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
 TESTLIB=-lboost_unit_test_framework
 DLLLIB=-ldl
-BOOSTINC= -I./log -I./factory -I./server -I./commands -I/usr/local/include
+BOOSTINC= -I./log -I./factory -I./server -I./stock -I./commands -I/usr/local/include
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -11,12 +11,11 @@ CGILIB=-lfastcgipp
 SRVLIB=-L./server -lserver
 CFLAGS= -g -fPIC -D_XLNX64
 CXXFLAGS= -g -fPIC -D_XLNX64
-DESC=httpd boostest
+DESC=httpd boostest stockclient
 CGI=cmd.fcgi
 INCLUDE=$(BOOSTINC)
 BOOSTOBJ= posix_main.o   
 TESTOBJ=boostest.o
-
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -32,6 +31,9 @@ all: $(DESC)
 httpd:$(BOOSTOBJ) $(BASELIB)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB}  $(SRVLIB) $(FACLIB)
+stockclient:stock.o
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
 $(CGI):fcgiMain.o
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB) $(CGILIB)
 boostest:$(TESTOBJ)

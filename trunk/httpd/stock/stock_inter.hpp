@@ -4,14 +4,15 @@
 #include <string>
 #include <map>
 #include <list>
-typedef struct DayPrice
+struct StockPrice
 {
   boost::posix_time::ptime time;
   std::map<std::string,double> PriceValues;
-}StockPrice;
+};
 
 class stock_inter
 {
+public:
 enum data_type
   {
     DAY=0,
