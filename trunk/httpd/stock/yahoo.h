@@ -1,5 +1,5 @@
-#ifndef _STATUS_H_
-#define _STATUS_H_
+#ifndef _YAHOO_H_
+#define _YAHOO_H_
 #include <string>
 #include <list>
 #include "stock_inter.hpp"

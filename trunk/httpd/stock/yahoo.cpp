@@ -223,7 +223,7 @@ std::string yahoo_stock::TransName(std::string stockName)
       ss<<"SHHQ"<<resv[0];
     }else if(resv[1]=="sz")
     {
-      ss<<"SZHQ"<<resv[0];
+      ss<<"SHHQ"<<resv[0];
     }
   return ss.str();
 }
