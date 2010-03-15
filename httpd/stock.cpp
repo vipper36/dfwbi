@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
      using namespace boost::gregorian;
      try
      {
+       std::string aStock;
 	  std::string configFile("stock.conf");
 	  std::string cmd("yahoo");
 	  std::string slist("file");
@@ -32,6 +33,7 @@ int main(int argc, char* argv[])
 	       ("config,f", po::value(&configFile), "config file")
 	       ("cmd,c", po::value(&cmd), "command")
 	       ("list,l", po::value(&slist), "list")
+	       ("stock,s", po::value(&aStock), "list")
 	       ;
 	  po::variables_map vm;
 	  po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -46,14 +48,21 @@ int main(int argc, char* argv[])
 	  conf->LoadIni(configFile);
 	  init_logs();
 	  std::map<std::string,std::string> stockList;
-	  list_inter *lp=conf->CreateObject<list_inter>(slist);
-	  lp->open("ss.csv","ss");
-	  std::map<std::string,std::string> &sslist=lp->GetList();
-	  stockList.insert(sslist.begin(),sslist.end());
-	  lp->open("sz.csv","sz");
-      
-	  std::map<std::string,std::string> &szlist=lp->GetList();
-	  stockList.insert(szlist.begin(),szlist.end());
+	  if(aStock.length()>0)
+	    {
+	      stockList.insert(std::make_pair(aStock,aStock));
+	      
+	    }else
+	    {
+	      list_inter *lp=conf->CreateObject<list_inter>(slist);
+	      lp->open("ss.csv","ss");
+	      std::map<std::string,std::string> &sslist=lp->GetList();
+	      stockList.insert(sslist.begin(),sslist.end());
+	      lp->open("sz.csv","sz");
+	      
+	      std::map<std::string,std::string> &szlist=lp->GetList();
+	      stockList.insert(szlist.begin(),szlist.end());
+	    }
 
 	  stock_inter *tp=conf->CreateObject<stock_inter>(cmd);
 	  if(tp!=NULL)
