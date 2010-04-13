@@ -1,7 +1,7 @@
-BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
+BOOSTLIB=-L/home/fly/usr/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
 TESTLIB=-lboost_unit_test_framework
 DLLLIB=-ldl
-BOOSTINC= -I../log -I../factory -I../commands -I/usr/local/include
+BOOSTINC= -I../log -I../factory -I../commands -I/home/fly/usr/include
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -26,7 +26,6 @@ BOOSTOBJ= connection.o mime_types.o reply.o request_handler.o request_parser.o s
 	$(CXX) $(CFLAGS) $(INCLUDE)  -c $<
 all: $(DESC)
 	@echo $@ update to date
-	@ldconfig
 $(DESC):$(BOOSTOBJ)
 	@echo Linking $@ ...
 	@ar -r $@ $^
