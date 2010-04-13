@@ -1,5 +1,5 @@
-INCLUDE=-I../log -I/usr/local/include -I ../factory -I ../client
-LIB=-ldl -L/usr/local/lib -lboost_date_time -L../factory -lfactory -L ../client -lclient -lboost_thread -lboost_system -lpthread
+INCLUDE=-I../log -I/home/fly/usr/include -I ../factory -I ../client
+LIB=-ldl -L/home/fly/usr/lib -lboost_date_time -L../factory -lfactory -L ../client -lclient -lboost_thread -lboost_system -lpthread
 CC=g++
 LIBTAR=yahoo.so
 LIBOBJ=yahoo.o

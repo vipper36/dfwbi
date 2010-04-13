@@ -8,14 +8,25 @@
 #include "list_inter.hpp"
 #include <boost/assign/list_of.hpp>
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
+
 
 
 namespace po = boost::program_options;
 using namespace boost::assign;
+using namespace boost::accumulators;
 using namespace Base;
 void OutStock(std::ostream &ost,StockPrice sp)
 {
      ost << sp.time<<","<<sp.PriceValues["open"]<<","<<sp.PriceValues["close"]<<","<<sp.PriceValues["high"]<<","<<sp.PriceValues["low"]<<","<<sp.PriceValues["money"]/sp.PriceValues["volum"]<<","<<sp.PriceValues["volum"]<<","<<sp.PriceValues["money"]<<std::endl;
+}
+template<typename ACC>
+void AddtoAcc(ACC &acc,StockPrice sp )
+{
+     acc(sp.PriceValues["money"]/sp.PriceValues["volum"]);
 }
 int main(int argc, char* argv[])
 {
@@ -73,9 +84,15 @@ int main(int argc, char* argv[])
 	       for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 	       {
 		    std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
+		    
+		    accumulator_set<double, stats<tag::mean, tag::variance > > acc;
+		    std::for_each(spList.begin(),spList.end(),boost::bind(AddtoAcc<accumulator_set<double, stats<tag::mean, tag::variance > > >,boost::ref(acc),_1));
+
 		    std::ofstream tof(it->first.c_str());
 		    std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
+		    std::cout<<mean(acc)<<":"<<variance(acc)<<std::endl;
 	       }
+	       
 	  }
      }
      catch (std::exception& e)
