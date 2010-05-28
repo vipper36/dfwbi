@@ -174,8 +174,8 @@ StockPrice yahoo_stock::GetCurPrice(std::string stockName)
 
 std::string yahoo_stock::CalUrl(std::string stockName,boost::posix_time::ptime &from, boost::posix_time::ptime& to,data_type type)
 {
-     std::string mcmd="http://203.209.255.240/test/kmin.py/wmData.znzDo?cmd=";
-     std::string dcmd="http://203.209.255.253/test/kline.py/data.znzDo?cmd=";
+     std::string mcmd="http://data03.znz.finance.bj1.aliyk.com/test/kmin.py/wmData.znzDo?cmd=";
+     std::string dcmd="http://data03.znz.finance.bj1.aliyk.com/test/kline.py/data.znzDo?cmd=";
      std::stringstream ss("");
      boost::gregorian::date fday = from.date();
      boost::gregorian::date tday = to.date();
