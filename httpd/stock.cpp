@@ -19,9 +19,17 @@ namespace po = boost::program_options;
 using namespace boost::assign;
 using namespace boost::accumulators;
 using namespace Base;
+static double lastval=0;
 void OutStock(std::ostream &ost,StockPrice sp)
 {
-     ost << sp.time<<","<<sp.PriceValues["open"]<<","<<sp.PriceValues["close"]<<","<<sp.PriceValues["high"]<<","<<sp.PriceValues["low"]<<","<<sp.PriceValues["money"]/sp.PriceValues["volum"]<<","<<sp.PriceValues["volum"]<<","<<sp.PriceValues["money"]<<std::endl;
+		double curval=log(sp.PriceValues["money"]/sp.PriceValues["volum"]);
+		double deltaval=100*(curval-lastval);
+		
+	if(lastval!=0)
+	{
+     ost << sp.time<<","<<sp.PriceValues["open"]<<","<<sp.PriceValues["close"]<<","<<sp.PriceValues["high"]<<","<<sp.PriceValues["low"]<<","<<deltaval<<","<<sp.PriceValues["volum"]<<","<<sp.PriceValues["money"]<<std::endl;
+	}
+		lastval=curval;
 }
 template<typename ACC>
 void AddtoAcc(ACC &acc,StockPrice sp )
