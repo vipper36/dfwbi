@@ -35,7 +35,7 @@ int main()
     // more than 2 features in this vector you can simply change the 2 to something else.
     // Or if you don't know how many features you want until runtime then you can put a 0
     // here and use the matrix.set_size() member function)
-    typedef matrix<double, 0, 1> sample_type;
+    typedef matrix<double, 2, 1> sample_type;
 
     // This is a typedef for the type of kernel we are going to use in this example.
     // In this case I have selected the radial basis kernel that can operate on our
@@ -55,7 +55,6 @@ int main()
         for (int c = -20; c <= 20; ++c)
         {
             sample_type samp;
-	    samp.set_size(2);
             samp(0) = r;
             samp(1) = c;
             samples.push_back(samp);
@@ -145,11 +144,11 @@ int main()
 
     // print out the number of support vectors in the resulting decision function
     cout << "\nnumber of support vectors in our learned_function is " 
-         << learned_function.function.support_vectors.nr() << endl;
+         << learned_function.function.basis_vectors.nr() << endl;
 
     // now lets try this decision_function on some samples we haven't seen before 
     sample_type sample;
-    sample.set_size(2);
+
     sample(0) = 3.123;
     sample(1) = 2;
     cout << "This sample should be >= 0 and it is classified as a " << learned_function(sample) << endl;
@@ -181,7 +180,7 @@ int main()
     // print out the number of support vectors in the resulting decision function.  
     // (it should be the same as in the one above)
     cout << "\nnumber of support vectors in our learned_pfunct is " 
-         << learned_pfunct.function.decision_funct.support_vectors.nr() << endl;
+         << learned_pfunct.function.decision_funct.basis_vectors.nr() << endl;
 
     sample(0) = 3.123;
     sample(1) = 2;
@@ -221,15 +220,15 @@ int main()
 
 
     // Lastly, note that the decision functions we trained above involved well over 100 
-    // support vectors.  Support vector machines in general tend to find decision functions
-    // that involve a lot of support vectors.  This is significant because the more 
-    // support vectors in a decision function, the longer it takes to classify new examples.
+    // basis vectors.  Support vector machines in general tend to find decision functions
+    // that involve a lot of basis vectors.  This is significant because the more 
+    // basis vectors in a decision function, the longer it takes to classify new examples.
     // So dlib provides the ability to find an approximation to the normal output of a
-    // support vector machine using fewer support vectors.  
+    // trainer using fewer basis vectors.  
 
     // Here we determine the cross validation accuracy when we approximate the output
-    // using only 10 support vectors.  To do this we use the reduced2() function.  It
-    // takes a trainer object and the number of support vectors to use and returns 
+    // using only 10 basis vectors.  To do this we use the reduced2() function.  It
+    // takes a trainer object and the number of basis vectors to use and returns 
     // a new trainer object that applies the necessary post processing during the creation
     // of decision function objects.
     cout << "\ncross validation accuracy with only 10 support vectors: " 
@@ -240,7 +239,7 @@ int main()
          << cross_validate_trainer(trainer, samples, labels, 3);
 
     // When you run this program you should see that, for this problem, you can reduce 
-    // the number of support vectors down to 10 without hurting the cross validation
+    // the number of basis vectors down to 10 without hurting the cross validation
     // accuracy. 
 
 
