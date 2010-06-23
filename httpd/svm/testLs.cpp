@@ -34,6 +34,8 @@ int main()
   std::cout<<y<<std::endl;
   lsf::LSFitting<double> ls(x,y);
   ls.calcParams();
+  ls.calcVar();
   std::cout<<ls.getParams()<<std::endl;
+  std::cout<<ls.getVar()<<std::endl;
   std::cout<<"ls end!"<<std::endl;
 }
