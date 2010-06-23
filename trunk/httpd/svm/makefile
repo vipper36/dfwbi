@@ -2,7 +2,7 @@
 # on Debian Linux using the gcc compiler.
 
 # this is the name of the output executable
-TARGET = svm_ex optimization_ex
+TARGET = svm_ex optimization_ex testLs
 
 # these are the compile time flags passed to gcc
 CFLAGS = -ggdb  -DDEBUG -DDLIB_NO_GUI_SUPPORT  -I /usr/local/include  -Wall
@@ -20,12 +20,15 @@ CC = nice g++
 
 SRC = svm_ex.cpp
 SRC1 = optimization_ex.cpp
+SRC2 = testLs.cpp
 ####################################################
 
 TMP = $(SRC:.cpp=.o)
 OBJ = $(TMP:.c=.o)
 TMP1 = $(SRC1:.cpp=.o)
 OBJ1 = $(TMP1:.c=.o)
+TMP2 = $(SRC2:.cpp=.o)
+OBJ2 = $(TMP2:.c=.o)
 
 all:$(TARGET)
 
@@ -37,6 +40,11 @@ svm_ex: $(OBJ)
 optimization_ex: $(OBJ1) 
 	@echo Linking $@
 	$(CC) $(LFLAGS) $(OBJ1) -o $@
+	@echo Build Complete
+
+testLs: $(OBJ2) 
+	@echo Linking $@
+	$(CC) $(LFLAGS) $(OBJ2) -o $@
 	@echo Build Complete
 
 .cpp.o: $<
