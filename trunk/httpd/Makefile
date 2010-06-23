@@ -1,7 +1,7 @@
 BOOSTLIB=-L/home/fly/usr/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
 TESTLIB=-lboost_unit_test_framework
 DLLLIB=-ldl
-BOOSTINC= -I./log -I./factory -I./server -I./stock -I./commands -I/home/fly/usr/include -I./da
+BOOSTINC= -I./log -I./factory -I./server -I./stock -I./commands -I/home/fly/usr/include -I./da -I./svm
 CC=gcc
 AR=ar -r
 CXX=g++
