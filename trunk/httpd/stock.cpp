@@ -12,8 +12,8 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-
-
+#include <boost/accumulators/statistics/rolling_mean.hpp>
+#include "da.h"
 
 namespace po = boost::program_options;
 using namespace boost::assign;
@@ -36,13 +36,18 @@ void AddtoAcc(ACC &acc,StockPrice sp )
 {
      acc(sp.PriceValues["money"]/sp.PriceValues["volum"]);
 }
+
+void AddtoCont(std::list<double> &target,StockPrice sp)
+{
+     target.push_back(sp.PriceValues["money"]/sp.PriceValues["volum"]);
+}
 int main(int argc, char* argv[])
 {
      using namespace boost::posix_time;
      using namespace boost::gregorian;
      try
      {
-       std::string aStock;
+	  std::string aStock;
 	  std::string configFile("stock.conf");
 	  std::string cmd("yahoo");
 	  std::string slist("file");
@@ -68,20 +73,20 @@ int main(int argc, char* argv[])
 	  init_logs();
 	  std::map<std::string,std::string> stockList;
 	  if(aStock.length()>0)
-	    {
-	      stockList.insert(std::make_pair(aStock,aStock));
+	  {
+	       stockList.insert(std::make_pair(aStock,aStock));
 	      
-	    }else
-	    {
-	      list_inter *lp=conf->CreateObject<list_inter>(slist);
-	      lp->open("ss.csv","ss");
-	      std::map<std::string,std::string> &sslist=lp->GetList();
-	      stockList.insert(sslist.begin(),sslist.end());
-	      lp->open("sz.csv","sz");
+	  }else
+	  {
+	       list_inter *lp=conf->CreateObject<list_inter>(slist);
+	       lp->open("ss.csv","ss");
+	       std::map<std::string,std::string> &sslist=lp->GetList();
+	       stockList.insert(sslist.begin(),sslist.end());
+	       lp->open("sz.csv","sz");
 	      
-	      std::map<std::string,std::string> &szlist=lp->GetList();
-	      stockList.insert(szlist.begin(),szlist.end());
-	    }
+	       std::map<std::string,std::string> &szlist=lp->GetList();
+	       stockList.insert(szlist.begin(),szlist.end());
+	  }
 
 	  stock_inter *tp=conf->CreateObject<stock_inter>(cmd);
 	  if(tp!=NULL)
@@ -99,8 +104,39 @@ int main(int argc, char* argv[])
 		    std::ofstream tof(it->first.c_str());
 		    std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
 		    std::cout<<mean(acc)<<":"<<variance(acc)<<std::endl;
+		    
+		    
+		    accumulator_set<double, stats<tag::rolling_mean> > acc2(tag::rolling_window::window_size = 5);
+		    
+		    std::list<double> rmean;
+		    std::list<double> aprice;
+		    SMA<std::list<double> > psma;
+
+		    std::for_each(spList.begin(),spList.end(),boost::bind(AddtoCont,boost::ref(aprice),_1));
+		    
+		    psma(rmean,aprice,5);
+		    for(std::list<double>::iterator it=rmean.begin();it!=rmean.end();++it)
+		    {
+			 std::cout<<*it<<std::endl;
+		    }
+		    std::cout<<"------------------------------------------------------"<<std::endl;
+		    EMA<std::list<double> > pema;
+		    std::list<double> rema;
+		    pema(rema,aprice,0.3);
+		    for(std::list<double>::iterator it=rema.begin();it!=rema.end();++it)
+		    {
+			 std::cout<<*it<<std::endl;
+		    }
+		    std::cout<<"------------------------------------------------------"<<std::endl;
+		    WMA<std::list<double> > pwma;
+		    std::list<double> rwma;
+		    pwma(rwma,aprice,5);
+
+		    for(std::list<double>::iterator it=rwma.begin();it!=rwma.end();++it)
+		    {
+			 std::cout<<*it<<std::endl;
+		    }
 	       }
-	       
 	  }
      }
      catch (std::exception& e)

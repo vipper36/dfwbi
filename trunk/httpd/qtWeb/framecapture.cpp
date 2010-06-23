@@ -40,7 +40,7 @@
  ****************************************************************************/
 
  #include "framecapture.h"
-
+#include <QPainter>
  #include <iostream>
  #include <QtWebKit>
 
@@ -105,7 +105,7 @@
      painter.setRenderHint(QPainter::Antialiasing, true);
      painter.setRenderHint(QPainter::TextAntialiasing, true);
      painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-     frame->documentElement().render(&painter);
+     frame->render(&painter);
      painter.end();
 
      image.save(fileName);
