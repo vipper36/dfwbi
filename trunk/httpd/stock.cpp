@@ -181,7 +181,11 @@ int main(int argc, char* argv[])
 		    std::cout<<x<<std::endl;
 		    std::cout<<"y="<<std::endl;
 		    std::cout<<y<<std::endl;
-
+		    lsf::LSFitting<double> ls(x,y);
+		    ls.calcParams();
+		    ls.calcVar();
+		    std::cout<<ls.getParams()<<std::endl;
+		    std::cout<<ls.getVar()<<std::endl;
 		    // accumulator_set<double, stats<tag::rolling_mean> > acc2(tag::rolling_window::window_size = 5);
 		    
 // 		    std::list<double> rmean;
