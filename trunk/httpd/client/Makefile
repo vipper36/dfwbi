@@ -8,7 +8,7 @@ CFLAGS=-g -DBOOSTEST -fPIC -D_XLNX64
 LDESC=libclient.a
 LFLAGS=-shared  -Wl,-soname,$(DESC).1
 INCLUDE=$(BOOSTINC)
-LIBOBJ=HttpClient.o  HttpReqest.o  HttpResponse.o  HttpUrl.o
+LIBOBJ=HttpClient.o AhttpClient.o HttpReqest.o  HttpResponse.o  HttpUrl.o
 
 .SUFFIXES: .h .cpp .o
 
