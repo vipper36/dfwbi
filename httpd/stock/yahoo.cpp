@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include "yahoo.h"
-
+#include "AhttpClient.h"
 void *stock_create()
 {
      yahoo_stock *ret=new yahoo_stock();
@@ -70,10 +70,11 @@ std::list<StockPrice> &yahoo_stock::GetHisPrice(std::string stockName,boost::pos
 	  if(url.length()>0)
 	  {
 	       LOG_APP << "url:"<<url;
+	       AhttpClient _client;
 	       if(!_client.connect(url))
 		    return _priceList;
-	       if(!_client.SendRequest())
-		    return _priceList;
+//	       if(!_client.SendRequest())
+//		    return _priceList;
 	       HttpResponse &res=_client.getResponse();
 	       if(!res.getBody().eof())
 	       {

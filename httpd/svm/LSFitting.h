@@ -60,17 +60,13 @@ namespace lsf
     void calcParams()
     {
       matrix<Type> xx=prod(trans (m_x),m_x);
-      std::cout<<"xx:"<<std::endl;
-      std::cout<<xx<<std::endl;
+
       vector<Type> xy=prod(trans (m_x),m_y);
       
-      std::cout<<"xy:"<<std::endl;
-      std::cout<<xy<<std::endl;
 
       matrix<Type> Invxx(xx.size1(),xx.size2());
       InvertMatrix(xx,Invxx);
-      std::cout<<"inverse xx:"<<std::endl;
-      std::cout<<Invxx<<std::endl;
+
       pars=prod(Invxx,xy);
     }
     void calcVar()
