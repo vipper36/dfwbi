@@ -7,12 +7,17 @@
 #include "stock_inter.hpp"
 #include "list_inter.hpp"
 #include <boost/assign/list_of.hpp>
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/accumulators/statistics/rolling_mean.hpp>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/vector_proxy.hpp>
+
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 
@@ -22,7 +27,7 @@
 #include <list>
 #include <algorithm>
 #include "da.h"
-#include "LSFitting.h"
+#include "GLSFitting.h"
 
 namespace po = boost::program_options;
 using namespace boost::assign;
@@ -78,11 +83,12 @@ public:
 			 curList.push_back(deltaval);
 		    }else
 		    {
-			 x.resize(m_curRow+1,m_order);
+			 x.resize(m_curRow+1,m_order+1);
 			 y.resize(m_curRow+1);
 			 
 			 y(m_curRow)=deltaval;
-			 int col=0;
+			 x(m_curRow,0)=1;
+			 int col=1;
 			 for(std::list<double>::iterator it=curList.begin();it!=curList.end();++it)
 			 {
 			      x(m_curRow,col)=*it;
@@ -159,34 +165,94 @@ int main(int argc, char* argv[])
 	  {
 	       //ptime from(date(2010,1,1),hours(0));
 	       ptime now = second_clock::local_time();
-	       ptime from=now-years(1);
-	       for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
+	       for(int i=0;i<20;i++)
 	       {
-		    std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
+		    now=now-days(5);
+		    std::cout<<"-------------"<<now<<std::endl;
+		    ptime from=now-months(3);
+		    for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
+		    {
+			 std::cout<<"-------------1--"<<now<<std::endl;
+			 std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
+			 std::cout<<"-------------2--"<<now<<std::endl;
+			 if(spList.size()>10)
+			 {
+			      // accumulator_set<double, stats<tag::mean, tag::variance > > acc;
+// 		    std::for_each(spList.begin(),spList.end(),boost::bind(AddtoAcc<accumulator_set<double, stats<tag::mean, tag::variance > > >,boost::ref(acc),_1));
+
+// 		    std::ofstream tof(it->first.c_str());
+// 		    std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
+//		    tof.close();
+// 		    std::cout<<mean(acc)<<":"<<variance(acc)<<std::endl;
 		    
-		    accumulator_set<double, stats<tag::mean, tag::variance > > acc;
-		    std::for_each(spList.begin(),spList.end(),boost::bind(AddtoAcc<accumulator_set<double, stats<tag::mean, tag::variance > > >,boost::ref(acc),_1));
-
-		    std::ofstream tof(it->first.c_str());
-		    std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
-		    std::cout<<mean(acc)<<":"<<variance(acc)<<std::endl;
+			      GetMatrix getMatrix(3);
+			      matrix<double> xs;
+			      vector<double> ys;
 		    
-		    GetMatrix getMatrix(3);
-		    matrix<double> x;
-		    vector<double> y;
 
-		    std::for_each(spList.begin(),spList.end(),boost::bind(getMatrix,_1,boost::ref(x),boost::ref(y)));
+			      std::for_each(spList.begin(),spList.end(),boost::bind(getMatrix,_1,boost::ref(xs),boost::ref(ys)));
+		    
+//		    std::cout<<"xs="<<std::endl;
+//		    std::cout<<xs<<std::endl;
+		    
+//		    std::cout<<"ys="<<std::endl;
+//		    std::cout<<ys<<std::endl;
+		    
+			      matrix_range<matrix<double> > x (xs, range (0, xs.size1()-1), range (0,  xs.size2()));
+//		    std::cout<<"x="<<std::endl;
+//		    std::cout<<x<<std::endl;
+		    
+			      vector_range<vector<double> > y (ys, range (0, ys.size()-1));
+//		    std::cout<<"y="<<std::endl;
+//		    std::cout<<y<<std::endl;
+		    
+		    
+			      // std::cout<<"x="<<std::endl;
+// 		    std::cout<<x<<std::endl;
+// 		    std::cout<<"y="<<std::endl;
+// 		    std::cout<<y<<std::endl;
+		    
+			      lsf::LSFitting<double> ls(x,y);
+			      ls.calcParams();
+			      ls.calcVar();
+//		    std::cout<<ls.getParams()<<std::endl;
+//		    std::cout<<ls.getVar()<<std::endl;
+		    
+			      matrix_row<matrix<double> > xt (xs, xs.size1()-1);
+		    
 
-		    std::cout<<"x="<<std::endl;
-		    std::cout<<x<<std::endl;
-		    std::cout<<"y="<<std::endl;
-		    std::cout<<y<<std::endl;
-		    lsf::LSFitting<double> ls(x,y);
-		    ls.calcParams();
-		    ls.calcVar();
-		    std::cout<<ls.getParams()<<std::endl;
-		    std::cout<<ls.getVar()<<std::endl;
-		    // accumulator_set<double, stats<tag::rolling_mean> > acc2(tag::rolling_window::window_size = 5);
+//		    std::cout<<"xt="<<std::endl;
+//		    std::cout<<xt<<std::endl;
+		    
+			      double yt=ys(ys.size()-1);
+//		    std::cout<<"yt="<<std::endl;
+//		    std::cout<<yt<<std::endl;
+		    
+			      double ytt=inner_prod(ls.getParams(),xt);
+		    
+
+			      double delta=yt-ytt;
+//		    std::cout<<"delta="<<std::endl;
+//		    std::cout<<delta<<std::endl;
+
+			      std::ofstream resof("result.txt",std::ios::app);
+			      if(fabs(delta)>ls.getVar())
+				   resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
+		    
+			      resof.close();
+			      // matrix_column<matrix<double> > x1(x, 1);
+		    
+// 		    matrix<double> l(x.size1(),x.size1());
+
+// 		    for (unsigned i = 0; i < x1.size (); ++ i)
+// 			 l(i,i)=x1(i);
+
+// 		    lsf::GLSFitting<double> gls(x,y,l);
+// 		    gls.calcParams();
+// 		    gls.calcVar();
+// 		    std::cout<<gls.getParams()<<std::endl;
+// 		    std::cout<<gls.getVar()<<std::endl;
+			      // accumulator_set<double, stats<tag::rolling_mean> > acc2(tag::rolling_window::window_size = 5);
 		    
 // 		    std::list<double> rmean;
 // 		    std::list<double> aprice;
@@ -216,6 +282,9 @@ int main(int argc, char* argv[])
 // 		    {
 // 			 std::cout<<*it<<std::endl;
 // 		    }
+			 }
+		    }
+		    std::cout<<"-------------3"<<now<<std::endl;
 	       }
 	  }
      }
