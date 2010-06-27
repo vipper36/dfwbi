@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 #include "stock_inter.hpp"
-#include "HttpClient.h"
+
 #include "HttpResponse.h"
 #include "Logger.hpp"
 #include "yahooParser.hpp"
@@ -40,6 +40,5 @@ private:
      void PrintPrice(StockPrice sp);
      void InsertMap(StockPrice sp,std::map<boost::posix_time::ptime,StockPrice> &smap);
      std::list<StockPrice> _priceList;
-     HttpClient _client;
 };
 #endif
