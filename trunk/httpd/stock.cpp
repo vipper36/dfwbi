@@ -27,7 +27,7 @@
 #include <list>
 #include <algorithm>
 #include "da.h"
-#include "GLSFitting.h"
+#include "LSFitting.h"
 
 namespace po = boost::program_options;
 using namespace boost::assign;
@@ -75,7 +75,7 @@ public:
 	       {
 		    m_last=curval;
 	       }
-	       if(deltaval<10.1)
+	       if(fabs(deltaval)<10.1)
 	       {
 
 		    if(curList.size()<m_order)
@@ -165,17 +165,20 @@ int main(int argc, char* argv[])
 	  {
 	       //ptime from(date(2010,1,1),hours(0));
 	       ptime now = second_clock::local_time();
-	       for(int i=0;i<20;i++)
+	       for(int i=0;i<100;i++)
 	       {
-		    now=now-days(5);
+		    now=now-days(1);
 		    std::cout<<"-------------"<<now<<std::endl;
+			greg_weekday wd = now.date().day_of_week();
+		if(wd.as_number()<5)
+		{	
 		    ptime from=now-months(3);
 		    for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		    {
 			 std::cout<<"-------------1--"<<now<<std::endl;
 			 std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
 			 std::cout<<"-------------2--"<<now<<std::endl;
-			 if(spList.size()>10)
+			 if(spList.size()>10&&spList.back().time.date()==now.date())
 			 {
 			      // accumulator_set<double, stats<tag::mean, tag::variance > > acc;
 // 		    std::for_each(spList.begin(),spList.end(),boost::bind(AddtoAcc<accumulator_set<double, stats<tag::mean, tag::variance > > >,boost::ref(acc),_1));
@@ -236,7 +239,7 @@ int main(int argc, char* argv[])
 //		    std::cout<<delta<<std::endl;
 
 			      std::ofstream resof("result.txt",std::ios::app);
-			      if(fabs(delta)>ls.getVar())
+			      if(fabs(delta)>2*ls.getVar())
 				   resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
 		    
 			      resof.close();
@@ -286,6 +289,7 @@ int main(int argc, char* argv[])
 		    }
 		    std::cout<<"-------------3"<<now<<std::endl;
 	       }
+		}
 	  }
      }
      catch (std::exception& e)
