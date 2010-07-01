@@ -1,7 +1,7 @@
-BOOSTLIB=-L/home/fly/usr/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
+BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lboost_program_options -lpthread
 TESTLIB=-lboost_unit_test_framework
 DLLLIB=-ldl
-BOOSTINC= -I./log -I./factory -I./server -I./stock -I./commands -I/home/fly/usr/include -I./da -I./svm
+BOOSTINC= -I./log -I./factory -I./server -I./stock -I./commands -I/usr/local/include -I./da -I./svm
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -11,7 +11,7 @@ CGILIB=-lfastcgipp
 SRVLIB=-L./server -lserver
 CFLAGS= -g -fPIC -D_XLNX64
 CXXFLAGS= -g -fPIC -D_XLNX64
-DESC=httpd boostest stockclient
+DESC=httpd boostest stockclient stockday stockprice
 CGI=cmd.fcgi
 INCLUDE=$(BOOSTINC)
 BOOSTOBJ= posix_main.o   
@@ -32,6 +32,12 @@ httpd:$(BOOSTOBJ) $(BASELIB)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB}  $(SRVLIB) $(FACLIB)
 stockclient:stock.o
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+stockday:stockday.o
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+stockprice:stockprice.o
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
 $(CGI):fcgiMain.o

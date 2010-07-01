@@ -238,7 +238,7 @@ int main(int argc, char* argv[])
 //		    std::cout<<"delta="<<std::endl;
 //		    std::cout<<delta<<std::endl;
 
-			      std::ofstream resof("result.txt",std::ios::app);
+			      std::ofstream resof("resultdata.txt",std::ios::app);
 			      if(fabs(delta)>2*ls.getVar())
 				   resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
 		    
