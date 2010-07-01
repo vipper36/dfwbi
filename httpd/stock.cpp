@@ -22,7 +22,7 @@
 #include <list>
 #include <algorithm>
 #include "da.h"
-#include "LSFitting.h"
+#include "GLSFitting.h"
 #include <dlib/svm.h>
 
 
@@ -209,10 +209,18 @@ int main(int argc, char* argv[])
 			  // 		    std::cout<<x<<std::endl;
 			  // 		    std::cout<<"y="<<std::endl;
 			  // 		    std::cout<<y<<std::endl;
-		    
-			  lsf::LSFitting<double> ls(x,y);
-			  ls.calcParams();
-			  ls.calcVar();
+		    matrix_column<matrix<double> > x1(xs, 1);
+                      identity_matrix<double> l(x.size1());
+                      matrix<double> ll(x.size1(),x.size1());
+                      ll.assign(l);
+                      for(int i=0;i<x.size1();i++)
+                           ll(i,i)=1/fabs(x1(i));
+                      lsf::GLSFitting<double> ls(x,y,ll);
+                      ls.calcParams();
+                      ls.calcVar();
+		//	  lsf::LSFitting<double> ls(x,y);
+		//	  ls.calcParams();
+		//	  ls.calcVar();
 			  //		    std::cout<<ls.getParams()<<std::endl;
 			  //		    std::cout<<ls.getVar()<<std::endl;
 		    
@@ -233,7 +241,7 @@ int main(int argc, char* argv[])
 			  //		    std::cout<<"delta="<<std::endl;
 			  //		    std::cout<<delta<<std::endl;
 
-			  //			      std::ofstream resof("resultdata.txt",std::ios::app);
+			std::ofstream resof("resultdata.txt",std::ios::app);
 			  if(fabs(delta)>2*ls.getVar())
 			    {
 			      vector<double> pars=ls.getParams();
@@ -244,25 +252,10 @@ int main(int argc, char* argv[])
 			      att.b3=pars(3);
 			      att.var=ls.getVar();
 			      lsmap.insert(std::make_pair(it->second,att));
-			      //resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
+			      resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
 			    }
-			  //resof.close();
+			  resof.close();
 			      
-			  // matrix_column<matrix<double> > x1(x, 1);
-		    
-			  // 		    matrix<double> l(x.size1(),x.size1());
-
-			  // 		    for (unsigned i = 0; i < x1.size (); ++ i)
-			  // 			 l(i,i)=x1(i);
-
-			  // 		    lsf::GLSFitting<double> gls(x,y,l);
-			  // 		    gls.calcParams();
-			  // 		    gls.calcVar();
-			  // 		    std::cout<<gls.getParams()<<std::endl;
-			  // 		    std::cout<<gls.getVar()<<std::endl;
-		    
-
-		    
 			}
 		    }
 		  std::cout<<"-------------3"<<now<<std::endl;
