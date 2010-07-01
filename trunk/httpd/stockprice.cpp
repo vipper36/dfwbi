@@ -27,7 +27,7 @@
 #include <list>
 #include <algorithm>
 #include "da.h"
-#include "LSFitting.h"
+#include "GLSFitting.h"
 
 namespace po = boost::program_options;
 using namespace boost::assign;
@@ -186,11 +186,24 @@ int main(int argc, char* argv[])
 			   
 		      std::cout<<x<<std::endl;
 		      std::cout<<y<<std::endl;
-		      lsf::LSFitting<double> ls(x,y);
-		      ls.calcParams();
-		      ls.calcVar();
-		      std::cout<<ls.getParams()<<std::endl;
-		      std::cout<<ls.getVar()<<std::endl;
+
+		      matrix_column<matrix<double> > x1(xs, 1);
+		      identity_matrix<double> l(x.size1());
+		      matrix<double> ll(x.size1(),x.size1());
+		      ll.assign(l);
+		      for(int i=0;i<x.size1();i++)
+			   ll(i,i)=1/fabs(x1(i));
+		      std::cout<<ll<<std::endl;
+		      lsf::GLSFitting<double> gls(x,y,ll);
+		      gls.calcParams();
+		      gls.calcVar();
+		      std::cout<<gls.getParams()<<std::endl;
+		      std::cout<<gls.getVar()<<std::endl;
+		      // lsf::LSFitting<double> ls(x,y);
+// 		      ls.calcParams();
+// 		      ls.calcVar();
+// 		      std::cout<<ls.getParams()<<std::endl;
+// 		      std::cout<<ls.getVar()<<std::endl;
 		    
 		      matrix_row<matrix<double> > xt (xs, xs.size1()-1);
 		    
@@ -202,7 +215,7 @@ int main(int argc, char* argv[])
 		      std::cout<<"yt="<<std::endl;
 		      std::cout<<yt<<std::endl;
 		    
-		      double ytt=inner_prod(ls.getParams(),xt);
+		      double ytt=inner_prod(gls.getParams(),xt);
 		    
 
 		      double delta=yt-ytt;
