@@ -26,6 +26,7 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <list>
 #include <algorithm>
+#include <dlib/mlp.h>
 #include "da.h"
 #include "GLSFitting.h"
 
@@ -119,6 +120,7 @@ int main(int argc, char* argv[])
   using namespace boost::gregorian;
   try
     {
+      std::string aStock;
       std::string configFile("stock.conf");
       std::string cmd("yahoo");
       std::string slist("file");
@@ -127,7 +129,7 @@ int main(int argc, char* argv[])
 	("help,h", "usage message")
 	("config,f", po::value(&configFile), "config file")
 	("cmd,c", po::value(&cmd), "command")
-	("list,l", po::value(&slist), "list")
+	("stock,s", po::value(&aStock), "list")
 	;
       po::variables_map vm;
       po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -142,34 +144,38 @@ int main(int argc, char* argv[])
       conf->LoadIni(configFile);
       init_logs();
       std::map<std::string,std::string> stockList;
-      list_inter *lp=conf->CreateObject<list_inter>(slist);
-      lp->open("ss.csv","ss");
-      std::map<std::string,std::string> &sslist=lp->GetList();
-      stockList.insert(sslist.begin(),sslist.end());
-      lp->open("sz.csv","sz");
+      if(aStock.length()>0)
+	{
+	  stockList.insert(std::make_pair(aStock,aStock));
 	      
-      std::map<std::string,std::string> &szlist=lp->GetList();
-      stockList.insert(szlist.begin(),szlist.end());
-
+	}else
+	{
+	  return 0;
+	}
 
       stock_inter *tp=conf->CreateObject<stock_inter>(cmd);
       if(tp!=NULL)
 	{
 	  //ptime from(date(2010,1,1),hours(0));
 	  ptime now = second_clock::local_time();
-	  greg_weekday wd = now.date().day_of_week();
 	  now=now-days(1);
-	  if(wd.as_number()<6)
+		    
+	  greg_weekday wd = now.date().day_of_week();
+	  if(wd.as_number()<8)
 	    {	
 	      ptime from=now-months(3);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
-		  std::cout<<"-------------1--"<<now<<std::endl;
+			
 		  std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
-		  std::cout<<"-------------2--"<<now<<std::endl;
 		  //if(spList.size()>10&&spList.back().time.date()==now.date())
 		  if(spList.size()>10)
 		    {
+		      std::ofstream tof(it->first.c_str());
+		      std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
+		      tof.close();
+			   
+		    
 		      GetMatrix getMatrix(3);
 		      matrix<double> xs;
 		      vector<double> ys;
@@ -177,49 +183,34 @@ int main(int argc, char* argv[])
 
 		      std::for_each(spList.begin(),spList.end(),boost::bind(getMatrix,_1,boost::ref(xs),boost::ref(ys)));
 		    
-		      		    
 		      matrix_range<matrix<double> > x (xs, range (0, xs.size1()-1), range (0,  xs.size2()));
-		      
-		    
 		      vector_range<vector<double> > y (ys, range (0, ys.size()-1));
-		      
-		    
-		    matrix_column<matrix<double> > x1(xs, 1);
-            identity_matrix<double> l(x.size1());    
-            matrix<double> ll(x.size1(),x.size1());  
-            ll.assign(l);
-            for(int i=0;i<x.size1();i++)
-           ll(i,i)=1/fabs(x1(i));
-            lsf::GLSFitting<double> ls(x,y,ll);
-            ls.calcParams();
-            ls.calcVar();
-		      
-		    
-		   //   lsf::LSFitting<double> ls(x,y);
-		    //  ls.calcParams();
-		     // ls.calcVar();
-		      
-		    
-		      matrix_row<matrix<double> > xt (xs, xs.size1()-1);
-		    
+			   
+		      typedef dlib::matrix<double, 3, 1> sample_type;
 
-		      
-		    
-		      double yt=ys(ys.size()-1);
-		      
-		    
-		      double ytt=inner_prod(ls.getParams(),xt);
-		    
+		      dlib::mlp::kernel_1a_c net(3,5,0,3);
 
-		      double delta=yt-ytt;
-      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
-		      
-		      std::ofstream resof("result.txt",std::ios::app);
-		      if(fabs(delta)>ls.getVar())
-			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
-		    
-		      resof.close();
+		      for (int i = 0; i < x.size1(); ++i)
+			{
+			  sample_type sample;
+			  sample(0)=x(i,1);
+			  sample(1)=x(i,2);
+			  sample(2)=x(i,3);
+			double out=y(i);
+			  net.train(sample,out);
+			}
+
+		      for (int i = 0; i < x.size1(); ++i)
+			{
+			  sample_type sample;
+			  sample(0)=x(i,1);
+			  sample(1)=x(i,2);
+			  sample(2)=x(i,3);
+			  std::cout << "This sample should be close to 1 and it is classified as a " << net(sample) << std::endl;
+			}
+		
 		    }
+	       
 		}
 	    }
 	}

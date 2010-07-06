@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
 	      now=now-days(1);
 	      std::cout<<"-------------"<<now<<std::endl;
 	      greg_weekday wd = now.date().day_of_week();
-	      if(wd.as_number()<5)
+	      if(wd.as_number()<6)
 		{	
 		  ptime from=now-months(3);
 		  for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
 
       std::vector<sample_type> samples;
       std::vector<sample_type> initial_centers;
-
+      std::vector<std::string> snlist;
       for (std::map<std::string,LsAtt>::iterator it=lsmap.begin(); it!=lsmap.end(); ++it)
 	{
 	  sample_type m;
@@ -284,6 +284,7 @@ int main(int argc, char* argv[])
 	  m(4) = it->second.var;
 	  // add this sample to our set of samples we will run k-means 
 	  samples.push_back(m);
+	  snlist.push_back(it->first);
 	}
       
       test.set_number_of_centers(3);
@@ -297,7 +298,7 @@ int main(int argc, char* argv[])
       // all points are correctly identified.
       for (unsigned long i = 0; i < samples.size(); ++i)
 	{
-	  std::cout << test(samples[i]) << "\n";
+	  std::cout << snlist[i]<<":"<<test(samples[i]) << "\n";
 	}
 
       // Now print out how many dictionary vec
