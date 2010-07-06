@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
 	  now=now-days(1);
 		    
 	  greg_weekday wd = now.date().day_of_week();
-	  if(wd.as_number()<5)
+	  if(wd.as_number()<6)
 	    {	
 	      ptime from=now-months(3);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
