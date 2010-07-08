@@ -206,12 +206,12 @@ int main(int argc, char* argv[])
 		      
 		    
 		      double yt=ys(ys.size()-1);
-		      
-		    
-		      double ytt=inner_prod(ls.getParams(),xt);
+		      double yt_l=yt/fabs(x1(x1.size()-1));
+		      vector<double> xt_l=1/fabs(x1(x1.size()-1))*xt;
+		      double ytt_l=inner_prod(ls.getParams(),xt_l);
 		    
 
-		      double delta=yt-ytt;
+		      double delta=yt_l-ytt_l;
       std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
 		      
 		      std::ofstream resof("result.txt",std::ios::app);
