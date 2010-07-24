@@ -224,38 +224,55 @@ int main(int argc, char* argv[])
 			  //		    std::cout<<ls.getParams()<<std::endl;
 			  //		    std::cout<<ls.getVar()<<std::endl;
 		    
-			  matrix_row<matrix<double> > xt (xs, xs.size1()-1);
+		      //matrix_row<matrix<double> > xt (xs, xs.size1()-1);
 		    
 
 			  //		    std::cout<<"xt="<<std::endl;
 			  //		    std::cout<<xt<<std::endl;
 		    
-			  double yt=ys(ys.size()-1);
+		      //  double yt=ys(ys.size()-1);
 			  //		    std::cout<<"yt="<<std::endl;
 			  //		    std::cout<<yt<<std::endl;
 		    
-			  double ytt=inner_prod(ls.getParams(),xt);
+		      //  double ytt=inner_prod(ls.getParams(),xt);
 		    
 
-			  double delta=yt-ytt;
+		      //  double delta=yt-ytt;
 			  //		    std::cout<<"delta="<<std::endl;
 			  //		    std::cout<<delta<<std::endl;
+		      matrix_row<matrix<double> > xt (xs, xs.size1()-1);
+		    
 
-			std::ofstream resof("resultdata.txt",std::ios::app);
-			  if(fabs(delta)>2*ls.getVar())
-			    {
-			      vector<double> pars=ls.getParams();
-			      LsAtt att;
-			      att.c=pars(0);
-			      att.b1=pars(1);
-			      att.b2=pars(2);
-			      att.b3=pars(3);
-			      att.var=ls.getVar();
-			      lsmap.insert(std::make_pair(it->second,att));
-			      resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
-			    }
-			  resof.close();
-			      
+		      
+		    
+		      double yt=ys(ys.size()-1);
+		      
+		      matrix_row<matrix<double> > lxi(xs, xs.size1()-1);
+		      double lquan=sqrt(inner_prod(lxi,lxi));
+		      double yt_l=yt/lquan;
+		      vector<double> xt_l=1/lquan*xt;
+		      double ytt_l=inner_prod(ls.getParams(),xt_l);
+		    
+
+		      double delta=yt_l-ytt_l;
+		      //  std::ofstream resof("resultdata.txt",std::ios::app);
+		      if(fabs(delta)>ls.getVar())
+			{
+			  vector<double> pars=ls.getParams();
+			  LsAtt att;
+			  att.c=pars(0);
+			  att.b1=pars(1);
+			  att.b2=pars(2);
+			  att.b3=pars(3);
+			  att.var=ls.getVar();
+			  std::stringstream ss;
+			  ss<<it->second;
+			  ss<<spList.back().time;
+			  lsmap.insert(std::make_pair(ss.str(),att));
+			  //  resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<std::endl;
+			}
+		      //resof.close();
+		      
 			}
 		    }
 		  std::cout<<"-------------3"<<now<<std::endl;
@@ -296,11 +313,13 @@ int main(int argc, char* argv[])
 
       // now loop over all our samples and print out their predicted class.  In this example
       // all points are correctly identified.
+      std::ofstream resof("resultdata.txt",std::ios::app);
       for (unsigned long i = 0; i < samples.size(); ++i)
 	{
-	  std::cout << snlist[i]<<":"<<test(samples[i]) << "\n";
+	  resof<< snlist[i]<<":"<<lsmap[snlist[i]].c<<","<<lsmap[snlist[i]].b1<<","<<lsmap[snlist[i]].b2
+	       <<","<<lsmap[snlist[i]].b3<<","<<lsmap[snlist[i]].var<<":"<<test(samples[i]) << "\n";
 	}
-
+      resof.close();
       // Now print out how many dictionary vec
     }
   catch (std::exception& e)
