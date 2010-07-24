@@ -27,6 +27,7 @@
 #include <list>
 #include <algorithm>
 #include <dlib/mlp.h>
+#include "dlib/svm.h"
 #include "da.h"
 #include "GLSFitting.h"
 
@@ -187,9 +188,12 @@ int main(int argc, char* argv[])
 		      vector_range<vector<double> > y (ys, range (0, ys.size()-1));
 			   
 		      typedef dlib::matrix<double, 3, 1> sample_type;
+		      typedef dlib::radial_basis_kernel<sample_type> kernel_type;
+		      
 
-		      dlib::mlp::kernel_1a_c net(3,5,0,3);
-
+		      dlib::mlp::kernel_1a net(3,10);
+		      dlib::krls<kernel_type> test(kernel_type(0.1),0.001);
+		      
 		      for (int i = 0; i < x.size1(); ++i)
 			{
 			  sample_type sample;
@@ -198,6 +202,7 @@ int main(int argc, char* argv[])
 			  sample(2)=x(i,3);
 			double out=y(i);
 			  net.train(sample,out);
+			  test.train(sample,out);
 			}
 
 		      for (int i = 0; i < x.size1(); ++i)
@@ -206,9 +211,10 @@ int main(int argc, char* argv[])
 			  sample(0)=x(i,1);
 			  sample(1)=x(i,2);
 			  sample(2)=x(i,3);
-			  std::cout << "This sample should be close to 1 and it is classified as a " << net(sample) << std::endl;
+			  std::cout << "This sample should be "<<y(i)<< " and nn as a " << net(sample)<<" krls as"<< test(sample) << std::endl;
+			  std::cout << y(i)<< "," << net(sample)<<","<< test(sample) << std::endl;
 			}
-		
+			
 		    }
 	       
 		}

@@ -57,10 +57,8 @@ namespace lsf
     {
       matrix<Type> Lx=prod(m_L,m_x);
       vector<Type> Ly=prod(m_L,m_y);
-      vector<Type> Lu=Ly-prod(Lx,pars);
-      matrix<Type> InvL(m_L.size1(),m_L.size2());
-      InvertMatrix(m_L,InvL);
-      vector<Type> u=prod(InvL,Lu);
+      vector<Type> u=Ly-prod(Lx,pars);
+
       accumulator_set<Type, stats<tag::variance > > acc;
 
       for(typename vector<Type>::iterator it=u.begin();it!=u.end();++it)

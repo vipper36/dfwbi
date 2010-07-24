@@ -11,7 +11,7 @@ CGILIB=-lfastcgipp
 SRVLIB=-L./server -lserver
 CFLAGS= -g -fPIC -D_XLNX64
 CXXFLAGS= -g -fPIC -D_XLNX64
-DESC=httpd boostest stockclient stockday stockprice
+DESC=httpd boostest stockclient stockday stockprice stocknn
 CGI=cmd.fcgi
 INCLUDE=$(BOOSTINC)
 BOOSTOBJ= posix_main.o   
@@ -20,7 +20,7 @@ TESTOBJ=boostest.o
 
 .cpp.o:
 	@echo Compiling cc program $< ......
-	@echo c to o
+	@echo cpp to o
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $<
 .c.o:
 	@echo Compiling cc program $< ......
@@ -31,20 +31,29 @@ all: $(DESC)
 httpd:$(BOOSTOBJ) $(BASELIB)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB}  $(SRVLIB) $(FACLIB)
+
 stockclient:stock.o
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+
 stockday:stockday.o
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+
+stocknn:stocknn.o
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+
 stockprice:stockprice.o
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+
 $(CGI):fcgiMain.o
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB) $(CGILIB)
+
 boostest:$(TESTOBJ)
 	@echo Linking $@ ...
 	$(CXX)  -o $@ $^ ${BOOSTLIB} ${DLLLIB} $(FACLIB)
+
 clean:
 	@-rm $(DESC)
 	@-rm -fr *.o *.a *~ "*#"
