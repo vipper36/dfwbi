@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
 	  greg_weekday wd = now.date().day_of_week();
 	  if(wd.as_number()<8)
 	    {	
-	      ptime from=now-months(3);
+	      ptime from=now-years(2);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
 			
@@ -215,6 +215,30 @@ int main(int argc, char* argv[])
 			  std::cout << y(i)<< "," << net(sample)<<","<< test(sample) << std::endl;
 			}
 			
+		      // matrix_column<matrix<double> > x1(xs, 1);
+// 		      identity_matrix<double> l(x.size1());    
+// 		      matrix<double> ll(x.size1(),x.size1());  
+// 		      ll.assign(l);
+// 		      for(int i=0;i<x.size1();i++)
+// 			{
+// 			  matrix_row<matrix<double> > xi(xs, i);
+// 			  double quan=sqrt(inner_prod(xi,xi));
+// 			  ll(i,i)=1/quan;
+// 			}
+// 		      lsf::GLSFitting<double> ls(x,y,ll);
+// 		      ls.calcParams();
+// 		      ls.calcVar();
+		      
+// 		      for(int i=0;i<x.size1();i++)
+// 			{
+// 			     matrix_row<matrix<double> > lxi(xs, i);
+// 			     double lquan=sqrt(inner_prod(lxi,lxi));
+// 			     vector<double> xt_l=1/lquan*lxi;
+
+
+// 			     double ytt_l=inner_prod(ls.getParams(),xt_l);
+// 			     std::cout << y(i)<< "," << ytt_l*lquan<< std::endl;
+// 			}
 		    }
 	       
 		}
