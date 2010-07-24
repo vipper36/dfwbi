@@ -161,14 +161,14 @@ int main(int argc, char* argv[])
 	  now=now-days(1);
 	  if(wd.as_number()<6)
 	    {	
-	      ptime from=now-months(3);
+	      ptime from=now-days(50);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
 		  std::cout<<"-------------1--"<<now<<std::endl;
 		  std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
 		  std::cout<<"-------------2--"<<now<<std::endl;
-		  //if(spList.size()>10&&spList.back().time.date()==now.date())
-		  if(spList.size()>10)
+		  if(spList.size()>10&&spList.back().time.date()==now.date())
+		    //if(spList.size()>10)
 		    {
 		      GetMatrix getMatrix(3);
 		      matrix<double> xs;
@@ -184,20 +184,24 @@ int main(int argc, char* argv[])
 		      vector_range<vector<double> > y (ys, range (0, ys.size()-1));
 		      
 		    
-		    matrix_column<matrix<double> > x1(xs, 1);
-            identity_matrix<double> l(x.size1());    
-            matrix<double> ll(x.size1(),x.size1());  
-            ll.assign(l);
-            for(int i=0;i<x.size1();i++)
-           ll(i,i)=1/fabs(x1(i));
-            lsf::GLSFitting<double> ls(x,y,ll);
-            ls.calcParams();
-            ls.calcVar();
+		      matrix_column<matrix<double> > x1(xs, 1);
+		      identity_matrix<double> l(x.size1());    
+		      matrix<double> ll(x.size1(),x.size1());  
+		      ll.assign(l);
+		      for(int i=0;i<x.size1();i++)
+			{
+			  matrix_row<matrix<double> > xi(xs, i);
+			  double quan=sqrt(inner_prod(xi,xi));
+			  ll(i,i)=1/quan;
+			}
+		      lsf::GLSFitting<double> ls(x,y,ll);
+		      ls.calcParams();
+		      ls.calcVar();
 		      
 		    
-		   //   lsf::LSFitting<double> ls(x,y);
-		    //  ls.calcParams();
-		     // ls.calcVar();
+		      //   lsf::LSFitting<double> ls(x,y);
+		      //  ls.calcParams();
+		      // ls.calcVar();
 		      
 		    
 		      matrix_row<matrix<double> > xt (xs, xs.size1()-1);
@@ -206,17 +210,20 @@ int main(int argc, char* argv[])
 		      
 		    
 		      double yt=ys(ys.size()-1);
-		      double yt_l=yt/fabs(x1(x1.size()-1));
-		      vector<double> xt_l=1/fabs(x1(x1.size()-1))*xt;
+		      
+		      matrix_row<matrix<double> > lxi(xs, xs.size1()-1);
+		      double lquan=sqrt(inner_prod(lxi,lxi));
+		      double yt_l=yt/lquan;
+		      vector<double> xt_l=1/lquan*xt;
 		      double ytt_l=inner_prod(ls.getParams(),xt_l);
 		    
 
 		      double delta=yt_l-ytt_l;
-      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
+		      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
 		      
 		      std::ofstream resof("result.txt",std::ios::app);
 		      if(fabs(delta)>ls.getVar())
-			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<std::endl;
+			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<std::endl;
 		    
 		      resof.close();
 		    }
