@@ -30,7 +30,7 @@
 #include "dlib/svm.h"
 #include "da.h"
 #include "GLSFitting.h"
-
+#define JIE 20
 namespace po = boost::program_options;
 using namespace boost::assign;
 using namespace boost::accumulators;
@@ -176,8 +176,8 @@ int main(int argc, char* argv[])
 		      std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
 		      tof.close();
 			   
-		    
-		      GetMatrix getMatrix(3);
+
+		      GetMatrix getMatrix(JIE);
 		      matrix<double> xs;
 		      vector<double> ys;
 		    
@@ -187,34 +187,40 @@ int main(int argc, char* argv[])
 		      matrix_range<matrix<double> > x (xs, range (0, xs.size1()-1), range (0,  xs.size2()));
 		      vector_range<vector<double> > y (ys, range (0, ys.size()-1));
 			   
-		      typedef dlib::matrix<double, 3, 1> sample_type;
+		      typedef dlib::matrix<double, JIE, 1> sample_type;
 		      typedef dlib::radial_basis_kernel<sample_type> kernel_type;
 		      
 
-		      dlib::mlp::kernel_1a net(3,10);
+		      dlib::mlp::kernel_1a net(JIE,20);
 		      dlib::krls<kernel_type> test(kernel_type(0.1),0.001);
 		      
-		      for (int i = 0; i < x.size1(); ++i)
+		      for (int i = 0; i < x.size1()-10; ++i)
 			{
 			  sample_type sample;
-			  sample(0)=x(i,1);
-			  sample(1)=x(i,2);
-			  sample(2)=x(i,3);
-			double out=y(i);
+			  for(int j=0;j<JIE;j++)
+			  {
+			       sample(j)=x(i,j+1);
+			  }
+			  double out=y(i);
 			  net.train(sample,out);
 			  test.train(sample,out);
 			}
+		      accumulator_set<double, stats<tag::variance > > acc;
 
 		      for (int i = 0; i < x.size1(); ++i)
 			{
 			  sample_type sample;
-			  sample(0)=x(i,1);
-			  sample(1)=x(i,2);
-			  sample(2)=x(i,3);
+			  for(int j=0;j<JIE;j++)
+			  {
+			       sample(j)=x(i,j+1);
+			  }
 			  std::cout << "This sample should be "<<y(i)<< " and nn as a " << net(sample)<<" krls as"<< test(sample) << std::endl;
 			  std::cout << y(i)<< "," << net(sample)<<","<< test(sample) << std::endl;
+			  if(i>=x.size1()-10)
+			       acc(test(sample)-y(i));
 			}
-			
+		     double  var=variance(acc);
+		      std::cout<<var<<std::endl;
 		      // matrix_column<matrix<double> > x1(xs, 1);
 // 		      identity_matrix<double> l(x.size1());    
 // 		      matrix<double> ll(x.size1(),x.size1());  
