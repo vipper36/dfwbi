@@ -161,16 +161,16 @@ int main(int argc, char* argv[])
 	  now=now-days(1);
 	  if(wd.as_number()<6)
 	    {	
-	      ptime from=now-days(50);
+	      ptime from=now-days(100);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
 		  std::cout<<"-------------1--"<<now<<std::endl;
 		  std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
 		  std::cout<<"-------------2--"<<now<<std::endl;
-		  if(spList.size()>10&&spList.back().time.date()==now.date())
+		  if(spList.size()>5*4&&spList.back().time.date()==now.date())
 		    //if(spList.size()>10)
 		    {
-		      GetMatrix getMatrix(3);
+		      GetMatrix getMatrix(5);
 		      matrix<double> xs;
 		      vector<double> ys;
 		    
@@ -222,8 +222,8 @@ int main(int argc, char* argv[])
 		      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
 		      
 		      std::ofstream resof("result.txt",std::ios::app);
-		      if(fabs(delta)>ls.getVar())
-			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<std::endl;
+		      if(fabs(delta)>3*ls.getVar())
+			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
 		    
 		      resof.close();
 		    }
