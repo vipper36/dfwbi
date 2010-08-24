@@ -30,7 +30,7 @@
 #include "dlib/svm.h"
 #include "da.h"
 #include "GLSFitting.h"
-#define JIE 20
+#define JIE 60
 namespace po = boost::program_options;
 using namespace boost::assign;
 using namespace boost::accumulators;
@@ -172,8 +172,9 @@ int main(int argc, char* argv[])
 	       typedef dlib::matrix<double, JIE, 1> sample_type;
 	       typedef dlib::radial_basis_kernel<sample_type> kernel_type;
 		    
-	       dlib::mlp::kernel_1a net(JIE,20);
-	       dlib::krls<kernel_type> test(kernel_type(0.1),0.001);
+	       //dlib::mlp::kernel_1a net(JIE,20,20);
+	       dlib::mlp::kernel_1a_c net(JIE,60,30);
+	       dlib::krls<kernel_type> test(kernel_type(0.1),0.1);
 	       std::list<sample_type> testsample;
 	       std::list<double> testresult;
 	       ptime from=now-years(2);
@@ -184,9 +185,9 @@ int main(int argc, char* argv[])
 		    //if(spList.size()>10&&spList.back().time.date()==now.date())
 		    if(spList.size()>10)
 		    {
-			 std::ofstream tof(it->first.c_str());
-			 std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
-			 tof.close();
+			 //std::ofstream tof(it->first.c_str());
+			 //std::for_each(spList.begin(),spList.end(),boost::bind(OutStock,boost::ref(tof),_1));
+			 //tof.close();
 			   
 
 			 GetMatrix getMatrix(JIE);
@@ -219,18 +220,36 @@ int main(int argc, char* argv[])
 	       std::list<sample_type>::iterator it;
 	       for(it=testsample.begin(),rit=testresult.begin();it!=testsample.end();++it,++rit)
 	       {
-		    net.train(*it,*rit);
-		    test.train(*it,*rit);
+		    if(*rit>0)
+			{
+		    	net.train(*it,1);
+			}
+		    else
+			{
+		    	net.train(*it,0);
+			}
+		    //test.train(*it,*rit);
 	       }
 	       accumulator_set<double, stats<tag::variance > > acc;
-	       accumulator_set<double, stats<tag::variance > > netacc;
+	       //accumulator_set<double, stats<tag::variance > > netacc;
+	       int eCount=0;
+	       int cCount=0;
 	       for(it=testsample.begin(),rit=testresult.begin();it!=testsample.end();++it,++rit)
 	       {
-		    acc(test(*it)-*rit);
-		    netacc(net(*it)-*rit);
+		    //acc(test(*it)-*rit);
+	       std::cout<<"net:"<<net(*it)<<" y:"<<*rit<<std::endl;
+	        
+		 if(net(*it)<0.5&&*rit>0||net(*it)>=0.5&&*rit<=0)
+		   {
+		     eCount++;
+		   }else
+		   {
+		     cCount++;
+		   }
 	       }
-	       std::cout<<"net var:"<<variance(netacc)<<std::endl;
-	       std::cout<<"krls var:"<<variance(acc)<<std::endl;
+	       std::cout<<"error count:"<<eCount<<" currect count:"<<cCount<<std::endl;
+	       //std::cout<<"net var:"<<variance(netacc)<<std::endl;
+	       //std::cout<<"krls var:"<<variance(acc)<<std::endl;
 			 
 
 	  }

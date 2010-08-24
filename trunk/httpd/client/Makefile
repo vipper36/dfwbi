@@ -1,5 +1,5 @@
-BOOSTLIB=-L/home/fly/usr/lib -lboost_thread -lboost_system -lpthread
-BOOSTINC=-I/home/fly/usr/include/
+BOOSTLIB=-L/usr/local/lib -lboost_thread -lboost_system -lpthread
+BOOSTINC=-I/usr/local/include/
 CC=gcc
 AR=ar -r
 CXX=g++

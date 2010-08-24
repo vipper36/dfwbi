@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
 
 		      double delta=yt_l-ytt_l;
 		      //  std::ofstream resof("resultdata.txt",std::ios::app);
-		      if(fabs(delta)>ls.getVar())
+		      if(fabs(delta)>2*ls.getVar())
 			{
 			  vector<double> pars=ls.getParams();
 			  LsAtt att;
