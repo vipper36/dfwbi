@@ -1,0 +1,32 @@
+#include "nsISupports.idl"
+
+interface nsISoapTask;
+interface nsISoapJob;
+interface nsISupportsArray;
+[scriptable, uuid(414ef0b7-873a-49be-af3f-ebbecc727b6a)]
+interface nsISoapInter:nsISupports
+{
+     void SetAddress(in AUTF8String address);
+     long getVersion(in long id);
+     nsISoapJob getJob(in long id);
+     long addJob(in AUTF8String name,in AUTF8String url,in AUTF8String type,in AUTF8String comment);
+     boolean updateJob(in long id);
+     AUTF8String getWrapper(in long id);
+     AUTF8String getWrapGen(in long id);
+     boolean addWrapper(in long jobid,in AUTF8String type,in AUTF8String wrapper,in AUTF8String wrapgen,in AUTF8String comment);
+     nsISoapTask getTask(in long cid,in long num);
+     nsISoapTask getTaskByJobId(in long cid,in long jobid,in AUTF8String type,in long num);
+     nsISoapTask getWrapTask(in long cid,in long num);
+     boolean updateWrapper(in AUTF8String wrap,in long id,in long taskid);
+     boolean updateWrapGen(in AUTF8String wrapgen,in long id);
+     long getStat(in long cid);
+     boolean putResult(in AUTF8String result,in long id);
+     nsISupportsArray getJobs();
+     void getJobID([array,size_is(id_size)] out long id,out unsigned long id_size);
+     boolean hasTask(in long cid);
+     nsISupportsArray getJobsWrapStatInvalid();
+     nsISoapTask getWrapInvalidTaskByJobId(in long cid,in long jobid,in AUTF8String type,in long num);
+     boolean delJob(in long jobid);
+     boolean updateJobUrl(in long jobid,in AUTF8String url);
+     boolean updateWrapperCheckOk(in AUTF8String wrap,in long wrapid);
+};

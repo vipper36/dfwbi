@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+   id     = "mybrowser"
+   title  = "browser"
+   orient = "horizontal"
+   width  = "1024"
+   height = "768"
+   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="mybrowser.js"/>
+  
+  
+  <vbox flex="1">
+    <hbox flex="1">
+      <tabbox id="extra-info-tab" flex="1">
+	<tabs id="comment-tab">
+	  <tab label="Job"/>
+	  <tab label="task"/>
+	  <tab label="Acess url"/>
+	  <tab label="Result"/>
+	</tabs>
+	<tabpanels style="background-color: White;" flex="3">
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="jobAddress" value="" flex="1"/>
+		<button id="Get-Job" label="List Job" oncommand="soapJob();"/>
+	      </hbox>
+
+	      <hbox height="10" />
+	      
+	      <listbox id="result_list" flex="1">
+		<listhead>
+		  <listheader label="ID"/>
+		  <listheader label="Name"/>
+		  <listheader label="Seed"/>
+		  <listheader label="SeedType"/>
+		  <listheader label="Comment"/>
+		</listhead>
+		<listcols>
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		</listcols>
+	      </listbox>
+
+	      <hbox>
+		<vbox flex="3"/>
+		<button id="Update-job" label="update" oncommand="updatejob();"/>
+	      </hbox>
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox height="10" />
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="taskAddress" value="" flex="1"/>
+		<button id="Get-Task" label="Soap" oncommand="soapTask();"/>
+	      </hbox>
+	      <hbox>
+		<label value="Job ID:"/>
+		<textbox id="Job-id" value="" flex="1"/>
+		<label value="Job Type:"/>
+		<textbox id="Job-type" value="" flex="1"/>
+		<label value="Wrap ID:"/>
+		<textbox id="Wrap-id" value="" flex="1"/>
+	      </hbox>
+	      <hbox flex="1">
+		<vbox flex="1">
+		  <label value="URL List:"/>
+		  <listbox id="url_list" flex="1">
+		    <listhead>
+		      <listheader label="UID"/>
+		      <listheader label="URLS"/>
+		    </listhead>
+		    <listcols>
+		      <listcol />
+		      <listcol flex="1" />
+		    </listcols>
+		  </listbox>
+		  <hbox>
+		    <vbox flex="3"/>
+		    <button id="access-sel" label="Access Selected" oncommand="accesssel();"/>
+		  </hbox>
+		</vbox>
+		<vbox flex="1">
+		  <label value="Wrapper:"/>
+		  <textbox id="soap-wrapper"  multiline="true" value="" flex="1"/>
+		  <hbox height="10" />
+		  <vbox id="variable-box">
+		    
+		  </vbox>
+		  <hbox>
+		    <vbox flex="3"/>
+		    <button id="loadVarList" label="Get Variables" oncommand="createvarlist();"/>
+		    <button id="save-wrap" label="Save" oncommand="savewrap();"/>
+		    <button id="set-xslt" label="Export" oncommand="setxslt();"/>
+		  </hbox>
+		  
+		</vbox>
+	      </hbox>
+	      <hbox>
+		
+	      </hbox>
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox id="main-box">
+		<label value="Target Address:"/>
+		<textbox id="urlbar" value="" flex="1" onchange="go();"/>
+		<label value="UID:"/>
+		<textbox id="url-id" value=""/>
+		<button id="go" label="Go" oncommand="go();"/>
+	      </hbox>
+	      <hbox height="10" />
+	      <hbox id="fetch-box" height="160">
+		<label value="XSLT Wrapper:"/>
+		<textbox id="wrapper"  multiline="true" value="" flex="1" readonly="true"/>
+		<vbox>
+		  <vbox>
+		    <button id="xslt" label="Fetch" oncommand="fetchxsltcom();" flex="3"/>
+		  </vbox>
+		</vbox>
+	      </hbox>
+	      <hbox height="10" />
+	      <hbox>
+		<label value="Target browser result:" flex="3"/>
+		<button id="Analysis" label="Analysis" oncommand="Analysis();"/>
+	      </hbox>
+	      <hbox height="10" />
+	      <browser  flex="1" id="browser" src="" type="content-primary"/>
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="Fetch result:"/>
+	      </hbox>
+	      <textbox multiline="true" id="resultc" newlines="pasteintact" readonly="true" flex="3"/>
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="resAddress" value="" flex="1"/>
+		
+		<button id="send-result" label="Send" oncommand="sendresult();"/>
+	      </hbox> 
+	    </vbox>
+	  </tabpanel>
+	  
+	  
+	</tabpanels>
+      </tabbox>
+    </hbox>
+  </vbox>
+
+</window>

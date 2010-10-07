@@ -1,0 +1,173 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from CrawlerCtrlService WSDL service -->
+
+  <service name="CrawlerCtrl" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://crawler.nyapc"/>
+      <parameter name="wsdlServiceElement" value="CrawlerCtrlService"/>
+      <parameter name="schemaQualified" value="http://dao.crawler.nyapc,http://crawler.nyapc"/>
+      <parameter name="wsdlServicePort" value="CrawlerCtrl"/>
+      <parameter name="className" value="nyapc.crawler.CrawlerCtrlImpl"/>
+      <parameter name="wsdlPortType" value="CrawlerCtrl"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="getVersion" qname="operNS:getVersion" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getVersionReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getTask" qname="operNS:getTask" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getTaskReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:Task" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:num" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWrapper" qname="operNS:getWrapper" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapperReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getTaskByJobId" qname="operNS:getTaskByJobId" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getTaskByJobIdReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:Task" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:jid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:type" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:num" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="putResult" qname="operNS:putResult" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:putResultReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:res" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getStat" qname="operNS:getStat" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getStatReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="addJob" qname="operNS:addJob" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:addJobReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:name" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:url" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:type" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:category" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:dredb" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:comment" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="delJob" qname="operNS:delJob" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:delJobReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getJobID" qname="operNS:getJobID" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getJobIDReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      </operation>
+      <operation name="getJob" qname="operNS:getJob" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getJobReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:JobAtt" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getJobs" qname="operNS:getJobs" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getJobsReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:JobAtt" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+      </operation>
+      <operation name="getJobsWrapStatInvalid" qname="operNS:getJobsWrapStatInvalid" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getJobsWrapStatInvalidReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:JobAtt" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+      </operation>
+      <operation name="updateJob" qname="operNS:updateJob" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateJobReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateJobUrl" qname="operNS:updateJobUrl" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateJobUrlReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:url" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="hasTask" qname="operNS:hasTask" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:hasTaskReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="addCookie" qname="operNS:addCookie" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:addCookieReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:jobid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:logUrl" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:logName" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:logPass" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:cookie" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:cookType" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateCookie" qname="operNS:updateCookie" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateCookieReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:jobid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:cookie" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getCookie" qname="operNS:getCookie" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getCookieReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:jobid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getLogInfo" qname="operNS:getLogInfo" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getLogInfoReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:LonginInfo" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:jobid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getLogJobID" qname="operNS:getLogJobID" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getLogJobIDReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      </operation>
+      <operation name="getWrapGen" qname="operNS:getWrapGen" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapGenReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateWrapper" qname="operNS:updateWrapper" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateWrapperReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:wrap" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:taskid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateWrapperCheckOk" qname="operNS:updateWrapperCheckOk" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateWrapperCheckOkReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:wrap" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:wrapId" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="updateWrapGen" qname="operNS:updateWrapGen" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:updateWrapGenReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:wrapgen" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWrapTask" qname="operNS:getWrapTask" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapTaskReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:Task" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:num" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWrapId" qname="operNS:getWrapId" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapIdReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:jid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWraptype" qname="operNS:getWraptype" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWraptypeReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWrapInvalidTask" qname="operNS:getWrapInvalidTask" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapInvalidTaskReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:Task" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:num" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getWrapInvalidTaskByJobId" qname="operNS:getWrapInvalidTaskByJobId" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getWrapInvalidTaskByJobIdReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:Task" xmlns:rtns="http://dao.crawler.nyapc" soapAction="" >
+        <parameter qname="pns:cid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:jid" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:type" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:num" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="addWrapper" qname="operNS:addWrapper" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:addWrapperReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:jobId" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:type" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:wrapper" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:vargen" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:comment" xmlns:pns="http://crawler.nyapc" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="deleteWrapStudy" qname="operNS:deleteWrapStudy" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:deleteWrapStudyReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getStudyWrapper" qname="operNS:getStudyWrapper" xmlns:operNS="http://crawler.nyapc" returnQName="retNS:getStudyWrapperReturn" xmlns:retNS="http://crawler.nyapc" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://crawler.nyapc" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="deleteWrapStudy getStudyWrapper getWrapGen getStat getWrapTask getWrapper updateWrapperCheckOk getWrapId getJob getVersion getLogInfo hasTask getWrapInvalidTask addCookie updateJob addJob delJob getWrapInvalidTaskByJobId updateJobUrl getTaskByJobId addWrapper getCookie getWraptype getTask updateWrapGen getJobs putResult getJobID updateWrapper getLogJobID getJobsWrapStatInvalid updateCookie"/>
+      <parameter name="scope" value="Session"/>
+
+      <typeMapping
+        xmlns:ns="http://dao.crawler.nyapc"
+        qname="ns:Task"
+        type="java:nyapc.crawler.dao.Task"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://dao.crawler.nyapc"
+        qname="ns:LonginInfo"
+        type="java:nyapc.crawler.dao.LonginInfo"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://dao.crawler.nyapc"
+        qname="ns:JobAtt"
+        type="java:nyapc.crawler.dao.JobAtt"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+  </service>
+</deployment>

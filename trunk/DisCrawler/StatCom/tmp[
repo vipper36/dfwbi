@@ -1,0 +1,7 @@
+/html/body/table/tbody/tr/td/table[@align="center"]/tbody/tr/td[@valign="top"]/table/tbody/tr/td/table[@class="ft12h" and @align="left"]/tbody
+
+tr/td[@align="left"]/table/tbody/tr/td/a
+
+/html/body/table[@align="center"]/tbody/tr/td[@valign="top"]/table[@align="right"]/tbody/tr/td[@align="middle"]/table/tbody/tr/td[@valign="top" and @align="left"]/table/tbody
+
+tr/td/div/table/tbody/tr/td[@class="default"]/a

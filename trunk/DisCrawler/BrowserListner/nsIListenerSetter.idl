@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+
+interface nsIStatManager;
+[scriptable, uuid(7a02b886-e622-4b25-8f87-543c5024c4b0)]
+interface nsIListenerSetter :nsISupports
+{
+	void SetStatManager( in nsIStatManager man);
+	void SetId( in long id);
+};

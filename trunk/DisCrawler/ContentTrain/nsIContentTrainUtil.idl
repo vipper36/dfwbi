@@ -1,0 +1,22 @@
+#include "nsISupports.idl"
+
+interface nsIAttDim;
+interface nsIDimStat;
+interface nsIAttSet;
+interface nsIXpathUtil;
+interface nsISupportsArray;
+[scriptable, uuid(db0aff49-f158-42b6-ae37-f52593361f28)]
+interface nsIContentTrainUtil:nsISupports
+{
+    void FindCommonDim([array,size_is(id_size)] out long dims, out PRUint32 id_size);
+    void SetVectorSet(in nsIAttSet attset);
+    void SetAttDim(in nsIAttDim attdim);
+    double GetSimilarityByDim(in long dimid);
+    double GetSimilarityBetweenStrings(in AUTF8String s1, in AUTF8String s2);
+    double GetSimilarityBetweenDims(in PRInt32 dim1, in PRInt32 dim2);
+    AUTF8String GetNodesTextByXpath(in nsIXpathUtil xpathutil, in AUTF8String xpath);
+    double IsDateDim(in long dimid, in nsIDimStat dimstat);
+    double IsSourceDim(in long dimid, in nsIDimStat dimstat);
+    double isAuthorDim(in long dimid, in nsIDimStat dimstat);
+};
+

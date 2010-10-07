@@ -1,0 +1,12 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(f1ef9bac-c020-43e9-adef-64153d4348fe)]
+interface nsISoapJob:nsISupports
+{
+     attribute long id;
+     attribute AUTF8String comment;
+     attribute AUTF8String seed;
+     attribute AUTF8String name;
+     attribute AUTF8String seedType;
+};

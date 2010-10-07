@@ -1,0 +1,13 @@
+#include "nsISupports.idl"
+
+interface nsIAttSet;
+interface nsIClustModel;
+[scriptable, uuid(ad6857e0-2ed3-49ae-9ef7-223fb668daf4)]
+interface nsICluster:nsISupports
+{
+     void SetAtt(in nsIAttSet set);
+     void SetDoubleParam(in AUTF8String name,in double value);
+     void SetStringParam(in AUTF8String name,in AUTF8String value);
+     void CaculModel();
+     nsIClustModel GetResultModel();
+};

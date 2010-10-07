@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(e6c5fa0c-ffc2-49dd-a3b4-670288f0401d)]
+interface nsIWrapperSave:nsISupports
+{
+     void SetLoaction(in AUTF8String loc);
+     AUTF8String GetWrapper(in long wrapId,in long ver);
+     void SaveWrapper(in long wrapId,in long ver,in AUTF8String wrapper);
+};

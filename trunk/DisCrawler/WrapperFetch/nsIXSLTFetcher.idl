@@ -1,0 +1,17 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+[scriptable, uuid(3ec69b5a-4af9-4d09-8972-ce722d45d82a)]
+interface nsIXSLTFetcher:nsISupports
+{
+     void OpenXsltFile(in AUTF8String name);
+     void SetXsltDocStr(in AUTF8String content);
+     void SetDocument(in nsIDOMDocument doc);
+     AUTF8String GetResultXML();
+     AUTF8String GetXsltVar(in AUTF8String name);
+     void SetXsltVar(in AUTF8String name,in AUTF8String value);
+     AUTF8String GetXsltDocStr();
+     unsigned long GetVarCount();
+     void GetVarByIndex(in long index,out AUTF8String name,out AUTF8String value);
+     void SetXsltParam(in AUTF8String name,in AUTF8String value);
+};

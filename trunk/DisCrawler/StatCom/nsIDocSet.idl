@@ -1,0 +1,10 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+[scriptable, uuid(b60c7690-9e56-4f32-a9b9-4826fec2521d)]
+interface nsIDocSet:nsISupports
+{
+     long GetDocCount();
+     nsIDOMDocument GetDocByIndex(in long index);
+     void AddDocument(in nsIDOMDocument doc);
+};

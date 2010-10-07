@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project name="" company="" manager="" phase="" project-start="20090902T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Working" description="A default working day"/>
+      <day-type id="1" name="Nonworking" description="A default non working day"/>
+      <day-type id="2" name="Use base" description="Use day from base calendar"/>
+    </day-types>
+    <calendar id="1" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="&#x5206;&#x5E03;&#x5F0F;&#x722C;&#x866B;" note="" work="316800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="Soap&#x670D;&#x52A1;" note="" work="115200" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="3" name="Soap&#x5BA2;&#x6237;&#x7AEF;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="4" name="&#x670D;&#x52A1;&#x7A0B;&#x5E8F;&#x67B6;&#x6784;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="5" name="&#x6570;&#x636E;&#x8BBF;&#x95EE;&#x5C42;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="6" name="Soap&#x670D;&#x52A1;&#x5C42;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+      <task id="7" name="Soap&#x8FDE;&#x63A5;&#x7EC4;&#x4EF6;" note="" work="144000" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="8" name="&#x9891;&#x9053;&#x8BBF;&#x95EE;&#x6A21;&#x5757;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="9" name="&#x680F;&#x76EE;&#x8BBF;&#x95EE;&#x6A21;&#x5757;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="10" name="&#x5185;&#x5BB9;URL&#x8BBF;&#x95EE;&#x6A21;&#x5757;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="11" name="Wrapper&#x8BBF;&#x95EE;&#x6A21;&#x5757;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="12" name="Filter&#x8BBF;&#x95EE;&#x6A21;&#x5757;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+      <task id="13" name="Wrapper&#x6539;&#x9020;" note="" work="57600" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="14" name="Wrapper&#x6293;&#x53D6;&#x6539;&#x9020;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="15" name="Wrapper &#x6784;&#x5EFA;&#x6539;&#x9020;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+    </task>
+    <task id="16" name="&#x7535;&#x5B50;&#x62A5;&#x6293;&#x53D6;&#xFF08;HTML&#xFF09;" note="" work="144000" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="17" name="HTML" note="" work="57600" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="18" name="&#x901A;&#x7528;&#x578B;Html&#x722C;&#x866B;&#x90E8;&#x7F72;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="19" name="&#x7279;&#x4F8B;&#x578B;HTML&#x722C;&#x866B;&#x90E8;&#x7F72;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+      <task id="20" name="Flash" note="" work="86400" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="21" name="swf&#x4E0B;&#x8F7D;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="22" name="cfg&#x4E0B;&#x8F7D;&#x89E3;&#x6790;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="23" name="xml&#x4E0B;&#x8F7D;&#x89E3;&#x6790;" note="" work="28800" start="20090902T000000Z" end="20090902T170000Z" work-start="20090902T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources>
+    <resource id="1" name="xiaofei" short-name="xf" type="1" units="0" email="" note="" std-rate="0"/>
+  </resources>
+  <allocations/>
+</project>

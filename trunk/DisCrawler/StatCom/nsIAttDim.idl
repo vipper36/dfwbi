@@ -1,0 +1,11 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(e2a8f8eb-eb4f-4f47-8799-f1d2fb706a9e)]
+interface nsIAttDim:nsISupports
+{
+	long GetCount();
+	long GetDimId(in AUTF8String desc);
+	void AddDim(in long id,in AUTF8String desc);
+	AUTF8String GetDesc(in long id);
+};
+

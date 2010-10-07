@@ -1,0 +1,18 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+interface nsIAttDim;
+[scriptable, uuid(b4cf915f-72a9-440c-9b9b-cff0ddf4dbfd)]
+interface nsIDimStat:nsISupports
+{
+	double GetTotalWeightByDim(in long id);
+	double GetAvrgWeightByDim(in long id);
+	double GetWeightVarianceByDim(in long id);
+	double GetInverseDocCountByDim(in long id);
+	double GetAvrgShowCountByDim(in long id);
+	double GetShowCountVarianceByDim(in long id);
+	long GetDocCount();
+	void SetDocument(in nsIDOMDocument doc);
+	void SetAttDim(in nsIAttDim attdim);
+};
+

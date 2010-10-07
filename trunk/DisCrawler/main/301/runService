@@ -1,0 +1,72 @@
+#! /bin/bash
+. ./config
+spid=$$
+echo $$>runservice.pid
+echo "Start service"
+nohup ./$1 >${spid}.log&
+sleep 10
+line=0
+testCount=0
+while [ 1 ]; do 
+    killed=0
+    keycount=`tail -n 200 ${spid}.log|grep "send key press.........."|wc -l`
+    pid=`cat gtkMain.pid`
+    if [ $pid ]; then
+	rpid=`ps aux|awk -vp=$pid '$2==p {print $2}'`
+	if [ $rpid ]; then
+	    if [ $keycount -eq 200 ]; then
+		ppid=`ps -ef|grep keyPress|awk -vp=$rpid '$2==p {print $3}'`
+		if [ $ppid ]; then
+		    echo "kill process $ppid"
+		    if [ $ppid -ne 1 ]; then
+			kill -9 $ppid
+		    fi
+		fi
+		rpid=`ps aux|awk -vp=$rpid '$2==p {print $2}'`
+		if [ $rpid ]; then
+		    echo "kill process $rpid"
+		    kill -9 $rpid
+		fi
+		killed=1
+		sleep 5
+	    fi
+	fi
+    fi
+    if [ $killed -eq 0 ]; then
+	curline=`wc -l ${spid}.log|awk '{print $1}'`
+	if [ $curline -eq  $line ]; then
+	    if [ $testCount -gt 4 ]; then
+		if [ $pid ]; then
+		    rpid=`ps aux|awk -vp=$pid '$2==p {print $2}'`
+		    if [ $rpid ]; then
+			echo "kill process"
+			ppid=`ps -ef|grep keyPress|awk -vp=$rpid '$2==p {print $3}'`
+			if [ $ppid ]; then
+			    echo "kill process $ppid"
+			    if [ $ppid -ne 1 ]; then
+				kill -9 $ppid
+			    fi
+			fi
+			rpid=`ps aux|awk -vp=$rpid '$2==p {print $2}'`
+			if [ $rpid ]; then
+			    echo "kill process $rpid"
+			    kill -9 $rpid
+			fi
+			testCount=0
+			sleep 5
+		    fi
+		fi
+		killed=1
+	    else
+		testCount=`expr $testCount + 1`
+	    fi
+	fi
+    fi
+    if [ $killed -gt 0 ]; then
+	echo "Start service"
+	nohup ./$1 >${spid}.log&
+	sleep 5
+    fi
+    line=$curline
+    sleep 3
+done

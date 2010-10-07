@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+interface nsIDOMDocument;
+interface nsIDocSet;
+interface nsIAttVec;
+interface nsIAttSet;
+interface nsIAttDim;
+[scriptable, uuid(c010210e-6081-498b-a481-0b10d59535bf)]
+interface nsIDocAtt:nsISupports
+{
+     attribute nsIAttDim dim;
+     void AddDocument(in nsIDOMDocument doc);
+     long GetVectorCount();
+     nsIAttVec GetVectorByIndex(in long index);
+     nsIAttSet GetResult();
+};

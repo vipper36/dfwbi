@@ -1,0 +1,25 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+interface nsIDOMNode;
+interface nsIDOMElement;
+interface nsISupportsArray;
+[scriptable, uuid(04d0d5e6-a3bf-4968-a4da-07478a562c0f)]
+interface nsIDomAttUtil:nsISupports
+{
+     long CalNodeDepth(in nsIDOMNode node);
+     long GetDocUrlCount(in nsIDOMDocument doc);
+     long GetNodeUrlCount(in nsIDOMNode node);
+     AUTF8String GetDocText(in nsIDOMDocument doc);
+     AUTF8String GetNodeText(in nsIDOMNode node);
+     AUTF8String GetNodeOwnText(in nsIDOMNode node);
+     long GetDocUrlDistance(in nsIDOMDocument doc);
+     long GetNodeUrlDistance(in nsIDOMNode node);
+     void CalSibParentDist(in nsIDOMElement node,out double pDist,out double lDist);
+     void GetEleBox(in nsIDOMElement node,out long x,out long y,out long w,out long h);
+     boolean IsLink(in nsIDOMNode node);
+     boolean IsLinkNotInCal(in nsIDOMNode node);
+     AUTF8String GetLinkStr(in nsIDOMNode node,in short type);
+     void GetALLDocumentArray(in nsIDOMDocument doc,in nsISupportsArray supArr);
+     long GetNodeArea(in nsIDOMNode node);
+};

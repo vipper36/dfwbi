@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss:SSS}]%C %L %t: %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="ROLLING"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/tmp/crawler.log" />
+		<param name="Threshold" value="DEBUG" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="102400KB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}] %C %L: %m%n" />
+			  <!--value="%C %L: %m%n"/-->
+		</layout>
+	</appender>
+
+	<appender name="BACKEND"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="database.log" />
+		<param name="Threshold" value="DEBUG" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="102400KB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss}] %C %L: %m%n" />
+		</layout>
+	</appender>
+
+	
+	<category name="nyapc.crawler" additivity="false">  
+		<level value="DEBUG" />  
+		<appender-ref ref="CONSOLE" />  
+	</category>
+	<category name="org.apache" additivity="false">  
+		<level value="ERROR" />  
+		<appender-ref ref="CONSOLE" />  
+	</category> 		
+	 		
+    <root>
+		<level value="ERROR" />
+		<!-- level value="ERROR,WARN,DEBUG" /-->
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+	
+
+
+</log4j:configuration>
