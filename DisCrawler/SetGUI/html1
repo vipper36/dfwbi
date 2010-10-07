@@ -1,0 +1,943 @@
+heml:<head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>中华工商时报数字报刊</title>
+<link href="/epaper/css/uniflows.css" rel="stylesheet" type="text/css">
+<link href="../../css/uniflows.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+#scrollerContent {
+	POSITION: absolute;
+	left: 0px;
+	top: 9px;
+}
+body {font-size:9pt;color:#660000;text-decoration: none}
+
+</style>
+<script>
+
+var upH = 6;//向上的箭头的高度
+var upW = 140; //向上的箭头的宽度
+var downH = 6;//向下的箭头的高度
+var downW = 140;//向下的箭头的宽度
+var dragH = 26; //滚动条的高度
+var dragW = 9; //滚动条的宽度
+var scrollH =379; //滚动体的高度
+var speed =9; //滚动的速度
+var dom = document.getElementById ? true:false;
+var nn4 = document.layers ? true:false;
+var ie4 = document.all ? true:false;
+var mouseY;
+var mouseX;
+var clickUp = false;
+var clickDown = false;
+var clickDrag = false;
+var clickAbove = false;
+var clickBelow = false;
+var timer = setTimeout("",500);
+var upL;
+var upT;
+var downL;
+var downT;
+var dragL;
+var dragT;
+var rulerL;
+var rulerT;
+var contentT;
+var contentH;
+var contentClipH;
+var scrollLength;
+var startY;
+function down(e){
+if((document.layers && e.which!=1) || (document.all && event.button!=1)) return true;
+getMouse(e);
+startY = (mouseY - dragT);
+if(mouseX >= upL && (mouseX <= (upL + upW)) && mouseY >= upT && (mouseY <= (upT + upH))){
+clickUp = true;
+return scrollUp();
+}
+else if(mouseX >= downL && (mouseX <= (downL + downW)) && mouseY >= downT && (mouseY <= (downT + downH))){
+clickDown = true;
+return scrollDown();
+}
+else if(mouseX >= dragL && (mouseX <= (dragL + dragW)) && mouseY >= dragT && (mouseY <= (dragT + dragH))){
+clickDrag = true;
+return false;
+}
+else if(mouseX >= dragL && (mouseX <= (dragL + dragW)) && mouseY >= rulerT && (mouseY <= (rulerT + scrollH))){
+if(mouseY < dragT){
+clickAbove = true;
+clickUp = true;
+return scrollUp();
+
+}
+else{
+clickBelow = true;
+clickDown = true;
+return scrollDown();
+}
+}
+else{
+return true;
+}
+}
+function move(e){
+if(clickDrag && contentH > contentClipH){
+getMouse(e);
+dragT = (mouseY - startY);
+if(dragT < (rulerT))
+dragT = rulerT;
+if(dragT > (rulerT + scrollH - dragH))
+dragT = (rulerT + scrollH - dragH);
+contentT = ((dragT - rulerT)*(1/scrollLength));
+contentT = eval('-' + contentT);
+moveTo();
+if(ie4)
+return false;
+}
+}
+function up(){
+clearTimeout(timer);
+clickUp = false;
+clickDown = false;
+clickDrag = false;
+clickAbove = false;
+clickBelow = false;
+
+return true;
+}
+function getT(){
+
+if(ie4)
+contentT = document.all.scrollerContent.style.pixelTop;
+else if(nn4)
+contentT = document.scrollerContentClip.document.scrollerContent.top;
+else if(dom)
+contentT = parseInt(document.getElementById("scrollerContent").style.top);
+}
+function getMouse(e){
+if(ie4){
+mouseY = event.clientY + document.body.scrollTop;
+mouseX = event.clientX + document.body.scrollLeft;
+}
+else if(nn4 || dom){
+mouseY = e.pageY;
+mouseX = e.pageX;
+}
+}
+function moveTo(){
+if(ie4){
+document.all.scrollerContent.style.top = contentT;
+document.all.ruler.style.top = dragT;
+document.all.drag.style.top = dragT;
+}
+else if(nn4){
+document.scrollerContentClip.document.scrollerContent.top = contentT;
+document.ruler.top = dragT;
+document.drag.top = dragT;
+}
+else if(dom){
+document.getElementById("scrollerContent").style.top = contentT + "px";
+document.getElementById("drag").style.top = dragT + "px";
+document.getElementById("ruler").style.top = dragT + "px";
+}
+}
+function scrollUp(){
+getT();
+if(clickAbove){
+if(dragT <= (mouseY-(dragH/2)))
+return up();
+}
+if(clickUp){
+if(contentT < 0){
+dragT = dragT - (speed*scrollLength);
+if(dragT < (rulerT))
+dragT = rulerT;
+contentT = contentT + speed;
+if(contentT > 0)
+contentT = 0;
+moveTo();
+timer = setTimeout("scrollUp()",25);
+}
+}
+return false;
+}
+function scrollDown(){
+getT();
+if(clickBelow){
+if(dragT >= (mouseY-(dragH/2)))
+return up();
+}
+if(clickDown){
+if(contentT > -(contentH - contentClipH)){
+dragT = dragT + (speed*scrollLength);
+if(dragT > (rulerT + scrollH - dragH))
+dragT = (rulerT + scrollH - dragH);
+contentT = contentT - speed;
+if(contentT < -(contentH - contentClipH))
+contentT = -(contentH - contentClipH);
+moveTo();
+timer = setTimeout("scrollDown()",25);
+}
+}
+return false;
+}
+function reloadPage(){
+location.reload();
+}
+function eventLoader(){
+
+if(ie4){
+upL = document.all.up.style.pixelLeft;
+upT = document.all.up.style.pixelTop;
+downL = document.all.down.style.pixelLeft;
+downT = document.all.down.style.pixelTop;
+dragL = document.all.drag.style.pixelLeft;
+dragT = document.all.drag.style.pixelTop;
+rulerT = document.all.ruler.style.pixelTop;
+contentH = parseInt(document.all.scrollerContent.scrollHeight);
+contentClipH = parseInt(document.all.scrollerContentClip.style.height);
+}
+else if(nn4){
+upL = document.up.left;
+upT = document.up.top;
+downL = document.down.left;
+downT = document.down.top;
+dragL = document.drag.left;
+dragT = document.drag.top;
+rulerT = document.ruler.top;
+contentH = document.scrollerContentClip.document.scrollerContent.clip.bottom;
+contentClipH = document.scrollerContentClip.clip.bottom;
+}
+else if(dom){
+upL = parseInt(document.getElementById("up").style.left);
+upT = parseInt(document.getElementById("up").style.top);
+downL = parseInt(document.getElementById("down").style.left);
+downT = parseInt(document.getElementById("down").style.top);
+dragL = parseInt(document.getElementById("drag").style.left);
+dragT = parseInt(document.getElementById("drag").style.top);
+rulerT = parseInt(document.getElementById("ruler").style.top);
+contentH = parseInt(document.getElementById("scrollerContent").offsetHeight);
+contentClipH = parseInt(document.getElementById("scrollerContentClip").offsetHeight);
+document.getElementById("scrollerContent").style.top = 0 + "px";
+}
+scrollLength = ((scrollH-dragH)/(contentH-contentClipH));
+if(nn4){
+document.captureEvents(Event.MOUSEDOWN | Event.MOUSEMOVE | Event.MOUSEUP);
+window.onresize = reloadPage;
+}
+document.onmousedown = down;
+document.onmousemove = move;
+document.onmouseup = up;
+}
+</script>
+</head><body topmargin="0" leftmargin="0" id="Me" onload="eventLoader()" bgcolor="#efefef">
+
+<span id="drag" style="left: 203px; position: absolute; top: 116px;"></span>
+
+<div style="display: none;" id="bmdh" class="bmdh" onmouseover="showbm();" onmouseout="hiddenbm();"><div class="bu_top"></div><ul class="bmdh_ul"><li id="01" onmouseover="libgshow('01');" onmouseout="libghidden('01');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120901.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120901.htm';}">
+         · 第01版：一版</a></li><li id="02" onmouseover="libgshow('02');" onmouseout="libghidden('02');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120902.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120902.htm';}">
+         · 第02版：二版</a></li><li id="03" onmouseover="libgshow('03');" onmouseout="libghidden('03');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120903.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120903.htm';}">
+         · 第03版：三版</a></li><li id="04" onmouseover="libgshow('04');" onmouseout="libghidden('04');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120904.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120904.htm';}">
+         · 第04版：四版</a></li><li id="05" onmouseover="libgshow('05');" onmouseout="libghidden('05');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120905.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120905.htm';}">
+         · 第05版：五版</a></li><li id="06" onmouseover="libgshow('06');" onmouseout="libghidden('06');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120906.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120906.htm';}">
+         · 第06版：六版</a></li><li id="07" onmouseover="libgshow('07');" onmouseout="libghidden('07');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120907.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120907.htm';}">
+         · 第07版：七版</a></li><li id="08" onmouseover="libgshow('08');" onmouseout="libghidden('08');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120908.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120908.htm';}">
+         · 第08版：八版</a></li><li id="09" onmouseover="libgshow('09');" onmouseout="libghidden('09');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120909.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120909.htm';}">
+         · 第09版：九版</a></li><li id="10" onmouseover="libgshow('10');" onmouseout="libghidden('10');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120910.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120910.htm';}">
+         · 第10版：十版</a></li><li id="11" onmouseover="libgshow('11');" onmouseout="libghidden('11');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120911.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120911.htm';}">
+         · 第11版：十一版</a></li><li id="12" onmouseover="libgshow('12');" onmouseout="libghidden('12');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120912.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120912.htm';}">
+         · 第12版：十二版</a></li><li id="13" onmouseover="libgshow('13');" onmouseout="libghidden('13');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120913.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120913.htm';}">
+         · 第13版：十三版</a></li><li id="14" onmouseover="libgshow('14');" onmouseout="libghidden('14');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120914.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120914.htm';}">
+         · 第14版：十四版</a></li><li id="15" onmouseover="libgshow('15');" onmouseout="libghidden('15');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120915.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120915.htm';}">
+         · 第15版：十五版</a></li><li id="16" onmouseover="libgshow('16');" onmouseout="libghidden('16');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120916.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120916.htm';}">
+         · 第16版：十六版</a></li><li id="17" onmouseover="libgshow('17');" onmouseout="libghidden('17');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120917.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120917.htm';}">
+         · 第17版：十七版</a></li><li id="18" onmouseover="libgshow('18');" onmouseout="libghidden('18');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120918.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120918.htm';}">
+         · 第18版：十八版</a></li><li id="19" onmouseover="libgshow('19');" onmouseout="libghidden('19');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120919.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120919.htm';}">
+         · 第19版：十九版</a></li><li id="20" onmouseover="libgshow('20');" onmouseout="libghidden('20');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120920.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120920.htm';}">
+         · 第20版：二十版</a></li><li id="21" onmouseover="libgshow('21');" onmouseout="libghidden('21');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120921.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120921.htm';}">
+         · 第21版：二十一版</a></li><li id="22" onmouseover="libgshow('22');" onmouseout="libghidden('22');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120922.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120922.htm';}">
+         · 第22版：二十二版</a></li><li id="23" onmouseover="libgshow('23');" onmouseout="libghidden('23');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120923.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120923.htm';}">
+         · 第23版：二十三版</a></li><li id="24" onmouseover="libgshow('24');" onmouseout="libghidden('24');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120924.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120924.htm';}">
+         · 第24版：二十四版</a></li><li id="25" onmouseover="libgshow('25');" onmouseout="libghidden('25');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120925.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120925.htm';}">
+         · 第25版：二十五版</a></li><li id="26" onmouseover="libgshow('26');" onmouseout="libghidden('26');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120926.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120926.htm';}">
+         · 第26版：二十六版</a></li><li id="27" onmouseover="libgshow('27');" onmouseout="libghidden('27');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120927.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120927.htm';}">
+         · 第27版：二十七版</a></li><li id="28" onmouseover="libgshow('28');" onmouseout="libghidden('28');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120928.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120928.htm';}">
+         · 第28版：二十八版</a></li><li id="29" onmouseover="libgshow('29');" onmouseout="libghidden('29');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120929.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120929.htm';}">
+         · 第29版：二十九版</a></li><li id="30" onmouseover="libgshow('30');" onmouseout="libghidden('30');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120930.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120930.htm';}">
+         · 第30版：三十版</a></li><li id="31" onmouseover="libgshow('31');" onmouseout="libghidden('31');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120931.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120931.htm';}">
+         · 第31版：三十一版</a></li><li id="32" onmouseover="libgshow('32');" onmouseout="libghidden('32');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120932.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120932.htm';}">
+         · 第32版：三十二版</a></li><li id="33" onmouseover="libgshow('33');" onmouseout="libghidden('33');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120933.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120933.htm';}">
+         · 第33版：三十三版</a></li><li id="34" onmouseover="libgshow('34');" onmouseout="libghidden('34');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120934.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120934.htm';}">
+         · 第34版：三十四版</a></li><li id="35" onmouseover="libgshow('35');" onmouseout="libghidden('35');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120935.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120935.htm';}">
+         · 第35版：三十五版</a></li><li id="36" onmouseover="libgshow('36');" onmouseout="libghidden('36');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120936.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120936.htm';}">
+         · 第36版：三十六版</a></li><li id="37" onmouseover="libgshow('37');" onmouseout="libghidden('37');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120937.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120937.htm';}">
+         · 第37版：三十七版</a></li><li class="" id="38" onmouseover="libgshow('38');" onmouseout="libghidden('38');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120938.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120938.htm';}">
+         · 第38版：三十八版</a></li><li class="" id="39" onmouseover="libgshow('39');" onmouseout="libghidden('39');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120939.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120939.htm';}">
+         · 第39版：三十九版</a></li><li class="" id="40" onmouseover="libgshow('40');" onmouseout="libghidden('40');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120940.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120940.htm';}">
+         · 第40版：四十版</a></li><li class="" id="41" onmouseover="libgshow('41');" onmouseout="libghidden('41');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120941.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120941.htm';}">
+         · 第41版：四十一版</a></li><li class="" id="42" onmouseover="libgshow('42');" onmouseout="libghidden('42');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120942.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120942.htm';}">
+         · 第42版：四十二版</a></li><li id="43" onmouseover="libgshow('43');" onmouseout="libghidden('43');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120943.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120943.htm';}">
+         · 第43版：四十三版</a></li><li id="44" onmouseover="libgshow('44');" onmouseout="libghidden('44');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120944.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120944.htm';}">
+         · 第44版：四十四版</a></li><li id="45" onmouseover="libgshow('45');" onmouseout="libghidden('45');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120945.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120945.htm';}">
+         · 第45版：四十五版</a></li><li id="46" onmouseover="libgshow('46');" onmouseout="libghidden('46');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120946.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120946.htm';}">
+         · 第46版：四十六版</a></li><li id="47" onmouseover="libgshow('47');" onmouseout="libghidden('47');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120947.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120947.htm';}">
+         · 第47版：四十七版</a></li><li id="48" onmouseover="libgshow('48');" onmouseout="libghidden('48');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120948.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120948.htm';}">
+         · 第48版：四十八版</a></li><li id="49" onmouseover="libgshow('49');" onmouseout="libghidden('49');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120949.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120949.htm';}">
+         · 第49版：四十九版</a></li><li id="50" onmouseover="libgshow('50');" onmouseout="libghidden('50');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120950.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120950.htm';}">
+         · 第50版：五十版</a></li><li id="51" onmouseover="libgshow('51');" onmouseout="libghidden('51');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120951.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120951.htm';}">
+         · 第51版：五十一版</a></li><li id="52" onmouseover="libgshow('52');" onmouseout="libghidden('52');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120952.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120952.htm';}">
+         · 第52版：五十二版</a></li><li id="53" onmouseover="libgshow('53');" onmouseout="libghidden('53');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120953.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120953.htm';}">
+         · 第53版：五十三版</a></li><li id="54" onmouseover="libgshow('54');" onmouseout="libghidden('54');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120954.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120954.htm';}">
+         · 第54版：五十四版</a></li><li id="55" onmouseover="libgshow('55');" onmouseout="libghidden('55');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120955.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120955.htm';}">
+         · 第55版：五十五版</a></li><li id="56" onmouseover="libgshow('56');" onmouseout="libghidden('56');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120956.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120956.htm';}">
+         · 第56版：五十六版</a></li><li id="57" onmouseover="libgshow('57');" onmouseout="libghidden('57');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120957.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120957.htm';}">
+         · 第57版：五十七版</a></li><li id="58" onmouseover="libgshow('58');" onmouseout="libghidden('58');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120958.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120958.htm';}">
+         · 第58版：五十八版</a></li><li id="59" onmouseover="libgshow('59');" onmouseout="libghidden('59');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120959.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120959.htm';}">
+         · 第59版：五十九版</a></li><li id="60" onmouseover="libgshow('60');" onmouseout="libghidden('60');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120960.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120960.htm';}">
+         · 第60版：六十版</a></li></ul></div>
+<div style="display: none;" id="btdh" class="btdh" onmouseover="showbt();" onmouseout="hiddenbt();"><div class="bu_top"></div><ul class="btdh_ul" onmouseover="showbt();" onmouseout="hiddenbt();"><li class="btdh_li" id="38" onmouseover="libgshow('38');" onmouseout="libghidden('38');"><a title="商务部禁止进出口“瘦肉精”替代品莱克多巴胺" href="/epaper/uniflows/01/20091209/01_38.htm">
+	         ·商务部禁止进出口“瘦肉精”替代品莱克多巴胺</a></li><li class="btdh_li" id="39" onmouseover="libgshow('39');" onmouseout="libghidden('39');"><a title="降低二氧化碳目标 体现大国责任" href="/epaper/uniflows/01/20091209/01_39.htm">
+	         ·降低二氧化碳目标 体现大国责任</a></li><li class="btdh_li" id="40" onmouseover="libgshow('40');" onmouseout="libghidden('40');"><a title="外汇局：不失时机推进重要领域关键环节改革" href="/epaper/uniflows/01/20091209/01_40.htm">
+	         ·外汇局：不失时机推进重要领域关键环节改革</a></li><li class="btdh_li" id="41" onmouseover="libgshow('41');" onmouseout="libghidden('41');"><a title="九部门部署专项行动清理互联网手机“毒瘤”" href="/epaper/uniflows/01/20091209/01_41.htm">
+	         ·九部门部署专项行动清理互联网手机“毒瘤”</a></li><li class="btdh_li" id="42" onmouseover="libgshow('42');" onmouseout="libghidden('42');"><a title="收入分配调整正当其时" href="/epaper/uniflows/01/20091209/01_42.htm">
+	         ·收入分配调整正当其时</a></li><li class="btdh_li" id="43" onmouseover="libgshow('43');" onmouseout="libghidden('43');"><a title="“两拓”合并新版本遭全球钢铁业反对" href="/epaper/uniflows/01/20091209/01_43.htm">
+	         ·“两拓”合并新版本遭全球钢铁业反对</a></li><li class="btdh_li" id="44" onmouseover="libgshow('44');" onmouseout="libghidden('44');"><a title="破解难题建组织 发挥作用促发展" href="/epaper/uniflows/01/20091209/01_44.htm">
+	         ·破解难题建组织 发挥作用促发展</a></li><li class="btdh_li" id="45" onmouseover="libgshow('45');" onmouseout="libghidden('45');"><a title="民营企业要把握好三大突破口" href="/epaper/uniflows/01/20091209/01_45.htm">
+	         ·民营企业要把握好三大突破口</a></li><li class="btdh_li" id="46" onmouseover="libgshow('46');" onmouseout="libghidden('46');"><a title="发展循环经济和高附加值产业" href="/epaper/uniflows/01/20091209/01_46.htm">
+	         ·发展循环经济和高附加值产业</a></li></ul></div>
+<span id="ruler" style="top: 116px;"></span>
+
+<span id="up" style="left: 819px; position: absolute; top: 190px;">
+<img id="imgup" alt="" src="/epaper/uniflows/img/up.gif" onmouseover="alpha_up('imgup');" onmouseout="alpha_up_out('imgup');" border="0" height="6" width="140"></span>
+
+<span id="down" style="left: 819px; position: absolute; top: 585px;">
+<img id="imgdown" alt="" src="/epaper/uniflows/img/down.gif" onmouseover="alpha_down('imgdown');" onmouseout="alpha_down_out('imgdown');" border="0" height="6" width="140"></span>
+
+<span id="scrollerContentClip" style="border: 0px solid rgb(204, 102, 0); overflow: hidden; left: 819px; visibility: visible; width: 140px; clip: rect(0px, 140px, 400px, 0px); position: absolute; top: 196px; height: 389px; background-image: url(/epaper/uniflows/img/boardlink_bg.gif);">
+
+<span id="scrollerContent" style="width: 140px; height: 389px; background-image: url(/epaper/uniflows/img/boardlink_bg.gif); top: 0px;">
+<!--版面文字导航开始-->
+<div id="boardurl" style="display: block;">
+<ul class="boardurl_ul"><li id="brd201" onmouseover="libgshow('brd201');" onmouseout="libghidden('brd201');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120901.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120901.htm';}">
+         第01版：一版</a></li><li id="brd202" onmouseover="libgshow('brd202');" onmouseout="libghidden('brd202');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120902.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120902.htm';}">
+         第02版：二版</a></li><li id="brd203" onmouseover="libgshow('brd203');" onmouseout="libghidden('brd203');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120903.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120903.htm';}">
+         第03版：三版</a></li><li id="brd204" onmouseover="libgshow('brd204');" onmouseout="libghidden('brd204');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120904.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120904.htm';}">
+         第04版：四版</a></li><li id="brd205" onmouseover="libgshow('brd205');" onmouseout="libghidden('brd205');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120905.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120905.htm';}">
+         第05版：五版</a></li><li id="brd206" onmouseover="libgshow('brd206');" onmouseout="libghidden('brd206');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120906.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120906.htm';}">
+         第06版：六版</a></li><li id="brd207" onmouseover="libgshow('brd207');" onmouseout="libghidden('brd207');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120907.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120907.htm';}">
+         第07版：七版</a></li><li id="brd208" onmouseover="libgshow('brd208');" onmouseout="libghidden('brd208');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120908.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120908.htm';}">
+         第08版：八版</a></li><li id="brd209" onmouseover="libgshow('brd209');" onmouseout="libghidden('brd209');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120909.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120909.htm';}">
+         第09版：九版</a></li><li id="brd210" onmouseover="libgshow('brd210');" onmouseout="libghidden('brd210');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120910.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120910.htm';}">
+         第10版：十版</a></li><li id="brd211" onmouseover="libgshow('brd211');" onmouseout="libghidden('brd211');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120911.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120911.htm';}">
+         第11版：十一版</a></li><li id="brd212" onmouseover="libgshow('brd212');" onmouseout="libghidden('brd212');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120912.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120912.htm';}">
+         第12版：十二版</a></li><li id="brd213" onmouseover="libgshow('brd213');" onmouseout="libghidden('brd213');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120913.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120913.htm';}">
+         第13版：十三版</a></li><li id="brd214" onmouseover="libgshow('brd214');" onmouseout="libghidden('brd214');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120914.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120914.htm';}">
+         第14版：十四版</a></li><li id="brd215" onmouseover="libgshow('brd215');" onmouseout="libghidden('brd215');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120915.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120915.htm';}">
+         第15版：十五版</a></li><li id="brd216" onmouseover="libgshow('brd216');" onmouseout="libghidden('brd216');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120916.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120916.htm';}">
+         第16版：十六版</a></li><li id="brd217" onmouseover="libgshow('brd217');" onmouseout="libghidden('brd217');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120917.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120917.htm';}">
+         第17版：十七版</a></li><li id="brd218" onmouseover="libgshow('brd218');" onmouseout="libghidden('brd218');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120918.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120918.htm';}">
+         第18版：十八版</a></li><li id="brd219" onmouseover="libgshow('brd219');" onmouseout="libghidden('brd219');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120919.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120919.htm';}">
+         第19版：十九版</a></li><li id="brd220" onmouseover="libgshow('brd220');" onmouseout="libghidden('brd220');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120920.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120920.htm';}">
+         第20版：二十版</a></li><li id="brd221" onmouseover="libgshow('brd221');" onmouseout="libghidden('brd221');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120921.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120921.htm';}">
+         第21版：二十一版</a></li><li id="brd222" onmouseover="libgshow('brd222');" onmouseout="libghidden('brd222');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120922.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120922.htm';}">
+         第22版：二十二版</a></li><li id="brd223" onmouseover="libgshow('brd223');" onmouseout="libghidden('brd223');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120923.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120923.htm';}">
+         第23版：二十三版</a></li><li id="brd224" onmouseover="libgshow('brd224');" onmouseout="libghidden('brd224');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120924.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120924.htm';}">
+         第24版：二十四版</a></li><li id="brd225" onmouseover="libgshow('brd225');" onmouseout="libghidden('brd225');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120925.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120925.htm';}">
+         第25版：二十五版</a></li><li id="brd226" onmouseover="libgshow('brd226');" onmouseout="libghidden('brd226');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120926.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120926.htm';}">
+         第26版：二十六版</a></li><li id="brd227" onmouseover="libgshow('brd227');" onmouseout="libghidden('brd227');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120927.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120927.htm';}">
+         第27版：二十七版</a></li><li id="brd228" onmouseover="libgshow('brd228');" onmouseout="libghidden('brd228');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120928.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120928.htm';}">
+         第28版：二十八版</a></li><li id="brd229" onmouseover="libgshow('brd229');" onmouseout="libghidden('brd229');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120929.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120929.htm';}">
+         第29版：二十九版</a></li><li id="brd230" onmouseover="libgshow('brd230');" onmouseout="libghidden('brd230');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120930.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120930.htm';}">
+         第30版：三十版</a></li><li id="brd231" onmouseover="libgshow('brd231');" onmouseout="libghidden('brd231');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120931.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120931.htm';}">
+         第31版：三十一版</a></li><li id="brd232" onmouseover="libgshow('brd232');" onmouseout="libghidden('brd232');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120932.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120932.htm';}">
+         第32版：三十二版</a></li><li id="brd233" onmouseover="libgshow('brd233');" onmouseout="libghidden('brd233');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120933.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120933.htm';}">
+         第33版：三十三版</a></li><li id="brd234" onmouseover="libgshow('brd234');" onmouseout="libghidden('brd234');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120934.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120934.htm';}">
+         第34版：三十四版</a></li><li id="brd235" onmouseover="libgshow('brd235');" onmouseout="libghidden('brd235');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120935.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120935.htm';}">
+         第35版：三十五版</a></li><li id="brd236" onmouseover="libgshow('brd236');" onmouseout="libghidden('brd236');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120936.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120936.htm';}">
+         第36版：三十六版</a></li><li id="brd237" onmouseover="libgshow('brd237');" onmouseout="libghidden('brd237');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120937.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120937.htm';}">
+         第37版：三十七版</a></li><li id="brd238" onmouseover="libgshow('brd238');" onmouseout="libghidden('brd238');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120938.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120938.htm';}">
+         第38版：三十八版</a></li><li id="brd239" onmouseover="libgshow('brd239');" onmouseout="libghidden('brd239');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120939.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120939.htm';}">
+         第39版：三十九版</a></li><li id="brd240" onmouseover="libgshow('brd240');" onmouseout="libghidden('brd240');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120940.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120940.htm';}">
+         第40版：四十版</a></li><li id="brd241" onmouseover="libgshow('brd241');" onmouseout="libghidden('brd241');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120941.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120941.htm';}">
+         第41版：四十一版</a></li><li id="brd242" onmouseover="libgshow('brd242');" onmouseout="libghidden('brd242');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120942.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120942.htm';}">
+         第42版：四十二版</a></li><li id="brd243" onmouseover="libgshow('brd243');" onmouseout="libghidden('brd243');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120943.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120943.htm';}">
+         第43版：四十三版</a></li><li id="brd244" onmouseover="libgshow('brd244');" onmouseout="libghidden('brd244');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120944.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120944.htm';}">
+         第44版：四十四版</a></li><li id="brd245" onmouseover="libgshow('brd245');" onmouseout="libghidden('brd245');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120945.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120945.htm';}">
+         第45版：四十五版</a></li><li id="brd246" onmouseover="libgshow('brd246');" onmouseout="libghidden('brd246');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120946.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120946.htm';}">
+         第46版：四十六版</a></li><li id="brd247" onmouseover="libgshow('brd247');" onmouseout="libghidden('brd247');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120947.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120947.htm';}">
+         第47版：四十七版</a></li><li id="brd248" onmouseover="libgshow('brd248');" onmouseout="libghidden('brd248');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120948.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120948.htm';}">
+         第48版：四十八版</a></li><li id="brd249" onmouseover="libgshow('brd249');" onmouseout="libghidden('brd249');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120949.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120949.htm';}">
+         第49版：四十九版</a></li><li id="brd250" onmouseover="libgshow('brd250');" onmouseout="libghidden('brd250');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120950.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120950.htm';}">
+         第50版：五十版</a></li><li id="brd251" onmouseover="libgshow('brd251');" onmouseout="libghidden('brd251');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120951.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120951.htm';}">
+         第51版：五十一版</a></li><li id="brd252" onmouseover="libgshow('brd252');" onmouseout="libghidden('brd252');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120952.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120952.htm';}">
+         第52版：五十二版</a></li><li id="brd253" onmouseover="libgshow('brd253');" onmouseout="libghidden('brd253');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120953.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120953.htm';}">
+         第53版：五十三版</a></li><li id="brd254" onmouseover="libgshow('brd254');" onmouseout="libghidden('brd254');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120954.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120954.htm';}">
+         第54版：五十四版</a></li><li id="brd255" onmouseover="libgshow('brd255');" onmouseout="libghidden('brd255');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120955.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120955.htm';}">
+         第55版：五十五版</a></li><li id="brd256" onmouseover="libgshow('brd256');" onmouseout="libghidden('brd256');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120956.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120956.htm';}">
+         第56版：五十六版</a></li><li id="brd257" onmouseover="libgshow('brd257');" onmouseout="libghidden('brd257');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120957.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120957.htm';}">
+         第57版：五十七版</a></li><li id="brd258" onmouseover="libgshow('brd258');" onmouseout="libghidden('brd258');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120958.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120958.htm';}">
+         第58版：五十八版</a></li><li id="brd259" onmouseover="libgshow('brd259');" onmouseout="libghidden('brd259');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120959.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120959.htm';}">
+         第59版：五十九版</a></li><li id="brd260" onmouseover="libgshow('brd260');" onmouseout="libghidden('brd260');"><a href="#" class="blue" id="pageLink" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120960.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120960.htm';}">
+         第60版：六十版</a></li></ul>
+</div>
+<!--版面图形导航开始-->
+<div style="display: none;" id="boardpicurl"><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120901.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120901.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120901abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">01版：一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120902.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120902.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120902abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">02版：二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120903.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120903.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120903abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">03版：三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120904.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120904.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120904abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">04版：四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120905.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120905.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120905abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">05版：五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120906.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120906.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120906abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">06版：六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120907.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120907.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120907abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">07版：七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120908.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120908.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120908abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">08版：八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120909.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120909.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120909abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">09版：九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120910.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120910.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120910abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">10版：十版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120911.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120911.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120911abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">11版：十一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120912.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120912.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120912abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">12版：十二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120913.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120913.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120913abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">13版：十三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120914.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120914.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120914abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">14版：十四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120915.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120915.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120915abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">15版：十五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120916.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120916.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120916abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">16版：十六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120917.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120917.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120917abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">17版：十七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120918.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120918.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120918abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">18版：十八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120919.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120919.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120919abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">19版：十九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120920.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120920.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120920abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">20版：二十版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120921.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120921.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120921abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">21版：二十一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120922.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120922.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120922abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">22版：二十二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120923.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120923.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120923abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">23版：二十三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120924.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120924.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120924abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">24版：二十四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120925.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120925.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120925abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">25版：二十五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120926.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120926.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120926abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">26版：二十六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120927.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120927.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120927abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">27版：二十七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120928.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120928.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120928abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">28版：二十八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120929.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120929.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120929abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">29版：二十九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120930.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120930.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120930abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">30版：三十版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120931.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120931.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120931abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">31版：三十一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120932.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120932.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120932abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">32版：三十二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120933.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120933.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120933abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">33版：三十三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120934.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120934.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120934abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">34版：三十四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120935.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120935.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120935abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">35版：三十五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120936.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120936.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120936abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">36版：三十六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120937.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120937.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120937abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">37版：三十七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120938.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120938.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120938abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">38版：三十八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120939.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120939.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120939abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">39版：三十九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120940.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120940.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120940abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">40版：四十版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120941.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120941.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120941abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">41版：四十一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120942.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120942.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120942abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">42版：四十二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120943.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120943.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120943abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">43版：四十三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120944.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120944.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120944abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">44版：四十四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120945.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120945.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120945abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">45版：四十五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120946.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120946.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120946abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">46版：四十六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120947.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120947.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120947abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">47版：四十七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120948.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120948.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120948abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">48版：四十八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120949.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120949.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120949abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">49版：四十九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120950.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120950.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120950abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">50版：五十版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120951.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120951.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120951abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">51版：五十一版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120952.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120952.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120952abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">52版：五十二版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120953.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120953.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120953abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">53版：五十三版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120954.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120954.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120954abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">54版：五十四版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120955.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120955.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120955abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">55版：五十五版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120956.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120956.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120956abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">56版：五十六版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120957.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120957.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120957abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">57版：五十七版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120958.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120958.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120958abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">58版：五十八版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120959.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120959.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120959abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">59版：五十九版</dt></dl><dl style="width: 140px;"><dt class="dt_picurl"><a href="#" class="blue" onclick="Post('checkhtmlfile.jsp?filepath=/uniflows/2009120960.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120960.htm';}"><img style="border: 0px solid rgb(51, 51, 51);" name="smallpages" src="/epaper/uniflows/images/2009120960abb.jpg" width="80"></a></dt><dt style="display: inline; text-align: center;">60版：六十版</dt></dl></div>
+</span>
+</span>
+
+
+
+<div id="alttitle" style="padding-left: 40px; padding-right: 40px;"></div>
+<div id="regiondiv" onclick="window.open(this.href);"></div>
+<script src="/epaper/js/default.js"></script>
+<script src="../../js/default.js"></script>
+
+<!--日期表使用函数开始-->
+<script language="javascript">   
+window.attachEvent("onload",window_onload);   
+function   window_onload()   
+{ 
+InitCalendar(mDate.getMonth(), mDate.getDate(), mDate.getYear());
+}   
+</script>
+
+
+<script language="JavaScript">
+public_description = new public_description_ctor;
+var InScriptlet = (typeof(window.external.version) == "string")
+
+function public_description_ctor() {
+	this.put_Value = put_Value;
+	this.get_Value = get_Value;
+
+	this.event_OnChange = "";   // fires when the value of the calendar changes
+	this.event_NewMonth = "";   // fires when the month changes, always preceded by an OnChange event
+	this.event_NewYear = "";    // fires when the year changes, always preceded by an OnChange event
+							   
+}
+mDate = new Date();
+//mSelectBackgroundColor = "red";
+mSelectBackgroundColor = "";
+mStandardBackgroundColor = "";
+mStandardForeColor = "";
+mHeaderColor = "#FFFFFF";
+mNonCurMonthForeColor = "#FFFFFF";
+mHighlightColor=""
+//mHighlightColor = "red";
+mPreviousElement = Me;
+mFirstOfMonthCol = 0;   // X-coord of first of month
+mLastOfMonthCol = 0;    // X-coord of last of month
+mLastOfMonthRow = 0;    // Y-coord of last of month
+
+function InitCalendar(iMonth, iDay, iYear) {
+	var newhref;
+	var sday;
+	var smonth;
+	var iimonth;
+	CurMonth.innerText = getStringMonth(iMonth);
+	CurMonth.style.color = mHeaderColor;
+	CurYear.innerText = getStringYear(iYear);
+	CurYear.style.color = mHeaderColor;
+
+  iimonth=iMonth;
+  
+		if (iMonth < 9){
+			iimonth=iimonth+1;
+			smonth ="0" + iimonth;
+		}else{
+			smonth = iimonth+1;
+		}
+			  
+	mDate.setDate(1);
+	mDate.setMonth(iMonth);
+	if(iYear > 100) {
+		mDate.setYear(iYear);
+		iNewSelection = iYear - 1970;
+	} else {
+		mDate.setYear(1900 + iYear);
+		iNewSelection = iYear - 70;
+	}
+	
+	document.all("selYear").selectedIndex = iNewSelection;
+	document.all("selMonth").selectedIndex = iMonth;
+
+	iFirstOfMonthCol = mDate.getDay();
+
+	mDate.setDate(iDay);
+	iTmp = iDay + iFirstOfMonthCol - 1;
+
+	iDayRow = Math.floor((iDay + iFirstOfMonthCol - 1) / 7);
+	
+	if (iFirstOfMonthCol == 0) {
+		// when the first of the month is Sunday, start in the second row
+		iFirstRow = 1;
+		iDayRow += 1;
+	} else {
+		iFirstRow = 0;
+	}
+	
+	// de-select the previous element
+	mPreviousElement.style.backgroundColor = mStandardBackgroundColor;
+
+	// once the column of the first of the month is known, the whole calendar can be populated
+	iDaysInMonth = getDaysInMonth(iMonth, iYear);
+
+	for(iCurRow = iFirstRow, iCurCol = iFirstOfMonthCol, iDayIndex = 1; iDayIndex <= iDaysInMonth; iDayIndex += 1, iCurCol += 1) {
+		if(iCurCol > 6) {
+			iCurCol = 0;
+			iCurRow += 1;
+		}
+		if (iDayIndex < 10)
+			sday ="0" + iDayIndex;
+		else
+			sday = iDayIndex;
+
+		document.all("Cell" + iCurCol + iCurRow).innerText = iDayIndex;
+		document.all("Cell" + iCurCol + iCurRow).value = "/uniflows/"+CurYear.innerText+smonth+sday+"01.htm";
+		document.all("Cell" + iCurCol + iCurRow).style.color = mStandardForeColor;
+	}
+	
+	// store the locations of the first and last days of the month in the grid
+	mFirstOfMonthCol = iFirstOfMonthCol;
+	mLastOfMonthCol = (iCurCol + 6) % 7;
+	if(iCurCol == 0)
+		mLastOfMonthRow = iCurRow - 1;
+	else
+		mLastOfMonthRow = iCurRow;
+ 
+	// populate the empty sections of the grid with the next and previous months' days
+	for(iDayIndex = 1; iCurRow <= 4 || iCurCol <= 6; iCurCol += 1, iDayIndex += 1) {
+		if(iCurCol > 6) {
+			iCurCol = 0;
+			iCurRow += 1;
+		}
+
+if (iDayIndex < 10)
+sday ="0" + iDayIndex;
+else
+sday = iDayIndex;
+		
+		document.all("Cell" + iCurCol + iCurRow).innerText = iDayIndex;
+		document.all("Cell" + iCurCol + iCurRow).value =  "/uniflows/"+CurYear.innerText+smonth+sday+"01.htm";
+		document.all("Cell" + iCurCol + iCurRow).style.color = mNonCurMonthForeColor;
+}
+
+	iPrevMonth = (mDate.getMonth() + 11) % 12;
+	iPrevMonthLastDay = getDaysInMonth(iPrevMonth, mDate.getYear());    
+
+	for(iDayIndex = iPrevMonthLastDay, iCurRow = 0, iCurCol = (mFirstOfMonthCol + 6) % 7; iCurCol >= 0; iCurCol -= 1, iDayIndex -=1) {
+		if (iDayIndex < 10)
+			sday ="0" + iDayIndex;
+		else
+			sday = iDayIndex;
+
+		document.all("Cell" + iCurCol + iCurRow).innerText = iDayIndex;
+		document.all("Cell" + iCurCol + iCurRow).value =  "/uniflows/"+CurYear.innerText+smonth+sday+"01.htm";
+		document.all("Cell" + iCurCol + iCurRow).style.color = mNonCurMonthForeColor;
+	}
+		
+	iDayCol = mDate.getDay();
+
+	// highlight the date in the calendar
+	document.all("Cell" + iDayCol + iDayRow).style.backgroundColor = mSelectBackgroundColor;
+	mPreviousElement = document.all("Cell" + iDayCol + iDayRow);
+
+   
+}
+
+function put_Value(stDate) {
+	// parse the string for the month, day, and year, and call InitCalendar
+	
+	mDate.setTime(Date.parse(stDate));
+	InitCalendar(mDate.getMonth(), mDate.getDate(), mDate.getYear());
+
+}
+
+function get_Value() {
+	iMonth = mDate.getMonth() + 1;
+	iYear = mDate.getYear();
+	   
+	return iMonth + "-" + mDate.getDate() + "-" + iYear;
+}
+
+function monthChange() {
+	mDate.setMonth(document.all("selMonth").selectedIndex);
+	InitCalendar(mDate.getMonth(), mDate.getDate(), mDate.getYear());
+	if (InScriptlet) { 
+	  window.external.raiseEvent("OnChange", window.event); 
+	  window.external.raiseEvent("NewMonth", window.event);
+	}
+}
+
+function selYearChange() {
+	// to set the year, add 1900 + 70 because the 0th element of the <select> tag has value 70
+	mDate.setYear(1970 + document.all("selYear").selectedIndex);
+	InitCalendar(mDate.getMonth(), mDate.getDate(), mDate.getYear());
+	
+	if (InScriptlet) {
+	  window.external.raiseEvent("OnChange", window.event);
+	  window.external.raiseEvent("NewYear", window.event);
+	}
+	
+}
+
+function getDaysInMonth(iMonth, iYear) {
+	if(iMonth == 1) {
+		if(iYear%4 == 0 && !(iYear%100 == 0) || iYear%400 == 0)
+			return 29;
+		else
+			return 28;
+		}
+	else if(iMonth == 3 || iMonth == 5 || iMonth == 8 || iMonth == 10)
+		return 30;
+	else 
+		return 31;
+
+}
+
+
+
+function getStringYear(iYear) {
+	if(iYear > 100)
+		return(iYear);
+	else
+		return (1900 + iYear);
+}
+
+
+function getStringMonth(iMonth) {
+  var monthArray = new Array("一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月");
+  return monthArray[iMonth];
+}
+
+function CalendarClick() {
+	current = window.event.srcElement;
+	if (IsValidCurMonthElement(current)) {
+		clickedDay = current.innerText;
+		if(clickedDay != mDate.getDate()) {
+			mPreviousElement.style.backgroundColor = mStandardBackgroundColor;
+			current.style.color = mStandardForeColor;
+			current.style.backgroundColor = mSelectBackgroundColor;
+			mPreviousElement = current;
+			mDate.setDate(clickedDay); 
+			if (InScriptlet) { window.external.raiseEvent("OnChange", window.event); }
+		}
+	} 
+	if (InScriptlet) { window.external.bubbleEvent(); }
+}
+
+function IsValidCurMonthElement(el) {
+	retVal = false;
+	if(el.id.substring(0, 4) == "Cell") {
+		iCol = el.id.substring(4, 5);
+		iRow = el.id.substring(5, 6);
+			
+		if(iRow == 0) {
+			if(0 < mFirstOfMonthCol && mFirstOfMonthCol <= iCol)
+				retVal = true;
+			} else if (iRow < mLastOfMonthRow || (iRow == mLastOfMonthRow && iCol <= mLastOfMonthCol))
+				retVal = true;
+	}
+	return retVal;
+}
+</script>
+
+<script language="javascript">
+var xmlhttp=null;
+var strobjname=null;
+var isexist=false;
+var strcururl;
+strcururl="";
+function Post(url)
+{
+ var strurl;
+ strcontent="";
+ isexist=false;
+ xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+ xmlhttp.Open("POST", url, true);
+ xmlhttp.onreadystatechange = HandleStateChange;
+ xmlhttp.Send(null);
+}
+
+function HandleStateChange()
+{
+ var csoption;
+ var i;
+ if (xmlhttp.readyState == 4)
+  {
+ 
+   var content=xmlhttp.responseXML.xml;
+			readXml(content);
+  }
+}
+
+function readXml(xml)
+{
+ //这里为了能在别的浏览器中正常运行，应该用别的方法解析xml文件
+ var stroption;
+ var strvalue;
+ var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+ xmlDoc.loadXML(xml);
+ var xmlObj =xmlDoc.getElementsByTagName("msginfo");
+	 for (var i=0;i<xmlObj.length;i++)
+	 {
+			stroption = xmlObj(i).text;
+		  if (stroption=="1"){
+			alert("该电子版面不存在!");
+			isexist=true;
+			parent.location = "/epaper/uniflows/";
+		  }else{
+			isexist=false;
+			if (strcururl != ""){
+				parent.location = strcururl;
+			}
+		  }
+
+	 }
+}
+
+function changeEdition(el){
+strcururl = "/epaper"+el;
+Post("checkhtmlfile.jsp?filepath="+el);
+//parent.location = "/epaper"+el;
+}
+
+</script>
+
+<!--日期表使用函数结束-->
+
+<div style="overflow: hidden; width: 1004px;">
+<table bgcolor="#efefef" border="0" cellpadding="0" cellspacing="0" width="1004">
+	<tbody><tr><td class="top_top" bgcolor="#0f3193" height="20"></td>
+	</tr>
+</tbody></table>
+<span id="redrectdiv" title="点击查看内容" style="border: 0px none ; position: absolute;"></span>
+
+<table id="mybody" border="0" cellpadding="0" cellspacing="0" width="1002">
+	<tbody><tr>
+		<!--左边版面图开始-->
+		
+	<td valign="top" width="394"> 
+	  <table border="0" cellpadding="0" cellspacing="0" width="97%">
+				<tbody><tr>
+					<td height="136" valign="top" width="20"><img src="/epaper/uniflows/img/top_left.gif" width="20"></td>
+					<td width="377"><!--版面图-->
+						<table border="0" cellpadding="0" cellspacing="0" width="377">
+							<tbody><tr>
+							  <td bgcolor="#ffffff" height="100" valign="top" align="center"><div id="boardmap"><map name="pagepicmap" id="pagepicmap"><area alt="" href="/epaper/uniflows/01/20091209/01_38.htm" onmouseover="mapAreaAction(71,89,297,209,'商务部禁止进出口“瘦肉精”替代品莱克多巴胺','/epaper/uniflows/01/20091209/01_38.htm');" shape="POLY" id="mp38" coords="297,224,297,313,368,313,368,224"><area alt="" href="/epaper/uniflows/01/20091209/01_39.htm" onmouseover="mapAreaAction(71,190,297,319,'降低二氧化碳目标 体现大国责任','/epaper/uniflows/01/20091209/01_39.htm');" shape="POLY" id="mp39" coords="297,334,297,524,368,524,368,334"><area alt="" href="/epaper/uniflows/01/20091209/01_40.htm" onmouseover="mapAreaAction(71,115,297,84,'外汇局：不失时机推进重要领域关键环节改革','/epaper/uniflows/01/20091209/01_40.htm');" shape="POLY" id="mp40" coords="297,99,297,214,368,214,368,99"><area alt="" href="/epaper/uniflows/01/20091209/01_41.htm" onmouseover="mapAreaAction(152,68,216,-3,'九部门部署专项行动清理互联网手机“毒瘤”','/epaper/uniflows/01/20091209/01_41.htm');" shape="POLY" id="mp41" coords="216,12,216,80,368,80,368,12"><area alt="" href="/epaper/uniflows/01/20091209/01_42.htm" onmouseover="mapAreaAction(222,95,65,415,'收入分配调整正当其时','/epaper/uniflows/01/20091209/01_42.htm');" shape="POLY" id="mp42" coords="65,430,65,525,287,525,287,430"><area alt="" href="/epaper/uniflows/01/20091209/01_43.htm" onmouseover="mapAreaAction(166,103,121,307,'“两拓”合并新版本遭全球钢铁业反对','/epaper/uniflows/01/20091209/01_43.htm');" shape="POLY" id="mp43" coords="121,322,121,425,287,425,287,322"><area alt="" href="/epaper/uniflows/01/20091209/01_44.htm" onmouseover="mapAreaAction(279,100,8,94,'破解难题建组织 发挥作用促发展','/epaper/uniflows/01/20091209/01_44.htm');" shape="POLY" id="mp44" coords="8,109,8,209,287,209,287,109"><area alt="" href="/epaper/uniflows/01/20091209/01_45.htm" onmouseover="mapAreaAction(107,210,8,201,'民营企业要把握好三大突破口','/epaper/uniflows/01/20091209/01_45.htm');" shape="POLY" id="mp45" coords="8,216,8,426,115,426,115,216"><area alt="" href="/epaper/uniflows/01/20091209/01_46.htm" onmouseover="mapAreaAction(166,104,121,200,'发展循环经济和高附加值产业','/epaper/uniflows/01/20091209/01_46.htm');" shape="POLY" id="mp46" coords="121,215,121,319,287,319,287,215"></map><img src="/epaper/uniflows/images/2009120901.jpg" id="_picsrc" usemap="#pagepicmap" border="0" width="377"></div></td>
+							</tr>
+							<tr><td background="/epaper/uniflows/img/btm.gif" height="31" align="right"><div id="preboard"><a href="#" onclick="Post('/epaper/uniflows/checkhtmlfile.jsp?filepath=/uniflows/2009120925.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120925.htm';}">
+						上一版
+						</a></div><div id="nextboard"><a href="#" onclick="Post('/epaper/uniflows/checkhtmlfile.jsp?filepath=/uniflows/2009120902.htm');if (!isexist) {window.location = '/epaper/uniflows/2009120902.htm';}">
+						下一版
+						</a></div><div id="boardsee"></div></td>
+							</tr>
+				  </tbody></table><!--版面图-->				  </td>
+				</tr>
+
+	  </tbody></table>
+		
+	</td>
+		<!--左边版面图结束-->
+		
+		<!--右边标题导航、版面导航开始-->
+		<td valign="top" width="607" align="left">
+			<table border="0" cellpadding="0" cellspacing="0" width="607">
+				<tbody><tr><td class="topbg2" height="85" valign="top" width="607"><table border="0" cellpadding="0" cellspacing="0" height="65" width="100%">
+                  <tbody><tr>
+                    <td rowspan="2" class="model" width="38%"><img src="logo2.gif" height="66"></td>
+                    <td height="45" valign="top" align="right"><img src="logo.jpg" id="logo" height="40"></td>
+                  </tr>
+                  <tr>
+                    <td width="62%"><table border="0" cellpadding="0" cellspacing="0" width="95%">
+                        <tbody><tr>
+                          <td class="top_title" height="13" valign="bottom" align="right">网站首页&nbsp;|&nbsp;<a href="/epaper/uniflows/default.htm">数字报首页</a>&nbsp;|&nbsp;<a href="javascript:;" onmouseover="showbm()" onmouseout="hiddenbm();">版面导航</a>&nbsp;|&nbsp;<a href="javascript:;" onmouseover="showbt()" onmouseout="hiddenbt();">标题导航</a>&nbsp;|&nbsp;<a href="javascript:window.opener=null;window.close();">退出</a>&nbsp;&nbsp;</td>
+                        </tr>
+                    </tbody></table></td>
+                  </tr>
+                </tbody></table></td>
+				</tr>
+				
+				<tr><td class="sousuo" height="35" width="608"><table border="0" cellpadding="0" cellspacing="0">
+                  <tbody><tr>
+                    <td width="21" align="center">&nbsp;</td>
+                    <td onmouseover="JustDate()" onmouseout="HiddenDate()" width="55" align="left">日期检索&nbsp;</td>
+                    <td onmouseover="JustDate()" onmouseout="HiddenDate()" width="109" align="left"><input name="search2" size="15" class="search_text" type="text"></td>
+                    <td onmouseover="JustDate()" onmouseout="HiddenDate()" width="79" align="left">&nbsp;<img src="img/rili_2.gif"></td>
+                    <td height="15" valign="middle" width="137"><input name="search" size="20" class="search_text" type="text"></td>
+                    <td valign="middle" width="132"><img src="/epaper/uniflows/img/search.jpg" style="cursor: pointer;" onclick="document.location.target='_blank';document.location.href='/epaper/uniflows/showresult.jsp?searchKeys='+search.value;">&nbsp;&nbsp;<a href="#" style="color: black;" onclick="document.location.target='_blank';document.location.href='/epaper/uniflows/advasearch.jsp'">高级检索</a></td>
+                  </tr>
+                </tbody></table></td>
+				</tr>
+				<tr><td>
+					<table border="0" cellpadding="0" cellspacing="0" width="607">
+			  <tbody><tr>
+			    <td width="30"></td>
+			    <td class="pubdate" height="25" valign="middle" width="340">出版日期：2009年12月09日
+</td>
+			    <td width="52"></td>
+			    <td valign="top">&nbsp;</td>
+			    <td width="16">&nbsp;</td>
+			  </tr>
+			    <tr><td width="30">&nbsp;</td>
+						
+				<td class="a_link  titles" height="430" valign="top" width="340"><table class="board_link" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="nowboard" height="25" width="100%">01版：一版</td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic38" onmouseover="overlinkbg('pic38');" onmouseout="outlinkbg('pic38');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="商务部禁止进出口“瘦肉精”替代品莱克多巴胺" href="/epaper/uniflows/01/20091209/01_38.htm"><div class="title_in">商务部禁止进出口“瘦肉精”替代品莱克多巴胺</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic39" onmouseover="overlinkbg('pic39');" onmouseout="outlinkbg('pic39');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="降低二氧化碳目标 体现大国责任" href="/epaper/uniflows/01/20091209/01_39.htm"><div class="title_in">降低二氧化碳目标 体现大国责任</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic40" onmouseover="overlinkbg('pic40');" onmouseout="outlinkbg('pic40');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="外汇局：不失时机推进重要领域关键环节改革" href="/epaper/uniflows/01/20091209/01_40.htm"><div class="title_in">外汇局：不失时机推进重要领域关键环节改革</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic41" onmouseover="overlinkbg('pic41');" onmouseout="outlinkbg('pic41');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="九部门部署专项行动清理互联网手机“毒瘤”" href="/epaper/uniflows/01/20091209/01_41.htm"><div class="title_in">九部门部署专项行动清理互联网手机“毒瘤”</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic42" onmouseover="overlinkbg('pic42');" onmouseout="outlinkbg('pic42');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="收入分配调整正当其时" href="/epaper/uniflows/01/20091209/01_42.htm"><div class="title_in">收入分配调整正当其时</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic43" onmouseover="overlinkbg('pic43');" onmouseout="outlinkbg('pic43');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="“两拓”合并新版本遭全球钢铁业反对" href="/epaper/uniflows/01/20091209/01_43.htm"><div class="title_in">“两拓”合并新版本遭全球钢铁业反对</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic44" onmouseover="overlinkbg('pic44');" onmouseout="outlinkbg('pic44');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="破解难题建组织 发挥作用促发展" href="/epaper/uniflows/01/20091209/01_44.htm"><div class="title_in">破解难题建组织 发挥作用促发展</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic45" onmouseover="overlinkbg('pic45');" onmouseout="outlinkbg('pic45');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="民营企业要把握好三大突破口" href="/epaper/uniflows/01/20091209/01_45.htm"><div class="title_in">民营企业要把握好三大突破口</div></a></div></td></tr></tbody></table></td></tr><tr><td><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td id="pic46" onmouseover="overlinkbg('pic46');" onmouseout="outlinkbg('pic46');" height="25"><div><img src="img/i_11.gif"><a target="_blank" title="发展循环经济和高附加值产业" href="/epaper/uniflows/01/20091209/01_46.htm"><div class="title_in">发展循环经济和高附加值产业</div></a></div></td></tr></tbody></table></td></tr></tbody></table></td>
+				<td width="52"></td>
+				<td valign="top" width="169"><table class="boardtitle" border="0" cellpadding="0" cellspacing="0" height="25">
+                  <tbody><tr>
+                    <td class="board_sel" id="boardltr" onclick="board_pic_ltr('boardltr','boardpic');" width="70" align="center">文字导航</td>
+                    <td class="board_unsel" id="boardpic" onclick="board_pic_ltr('boardpic','boardltr');" width="70" align="center">图片导航</td>
+                  </tr>
+                </tbody></table>
+				</td>
+				<td width="16"></td>
+				  </tr></tbody></table>
+				</td></tr>
+			
+		  </tbody></table>
+	  </td>
+		<!--右边标题导航、版面导航结束-->
+	</tr>
+</tbody></table>
+<table class="link_btm" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td height="100">&nbsp;</td>
+  </tr>
+</tbody></table>
+<!--日期表开始-->
+					  <div id="dateDiv" onmouseover="ShowDate();" onmouseout="HiddenDate();" style="display: none; position: absolute;">
+					    <table onmouseover="ShowDate();" bgcolor="#e6e1d0" width="223"><tbody><tr>
+							<td width="95" align="center">
+							<div style="display: none;"><span id="CurYear">year</span>年<span id="CurMonth">month and</span></div>
+							  <select id="selMonth" name="selMonth" onchange="monthChange();SetSelectValue(false);" onfocus="SetSelectValue(true)" ;="">
+								<option value="0">一月</option>
+								<option value="1">二月</option>
+								<option value="2">三月</option>
+								<option value="3">四月</option>
+								<option value="4">五月</option>
+								<option value="5">六月</option>
+								<option value="6">七月</option>
+								<option value="7">八月</option>
+								<option value="8">九月</option>
+								<option value="9">十月</option>
+								<option value="10">十一月</option>
+								<option value="11">十二月</option>
+							  </select></td>
+							<td width="95" align="center">
+							  <select id="selYear" name="selYear" onchange="selYearChange();SetSelectValue(false);" onfocus="SetSelectValue(true)" ;="">
+								<option value="70">1970</option>
+								<option value="71">1971</option>
+								<option value="72">1972</option>
+								<option value="73">1973</option>
+								<option value="74">1974</option>
+								<option value="75">1975</option>
+								<option value="76">1976</option>
+								<option value="77">1977</option>
+								<option value="78">1978</option>
+								<option value="79">1979</option>
+								<option value="80">1980</option>
+								<option value="81">1981</option>
+								<option value="82">1982</option>
+								<option value="83">1983</option>
+								<option value="84">1984</option>
+								<option value="85">1985</option>
+								<option value="86">1986</option>
+								<option value="87">1987</option>
+								<option value="88">1988</option>
+								<option value="89">1989</option>
+								<option value="90">1990</option>
+								<option value="91">1991</option>
+								<option value="92">1992</option>
+								<option value="93">1993</option>
+								<option value="94">1994</option>
+								<option value="95">1995</option>
+								<option value="96">1996</option>
+								<option value="97">1997</option>
+								<option value="98">1998</option>
+								<option value="99">1999</option>
+								<option value="100">2000</option>
+								<option value="101">2001</option>
+								<option value="102">2002</option>
+								<option value="103">2003</option>
+								<option value="104">2004</option>
+								<option value="105">2005</option>
+								<option value="106">2006</option>
+								<option value="107">2007</option>
+								<option value="108">2008</option>
+								<option value="109">2009</option>
+								<option value="110">2010</option>
+							  </select></td></tr></tbody></table>
+					    <table onclick="CalendarClick();" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="223">
+						  <tbody><tr>
+						  <td bgcolor="#ffffff" width="223"><table cellpadding="2" cellspacing="0" width="223">
+						  <tbody><tr id="DayHeaders"> 
+							<td class="rili_week" width="32" align="center"><font color="#ffffff">日</font></td>
+							<td class="rili_week" width="32" align="center">一</td>
+							<td class="rili_week" width="32" align="center">二</td>
+							<td class="rili_week" width="32" align="center">三</td>
+							<td class="rili_week" width="32" align="center">四</td>
+							<td class="rili_week" width="32" align="center">五</td>
+							<td class="rili_week" width="32" align="center">六</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell00" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell10" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell20" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell30" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell40" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell50" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell60" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell01" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell11" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell21" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell31" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell41" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell51" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell61" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell02" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell12" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell22" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell32" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell42" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell52" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell62" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell03" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell13" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell23" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell33" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell43" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell53" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell63" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell04" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell14" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell24" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell34" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell44" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell54" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell64" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr class="rili_date" bgcolor="#d5d3d6"> 
+							<td id="Cell05" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell15" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell25" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell35" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell45" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell55" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+							<td id="Cell65" value="" style="cursor: pointer;" onmouseover="ShowDate();" onclick="changeEdition(this.value);" class="rl" width="32" align="center">&nbsp;</td>
+						  </tr>
+						  <tr><td colspan="7" class="rili_btm"></td></tr>
+						</tbody></table></td></tr></tbody></table>
+</div>
+							<!--日期表结束-->
+</div>
+</body>

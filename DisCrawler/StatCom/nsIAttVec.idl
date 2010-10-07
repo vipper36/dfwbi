@@ -1,0 +1,22 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+interface nsIDOMNode;
+
+
+[scriptable, uuid(cbe1afb1-8057-4500-a325-5aa407b0ade6)]
+interface nsIAttVec:nsISupports
+{
+     attribute nsIDOMDocument doc;
+     attribute nsIDOMNode node;
+     long GetLength();
+
+     void SetValue(in long dim,in double value);
+
+     void AddValue(in long dim,in double value);
+     boolean Contains(in long dim);
+     void AppendVector(in nsIAttVec vec);
+     void SetVector(in nsIAttVec vec);
+     double GetValueByDim(in long dim);
+     void GetDims([array, size_is(cv_size)] out long dims,out unsigned long cv_size);
+};

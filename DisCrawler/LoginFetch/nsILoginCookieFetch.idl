@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+[scriptable, uuid(761f8765-dc9f-428c-b9e0-01a09e5c6b4d)]
+interface nsILoginCookieFetch:nsISupports
+{
+     void SetDocument(in nsIDOMDocument doc,in AUTF8String url,in AUTF8String userName,in AUTF8String password);
+     AUTF8String GetLoginCookie();
+};

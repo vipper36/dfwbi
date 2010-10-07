@@ -1,0 +1,20 @@
+#include "nsISupports.idl"
+
+interface nsIWebBrowser;
+interface nsISoapTask;
+interface nsISoapInter;
+[scriptable, uuid(af490cbe-7a7c-40b1-a4a9-3aa277526eaa)]
+interface nsIStatManager :nsISupports
+{
+     const unsigned short NOT_START   = 0;
+     const unsigned short RUNNING   = 1;
+     const unsigned short FIN_DOC     = 2;
+     const unsigned short FINISH      = 3;
+     const unsigned short TIME_OUT_ERROR      = 4;
+     const unsigned short NETWORK_ERROR      = 5;
+     void SetBrowser( in nsIWebBrowser browser,in long id);
+     void ChangeStat( in long id,in unsigned short stat);
+     void SetTask(in nsISoapTask task);
+     void SetInter(in nsISoapInter inter);
+     void SetCid(in long id);
+};

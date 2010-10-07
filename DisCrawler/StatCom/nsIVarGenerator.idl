@@ -1,0 +1,13 @@
+#include "nsISupports.idl"
+
+interface nsIClustModel;
+interface nsIAttDim;
+[scriptable, uuid(25e13b08-c4d9-48d2-8144-e96cef8afae7)]
+interface nsIVarGenerator:nsISupports
+{
+     void SetModel(in nsIClustModel model);
+     void SetParam(in AUTF8String name,in AUTF8String value);
+     void SetAttDim(in nsIAttDim attdim);
+     void GenVar();
+     AUTF8String GetVar(in AUTF8String name);
+};

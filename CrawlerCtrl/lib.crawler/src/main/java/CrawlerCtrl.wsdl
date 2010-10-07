@@ -1,0 +1,1745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://crawler.nyapc" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://crawler.nyapc" xmlns:intf="http://crawler.nyapc" xmlns:tns1="http://dao.crawler.nyapc" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://crawler.nyapc" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://dao.crawler.nyapc"/>
+   <element name="getVersion">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getVersionResponse">
+    <complexType>
+     <sequence>
+      <element name="getVersionReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTask">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+      <element name="num" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTaskResponse">
+    <complexType>
+     <sequence>
+      <element name="getTaskReturn" type="tns1:Task"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapper">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapperResponse">
+    <complexType>
+     <sequence>
+      <element name="getWrapperReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTaskByJobId">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+      <element name="jid" type="xsd:int"/>
+      <element name="type" type="xsd:string"/>
+      <element name="num" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTaskByJobIdResponse">
+    <complexType>
+     <sequence>
+      <element name="getTaskByJobIdReturn" type="tns1:Task"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="putResult">
+    <complexType>
+     <sequence>
+      <element name="res" type="xsd:string"/>
+      <element name="cid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="putResultResponse">
+    <complexType>
+     <sequence>
+      <element name="putResultReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getStat">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getStatResponse">
+    <complexType>
+     <sequence>
+      <element name="getStatReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addJob">
+    <complexType>
+     <sequence>
+      <element name="name" type="xsd:string"/>
+      <element name="url" type="xsd:string"/>
+      <element name="type" type="xsd:string"/>
+      <element name="category" type="xsd:string"/>
+      <element name="dredb" type="xsd:string"/>
+      <element name="comment" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addJobResponse">
+    <complexType>
+     <sequence>
+      <element name="addJobReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delJob">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="delJobResponse">
+    <complexType>
+     <sequence>
+      <element name="delJobReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobID">
+    <complexType/>
+   </element>
+   <element name="getJobIDResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getJobIDReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJob">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobResponse">
+    <complexType>
+     <sequence>
+      <element name="getJobReturn" type="tns1:JobAtt"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobs">
+    <complexType/>
+   </element>
+   <element name="getJobsResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getJobsReturn" type="tns1:JobAtt"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobsWrapStatInvalid">
+    <complexType/>
+   </element>
+   <element name="getJobsWrapStatInvalidResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getJobsWrapStatInvalidReturn" type="tns1:JobAtt"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateJob">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateJobResponse">
+    <complexType>
+     <sequence>
+      <element name="updateJobReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateJobUrl">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+      <element name="url" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateJobUrlResponse">
+    <complexType>
+     <sequence>
+      <element name="updateJobUrlReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="hasTask">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="hasTaskResponse">
+    <complexType>
+     <sequence>
+      <element name="hasTaskReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addCookie">
+    <complexType>
+     <sequence>
+      <element name="jobid" type="xsd:int"/>
+      <element name="logUrl" type="xsd:string"/>
+      <element name="logName" type="xsd:string"/>
+      <element name="logPass" type="xsd:string"/>
+      <element name="cookie" type="xsd:string"/>
+      <element name="cookType" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addCookieResponse">
+    <complexType>
+     <sequence>
+      <element name="addCookieReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateCookie">
+    <complexType>
+     <sequence>
+      <element name="jobid" type="xsd:int"/>
+      <element name="cookie" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateCookieResponse">
+    <complexType>
+     <sequence>
+      <element name="updateCookieReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCookie">
+    <complexType>
+     <sequence>
+      <element name="jobid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCookieResponse">
+    <complexType>
+     <sequence>
+      <element name="getCookieReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLogInfo">
+    <complexType>
+     <sequence>
+      <element name="jobid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLogInfoResponse">
+    <complexType>
+     <sequence>
+      <element name="getLogInfoReturn" type="tns1:LonginInfo"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLogJobID">
+    <complexType/>
+   </element>
+   <element name="getLogJobIDResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getLogJobIDReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapGen">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapGenResponse">
+    <complexType>
+     <sequence>
+      <element name="getWrapGenReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapper">
+    <complexType>
+     <sequence>
+      <element name="wrap" type="xsd:string"/>
+      <element name="id" type="xsd:int"/>
+      <element name="taskid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapperResponse">
+    <complexType>
+     <sequence>
+      <element name="updateWrapperReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapperCheckOk">
+    <complexType>
+     <sequence>
+      <element name="wrap" type="xsd:string"/>
+      <element name="wrapId" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapperCheckOkResponse">
+    <complexType>
+     <sequence>
+      <element name="updateWrapperCheckOkReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapGen">
+    <complexType>
+     <sequence>
+      <element name="wrapgen" type="xsd:string"/>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateWrapGenResponse">
+    <complexType>
+     <sequence>
+      <element name="updateWrapGenReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapTask">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+      <element name="num" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapTaskResponse">
+    <complexType>
+     <sequence>
+      <element name="getWrapTaskReturn" type="tns1:Task"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapId">
+    <complexType>
+     <sequence>
+      <element name="jid" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapIdResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getWrapIdReturn" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWraptype">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWraptypeResponse">
+    <complexType>
+     <sequence>
+      <element name="getWraptypeReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapInvalidTask">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+      <element name="num" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapInvalidTaskResponse">
+    <complexType>
+     <sequence>
+      <element name="getWrapInvalidTaskReturn" type="tns1:Task"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapInvalidTaskByJobId">
+    <complexType>
+     <sequence>
+      <element name="cid" type="xsd:int"/>
+      <element name="jid" type="xsd:int"/>
+      <element name="type" type="xsd:string"/>
+      <element name="num" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getWrapInvalidTaskByJobIdResponse">
+    <complexType>
+     <sequence>
+      <element name="getWrapInvalidTaskByJobIdReturn" type="tns1:Task"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addWrapper">
+    <complexType>
+     <sequence>
+      <element name="jobId" type="xsd:int"/>
+      <element name="type" type="xsd:string"/>
+      <element name="wrapper" type="xsd:string"/>
+      <element name="vargen" type="xsd:string"/>
+      <element name="comment" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="addWrapperResponse">
+    <complexType>
+     <sequence>
+      <element name="addWrapperReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deleteWrapStudy">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deleteWrapStudyResponse">
+    <complexType>
+     <sequence>
+      <element name="deleteWrapStudyReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getStudyWrapper">
+    <complexType>
+     <sequence>
+      <element name="id" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getStudyWrapperResponse">
+    <complexType>
+     <sequence>
+      <element name="getStudyWrapperReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://dao.crawler.nyapc" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="Task">
+    <sequence>
+     <element name="ids" nillable="true" type="xsd:string"/>
+     <element name="job_id" type="xsd:int"/>
+     <element name="taskId" type="xsd:int"/>
+     <element name="type" nillable="true" type="xsd:string"/>
+     <element name="urls" nillable="true" type="xsd:string"/>
+     <element name="wrap_id" type="xsd:int"/>
+     <element name="wrap_version" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="JobAtt">
+    <sequence>
+     <element name="category" nillable="true" type="xsd:string"/>
+     <element name="comment" nillable="true" type="xsd:string"/>
+     <element name="createTime" nillable="true" type="xsd:string"/>
+     <element name="dredb" nillable="true" type="xsd:string"/>
+     <element name="id" type="xsd:int"/>
+     <element name="interval" type="xsd:int"/>
+     <element name="jobStat" nillable="true" type="xsd:string"/>
+     <element name="name" nillable="true" type="xsd:string"/>
+     <element name="seed" nillable="true" type="xsd:string"/>
+     <element name="seedType" nillable="true" type="xsd:string"/>
+     <element name="updateFlag" nillable="true" type="xsd:string"/>
+     <element name="updateTime" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="LonginInfo">
+    <sequence>
+     <element name="logName" nillable="true" type="xsd:string"/>
+     <element name="logPass" nillable="true" type="xsd:string"/>
+     <element name="logUrl" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getWrapGenResponse">
+
+      <wsdl:part element="impl:getWrapGenResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStatRequest">
+
+      <wsdl:part element="impl:getStat" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCookieResponse">
+
+      <wsdl:part element="impl:getCookieResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobsResponse">
+
+      <wsdl:part element="impl:getJobsResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapInvalidTaskByJobIdResponse">
+
+      <wsdl:part element="impl:getWrapInvalidTaskByJobIdResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="putResultResponse">
+
+      <wsdl:part element="impl:putResultResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapperCheckOkRequest">
+
+      <wsdl:part element="impl:updateWrapperCheckOk" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTaskByJobIdRequest">
+
+      <wsdl:part element="impl:getTaskByJobId" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapTaskRequest">
+
+      <wsdl:part element="impl:getWrapTask" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWraptypeResponse">
+
+      <wsdl:part element="impl:getWraptypeResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobIDResponse">
+
+      <wsdl:part element="impl:getJobIDResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapInvalidTaskResponse">
+
+      <wsdl:part element="impl:getWrapInvalidTaskResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addCookieRequest">
+
+      <wsdl:part element="impl:addCookie" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapGenResponse">
+
+      <wsdl:part element="impl:updateWrapGenResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTaskByJobIdResponse">
+
+      <wsdl:part element="impl:getTaskByJobIdResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="delJobResponse">
+
+      <wsdl:part element="impl:delJobResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateCookieResponse">
+
+      <wsdl:part element="impl:updateCookieResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapperCheckOkResponse">
+
+      <wsdl:part element="impl:updateWrapperCheckOkResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateJobUrlRequest">
+
+      <wsdl:part element="impl:updateJobUrl" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addWrapperResponse">
+
+      <wsdl:part element="impl:addWrapperResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobIDRequest">
+
+      <wsdl:part element="impl:getJobID" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapIdResponse">
+
+      <wsdl:part element="impl:getWrapIdResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateJobRequest">
+
+      <wsdl:part element="impl:updateJob" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobsWrapStatInvalidRequest">
+
+      <wsdl:part element="impl:getJobsWrapStatInvalid" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWraptypeRequest">
+
+      <wsdl:part element="impl:getWraptype" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLogInfoRequest">
+
+      <wsdl:part element="impl:getLogInfo" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapTaskResponse">
+
+      <wsdl:part element="impl:getWrapTaskResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobRequest">
+
+      <wsdl:part element="impl:getJob" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addJobRequest">
+
+      <wsdl:part element="impl:addJob" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getVersionResponse">
+
+      <wsdl:part element="impl:getVersionResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addCookieResponse">
+
+      <wsdl:part element="impl:addCookieResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapperResponse">
+
+      <wsdl:part element="impl:getWrapperResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="delJobRequest">
+
+      <wsdl:part element="impl:delJob" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getVersionRequest">
+
+      <wsdl:part element="impl:getVersion" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateJobUrlResponse">
+
+      <wsdl:part element="impl:updateJobUrlResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobResponse">
+
+      <wsdl:part element="impl:getJobResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="putResultRequest">
+
+      <wsdl:part element="impl:putResult" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapGenRequest">
+
+      <wsdl:part element="impl:updateWrapGen" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteWrapStudyRequest">
+
+      <wsdl:part element="impl:deleteWrapStudy" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateCookieRequest">
+
+      <wsdl:part element="impl:updateCookie" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapInvalidTaskRequest">
+
+      <wsdl:part element="impl:getWrapInvalidTask" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapperRequest">
+
+      <wsdl:part element="impl:getWrapper" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addJobResponse">
+
+      <wsdl:part element="impl:addJobResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobsRequest">
+
+      <wsdl:part element="impl:getJobs" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="hasTaskResponse">
+
+      <wsdl:part element="impl:hasTaskResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStudyWrapperResponse">
+
+      <wsdl:part element="impl:getStudyWrapperResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCookieRequest">
+
+      <wsdl:part element="impl:getCookie" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStatResponse">
+
+      <wsdl:part element="impl:getStatResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapInvalidTaskByJobIdRequest">
+
+      <wsdl:part element="impl:getWrapInvalidTaskByJobId" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLogJobIDResponse">
+
+      <wsdl:part element="impl:getLogJobIDResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapGenRequest">
+
+      <wsdl:part element="impl:getWrapGen" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapperResponse">
+
+      <wsdl:part element="impl:updateWrapperResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getWrapIdRequest">
+
+      <wsdl:part element="impl:getWrapId" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateWrapperRequest">
+
+      <wsdl:part element="impl:updateWrapper" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTaskRequest">
+
+      <wsdl:part element="impl:getTask" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLogJobIDRequest">
+
+      <wsdl:part element="impl:getLogJobID" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTaskResponse">
+
+      <wsdl:part element="impl:getTaskResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateJobResponse">
+
+      <wsdl:part element="impl:updateJobResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteWrapStudyResponse">
+
+      <wsdl:part element="impl:deleteWrapStudyResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLogInfoResponse">
+
+      <wsdl:part element="impl:getLogInfoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobsWrapStatInvalidResponse">
+
+      <wsdl:part element="impl:getJobsWrapStatInvalidResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addWrapperRequest">
+
+      <wsdl:part element="impl:addWrapper" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="hasTaskRequest">
+
+      <wsdl:part element="impl:hasTask" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getStudyWrapperRequest">
+
+      <wsdl:part element="impl:getStudyWrapper" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="CrawlerCtrl">
+
+      <wsdl:operation name="getVersion">
+
+         <wsdl:input message="impl:getVersionRequest" name="getVersionRequest"/>
+
+         <wsdl:output message="impl:getVersionResponse" name="getVersionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTask">
+
+         <wsdl:input message="impl:getTaskRequest" name="getTaskRequest"/>
+
+         <wsdl:output message="impl:getTaskResponse" name="getTaskResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapper">
+
+         <wsdl:input message="impl:getWrapperRequest" name="getWrapperRequest"/>
+
+         <wsdl:output message="impl:getWrapperResponse" name="getWrapperResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTaskByJobId">
+
+         <wsdl:input message="impl:getTaskByJobIdRequest" name="getTaskByJobIdRequest"/>
+
+         <wsdl:output message="impl:getTaskByJobIdResponse" name="getTaskByJobIdResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="putResult">
+
+         <wsdl:input message="impl:putResultRequest" name="putResultRequest"/>
+
+         <wsdl:output message="impl:putResultResponse" name="putResultResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getStat">
+
+         <wsdl:input message="impl:getStatRequest" name="getStatRequest"/>
+
+         <wsdl:output message="impl:getStatResponse" name="getStatResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addJob">
+
+         <wsdl:input message="impl:addJobRequest" name="addJobRequest"/>
+
+         <wsdl:output message="impl:addJobResponse" name="addJobResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="delJob">
+
+         <wsdl:input message="impl:delJobRequest" name="delJobRequest"/>
+
+         <wsdl:output message="impl:delJobResponse" name="delJobResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobID">
+
+         <wsdl:input message="impl:getJobIDRequest" name="getJobIDRequest"/>
+
+         <wsdl:output message="impl:getJobIDResponse" name="getJobIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJob">
+
+         <wsdl:input message="impl:getJobRequest" name="getJobRequest"/>
+
+         <wsdl:output message="impl:getJobResponse" name="getJobResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobs">
+
+         <wsdl:input message="impl:getJobsRequest" name="getJobsRequest"/>
+
+         <wsdl:output message="impl:getJobsResponse" name="getJobsResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobsWrapStatInvalid">
+
+         <wsdl:input message="impl:getJobsWrapStatInvalidRequest" name="getJobsWrapStatInvalidRequest"/>
+
+         <wsdl:output message="impl:getJobsWrapStatInvalidResponse" name="getJobsWrapStatInvalidResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateJob">
+
+         <wsdl:input message="impl:updateJobRequest" name="updateJobRequest"/>
+
+         <wsdl:output message="impl:updateJobResponse" name="updateJobResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateJobUrl">
+
+         <wsdl:input message="impl:updateJobUrlRequest" name="updateJobUrlRequest"/>
+
+         <wsdl:output message="impl:updateJobUrlResponse" name="updateJobUrlResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="hasTask">
+
+         <wsdl:input message="impl:hasTaskRequest" name="hasTaskRequest"/>
+
+         <wsdl:output message="impl:hasTaskResponse" name="hasTaskResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addCookie">
+
+         <wsdl:input message="impl:addCookieRequest" name="addCookieRequest"/>
+
+         <wsdl:output message="impl:addCookieResponse" name="addCookieResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateCookie">
+
+         <wsdl:input message="impl:updateCookieRequest" name="updateCookieRequest"/>
+
+         <wsdl:output message="impl:updateCookieResponse" name="updateCookieResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCookie">
+
+         <wsdl:input message="impl:getCookieRequest" name="getCookieRequest"/>
+
+         <wsdl:output message="impl:getCookieResponse" name="getCookieResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLogInfo">
+
+         <wsdl:input message="impl:getLogInfoRequest" name="getLogInfoRequest"/>
+
+         <wsdl:output message="impl:getLogInfoResponse" name="getLogInfoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLogJobID">
+
+         <wsdl:input message="impl:getLogJobIDRequest" name="getLogJobIDRequest"/>
+
+         <wsdl:output message="impl:getLogJobIDResponse" name="getLogJobIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapGen">
+
+         <wsdl:input message="impl:getWrapGenRequest" name="getWrapGenRequest"/>
+
+         <wsdl:output message="impl:getWrapGenResponse" name="getWrapGenResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapper">
+
+         <wsdl:input message="impl:updateWrapperRequest" name="updateWrapperRequest"/>
+
+         <wsdl:output message="impl:updateWrapperResponse" name="updateWrapperResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapperCheckOk">
+
+         <wsdl:input message="impl:updateWrapperCheckOkRequest" name="updateWrapperCheckOkRequest"/>
+
+         <wsdl:output message="impl:updateWrapperCheckOkResponse" name="updateWrapperCheckOkResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapGen">
+
+         <wsdl:input message="impl:updateWrapGenRequest" name="updateWrapGenRequest"/>
+
+         <wsdl:output message="impl:updateWrapGenResponse" name="updateWrapGenResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapTask">
+
+         <wsdl:input message="impl:getWrapTaskRequest" name="getWrapTaskRequest"/>
+
+         <wsdl:output message="impl:getWrapTaskResponse" name="getWrapTaskResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapId">
+
+         <wsdl:input message="impl:getWrapIdRequest" name="getWrapIdRequest"/>
+
+         <wsdl:output message="impl:getWrapIdResponse" name="getWrapIdResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWraptype">
+
+         <wsdl:input message="impl:getWraptypeRequest" name="getWraptypeRequest"/>
+
+         <wsdl:output message="impl:getWraptypeResponse" name="getWraptypeResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapInvalidTask">
+
+         <wsdl:input message="impl:getWrapInvalidTaskRequest" name="getWrapInvalidTaskRequest"/>
+
+         <wsdl:output message="impl:getWrapInvalidTaskResponse" name="getWrapInvalidTaskResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapInvalidTaskByJobId">
+
+         <wsdl:input message="impl:getWrapInvalidTaskByJobIdRequest" name="getWrapInvalidTaskByJobIdRequest"/>
+
+         <wsdl:output message="impl:getWrapInvalidTaskByJobIdResponse" name="getWrapInvalidTaskByJobIdResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addWrapper">
+
+         <wsdl:input message="impl:addWrapperRequest" name="addWrapperRequest"/>
+
+         <wsdl:output message="impl:addWrapperResponse" name="addWrapperResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteWrapStudy">
+
+         <wsdl:input message="impl:deleteWrapStudyRequest" name="deleteWrapStudyRequest"/>
+
+         <wsdl:output message="impl:deleteWrapStudyResponse" name="deleteWrapStudyResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getStudyWrapper">
+
+         <wsdl:input message="impl:getStudyWrapperRequest" name="getStudyWrapperRequest"/>
+
+         <wsdl:output message="impl:getStudyWrapperResponse" name="getStudyWrapperResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="CrawlerCtrlSoapBinding" type="impl:CrawlerCtrl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getVersion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getVersionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getVersionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTask">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTaskRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTaskResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapper">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapperRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapperResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTaskByJobId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTaskByJobIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTaskByJobIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="putResult">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="putResultRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="putResultResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getStat">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getStatRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getStatResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addJobRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addJobResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="delJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="delJobRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="delJobResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getJobIDRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getJobIDResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getJobRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getJobResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobs">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getJobsRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getJobsResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobsWrapStatInvalid">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getJobsWrapStatInvalidRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getJobsWrapStatInvalidResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateJob">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateJobRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateJobResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateJobUrl">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateJobUrlRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateJobUrlResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="hasTask">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="hasTaskRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="hasTaskResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addCookie">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addCookieRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addCookieResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateCookie">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateCookieRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateCookieResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCookie">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCookieRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCookieResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLogInfo">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getLogInfoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getLogInfoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getLogJobID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getLogJobIDRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getLogJobIDResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapGen">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapGenRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapGenResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapper">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateWrapperRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateWrapperResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapperCheckOk">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateWrapperCheckOkRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateWrapperCheckOkResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateWrapGen">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateWrapGenRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateWrapGenResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapTask">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapTaskRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapTaskResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWraptype">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWraptypeRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWraptypeResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapInvalidTask">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapInvalidTaskRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapInvalidTaskResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getWrapInvalidTaskByJobId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getWrapInvalidTaskByJobIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getWrapInvalidTaskByJobIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addWrapper">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addWrapperRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addWrapperResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteWrapStudy">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteWrapStudyRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteWrapStudyResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getStudyWrapper">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getStudyWrapperRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getStudyWrapperResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="CrawlerCtrlService">
+
+      <wsdl:port binding="impl:CrawlerCtrlSoapBinding" name="CrawlerCtrl">
+
+         <wsdlsoap:address location="http://localhost:8080/WebServiceCrawler/services/CrawlerCtrl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

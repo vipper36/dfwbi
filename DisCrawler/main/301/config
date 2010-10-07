@@ -1,0 +1,10 @@
+#config file
+MOZSHELL=/usr/local/xulrunner-sdk/bin/run-mozilla.sh
+CrawlerBin=~/workspace/DisCrawler/main/gtkMain
+MulBin=~/workspace/DisCrawler/main/mulMain
+KEYPRESS=~/workspace/DisCrawler/main/keyPress
+MulDocListener="@nyapc.com/XPCOM/nsMultiDocListener;1"
+WrapGenListener="@nyapc.com/XPCOM/nsWrapGenListener;1"
+CrawStatMan="@nyapc.com/XPCOM/nsCrawStatMan;1"
+WrapStatMan="@nyapc.com/XPCOM/nsWrapStatMan;1"
+CID=301

@@ -1,0 +1,10 @@
+#include "nsIWebBrowser.idl"
+
+[scriptable, uuid(34a28308-eb61-4d9c-90c3-50cfa264d6ea)]
+interface nsIBrowserConnector :nsISupports
+{
+     void SetID( in long id); 
+     void SetInterrupt( in double inter);
+     void SetDefDoc( in long num);
+     void SetBrowser( in nsIWebBrowser browser); 
+};

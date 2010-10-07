@@ -1,0 +1,14 @@
+#include "nsISupports.idl"
+
+interface nsIAttSet;
+interface nsIAttVec;
+[scriptable, uuid(be94ca29-5d0f-43ca-b724-ca2b5a029f53)]
+interface nsIClustModel:nsISupports
+{
+//     attribute nsIAttVec modelAtt;
+     long GetClassCount();
+     nsIAttVec GetClassAtt(in long classid);
+     nsIAttSet GetClassSet(in long classid);
+     void AppendClass(in nsIAttSet set,in nsIAttVec att); 
+     void ClearModel(); 
+};

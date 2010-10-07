@@ -1,0 +1,46 @@
+;; Object include/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "include/"
+  :tables (list 
+   (semanticdb-table "property.h"
+    :major-mode 'c-mode
+    :tags '(("__PROPERTY_H__" variable (:constant-flag t) nil [nil nil]) ("string" include (:system-flag t) (dependency-file none) [nil nil]) ("iostream" include (:system-flag t) (dependency-file none) [nil nil]) ("fstream" include (:system-flag t) (dependency-file none) [nil nil]) ("LINUX_SUSE" variable (:constant-flag t) nil [nil nil]) ("OS" variable (:constant-flag t) nil [nil nil]) ("of" function (:prototype-flag t :typemodifiers ("static") :type ("std::ofstream" type (:type "class") nil nil)) nil [nil nil]) ("LOG_LEVEL" variable (:constant-flag t) nil [nil nil]) ("LOG" variable (:constant-flag t) nil [nil nil]) ("DEBUG" variable (:constant-flag t) nil [nil nil]) ("INFO" variable (:constant-flag t) nil [nil nil]) ("ERROR" variable (:constant-flag t) nil [nil nil]) ("BLOCK_MAX_WEIGHT" variable (:constant-flag t) nil [nil nil]) ("BLOCK_NUMBER_IN_A_CLUSTER" variable (:constant-flag t) nil [nil nil]) ("SIMILAR_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("WRAP_SIMILAR_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("SIMILAR_CONTENT_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("LINK_BLOCK_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("MIN_CONTENT_LENGTH" variable (:constant-flag t) nil [nil nil]) ("SIMILAR_NODE_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("CONTENT_PAGE_THRESHOLD" variable (:constant-flag t) nil [nil nil]) ("AVERAGE_TITLE_LENGTH" variable (:constant-flag t) nil [nil nil]) ("RULE_SEPARATOR" variable (:constant-flag t) nil [nil nil]) ("RULE_TITLE" variable (:constant-flag t) nil [nil nil]) ("RULE_AUTHOR_SOURCE" variable (:constant-flag t) nil [nil nil]) ("RULE_AUTHOR" variable (:constant-flag t) nil [nil nil]) ("RULE_SOURCE" variable (:constant-flag t) nil [nil nil]) ("RULE_DATE" variable (:constant-flag t) nil [nil nil]) ("RULE_MAIN_NODE" variable (:constant-flag t) nil [nil nil]) ("RULE_AD_NODE" variable (:constant-flag t) nil [nil nil]) ("XPATH_WITH_ATTRIBUTE" variable (:constant-flag t) nil [nil nil]) ("CONTENT_BLOCK" variable (:constant-flag t) nil [nil nil]) ("LINK_BLOCK" variable (:constant-flag t) nil [nil nil]) ("CHANNEL_BLOCK" variable (:constant-flag t) nil [nil nil]))
+    :file "property.h"
+    :pointmax 1905
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "nsIAttVec.h"
+    :major-mode 'c-mode
+    :tags '(("__gen_nsIAttVec_h__" variable (:constant-flag t) nil [104 157]) ("nsISupports.h" include nil (dependency-file none) [156 180]) ("NS_NO_VTABLE" variable (:constant-flag t) nil [281 306]) ("nsIDOMDocument" type (:prototype t :type "class") nil [301 322]) ("nsIDOMNode" type (:prototype t :type "class") nil [350 367]) ("NS_IATTVEC_IID_STR" variable (:constant-flag t) nil [443 524]) ("NS_IATTVEC_IID" variable (:constant-flag t) nil [510 622]) ("NS_DECL_NSIATTVEC" variable (:constant-flag t) nil [1893 2683]) ("NS_FORWARD_NSIATTVEC" variable (:constant-flag t) nil [2663 3812]))
+    :file "nsIAttVec.h"
+    :pointmax 6984
+    )
+   (semanticdb-table "StyleCompare.h"
+    :major-mode 'c-mode
+    :tags '(("string" include (:system-flag t) (dependency-file none) [1 18]) ("map" include (:system-flag t) (dependency-file none) [19 33]) ("list" include (:system-flag t) (dependency-file none) [34 49]) ("set" include (:system-flag t) (dependency-file none) [50 64]) ("__STYLECOMPARE_H__" variable (:constant-flag t) nil [101 126]) ("BACKGROUND" variable (:constant-flag t) nil [151 200]) ("BACKGROUND_COLOR" variable (:constant-flag t) nil [184 239]) ("TEXT_COLOR" variable (:constant-flag t) nil [229 267]) ("TEXT_ALIGN" variable (:constant-flag t) nil [257 305]) ("TEXT_DECORATION" variable (:constant-flag t) nil [290 338]) ("FONT" variable (:constant-flag t) nil [334 367]) ("FONT_FAMILY" variable (:constant-flag t) nil [356 400]) ("FONT_SIZE" variable (:constant-flag t) nil [391 432]) ("FONT_STYLE" variable (:constant-flag t) nil [422 466]) ("FONT_WEIGHT" variable (:constant-flag t) nil [455 501]) ("LIST_STYLE" variable (:constant-flag t) nil [491 540]) ("LIST_STYLE_IMAGE" variable (:constant-flag t) nil [524 583]) ("LIST_STYLE_TYPE" variable (:constant-flag t) nil [568 630]) ("LIST_STYLE_POSITION" variable (:constant-flag t) nil [611 674]) ("TABLE_LAYOUT" variable (:constant-flag t) nil [662 713]) ("TABLE_COLLAPSE" variable (:constant-flag t) nil [699 796]) ("TABLE_CAPTION" variable (:constant-flag t) nil [783 829]) ("PADDING" variable (:constant-flag t) nil [822 861]) ("PADDING_TOP" variable (:constant-flag t) nil [850 898]) ("PADDING_RIGHT" variable (:constant-flag t) nil [885 936]) ("PADDING_LEFT" variable (:constant-flag t) nil [924 975]) ("PADDING_BOTTOM" variable (:constant-flag t) nil [961 1009]) ("BORDER" variable (:constant-flag t) nil [1003 1041]) ("MARGIN" variable (:constant-flag t) nil [1035 1069]) ("POSITION" variable (:constant-flag t) nil [1061 1097]) ("DISPLAY" variable (:constant-flag t) nil [1090 1124]) ("HEIGHT" variable (:constant-flag t) nil [1118 1149]) ("WIDTH" variable (:constant-flag t) nil [1144 1173]) ("FLOAT" variable (:constant-flag t) nil [1168 1206]) ("VECTOR_NUMBER" variable (:constant-flag t) nil [1193 1232]) ("VECTOR_WEIGHT" variable (:constant-flag t) nil [1219 1337]) ("DEFINE_RGB_MATRIX" variable (:constant-flag t) nil [1320 1369]) ("COLOR_YELLOW" variable (:constant-flag t) nil [1357 1406]) ("COLOR_YELLOW_VALUE" variable (:constant-flag t) nil [1388 1449]) ("COLOR_GRAY" variable (:constant-flag t) nil [1439 1482]) ("COLOR_GRAY_VALUE" variable (:constant-flag t) nil [1466 1517]) ("compare_styles" function (:prototype-flag t :arguments (("style1" variable (:type ("map" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1533 1559]) ("style2" variable (:type ("map" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1560 1585])) :type "float") nil [1512 1586]) ("compare_styles" function (:prototype-flag t :arguments (("style1" variable (:type ("map" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1609 1635]) ("style2" variable (:type ("map" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1636 1662]) ("S" variable (:pointer 1 :type "float") (reparse-symbol arg-sub-list) [1663 1673]) ("W" variable (:pointer 1 :type "float") (reparse-symbol arg-sub-list) [1674 1684])) :type "float") nil [1588 1685]) ("normalize" function (:prototype-flag t :arguments (("style" variable (:type ("map" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [1702 1729])) :type "void") nil [1687 1730]) ("map_color" variable (:typemodifiers ("static") :type ("map" type (:type "class") nil nil)) nil [1732 1765]))
+    :file "StyleCompare.h"
+    :pointmax 1774
+    )
+   (semanticdb-table "nsIDomAttUtil.h"
+    :major-mode 'c-mode
+    :tags '(("__gen_nsIDomAttUtil_h__" variable (:constant-flag t) nil [112 169]) ("nsISupports.h" include nil (dependency-file none) [168 192]) ("NS_NO_VTABLE" variable (:constant-flag t) nil [293 318]) ("nsIDOMDocument" type (:prototype t :type "class") nil [313 334]) ("nsIDOMNode" type (:prototype t :type "class") nil [362 379]) ("NS_IDOMATTUTIL_IID_STR" variable (:constant-flag t) nil [459 548]) ("NS_IDOMATTUTIL_IID" variable (:constant-flag t) nil [530 646]) ("NS_DECL_NSIDOMATTUTIL" variable (:constant-flag t) nil [1073 1325]) ("NS_FORWARD_NSIDOMATTUTIL" variable (:constant-flag t) nil [1301 1623]))
+    :file "nsIDomAttUtil.h"
+    :pointmax 2581
+    )
+   (semanticdb-table "nsIAttSet.h"
+    :major-mode 'c-mode
+    :tags '(("__gen_nsIAttSet_h__" variable (:constant-flag t) nil [104 157]) ("nsISupports.h" include nil (dependency-file none) [156 180]) ("NS_NO_VTABLE" variable (:constant-flag t) nil [281 306]) ("nsIAttVec" type (:prototype t :type "class") nil [301 317]) ("NS_IATTSET_IID_STR" variable (:constant-flag t) nil [393 474]) ("NS_IATTSET_IID" variable (:constant-flag t) nil [460 572]) ("NS_DECL_NSIATTSET" variable (:constant-flag t) nil [1533 2107]) ("NS_FORWARD_NSIATTSET" variable (:constant-flag t) nil [2087 2904]))
+    :file "nsIAttSet.h"
+    :pointmax 5178
+    )
+   (semanticdb-table "nsIXpathUtil.h"
+    :major-mode 'c-mode
+    :tags '(("__gen_nsIXpathUtil_h__" variable (:constant-flag t) nil [110 166]) ("nsISupports.h" include nil (dependency-file none) [165 189]) ("NS_NO_VTABLE" variable (:constant-flag t) nil [290 315]) ("nsIDOMDocument" type (:prototype t :type "class") nil [310 331]) ("nsIDOMNode" type (:prototype t :type "class") nil [359 376]) ("nsISupportsArray" type (:prototype t :type "class") nil [404 427]) ("NS_IXPATHUTIL_IID_STR" variable (:constant-flag t) nil [506 593]) ("NS_IXPATHUTIL_IID" variable (:constant-flag t) nil [576 691]) ("NS_DECL_NSIXPATHUTIL" variable (:constant-flag t) nil [1849 2512]) ("NS_FORWARD_NSIXPATHUTIL" variable (:constant-flag t) nil [2489 3386]))
+    :file "nsIXpathUtil.h"
+    :pointmax 5907
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre4"
+  :semanticdb-version "2.0pre4"
+  )

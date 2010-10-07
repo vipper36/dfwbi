@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+   id     = "mybrowser"
+   title  = "browser"
+   orient = "horizontal"
+   width  = "1024"
+   height = "768"
+   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="mybrowser.js"/>
+  
+  
+  <vbox flex="1">
+    <hbox flex="1">
+      <tabbox id="extra-info-tab" flex="1">
+	<tabs id="comment-tab">
+	  <tab label="Test Pannel"/>
+	  <tab label="Result"/>
+	</tabs>
+	<tabpanels style="background-color: White;" flex="3">
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="taskAddress" value="" flex="1"/>
+		<label value="Job ID:"/>
+		<textbox id="Job-id" value=""/>
+		<label value="Job Type:"/>
+		<textbox id="Job-type" value=""/>
+		<label value="Num:"/>
+		<textbox id="url-Number" value=""/>
+		<button id="Get-Task" label="Get Task" oncommand="soapTask();"/>
+	      </hbox>
+	      
+	      <hbox flex="1">
+		<vbox id="content-box">
+		  <label value="XSLT Wrapper:"/>
+		  <textbox id="task-wrapper"  multiline="true" value="" flex="1"/>
+		  <vbox>
+		    <vbox id="variable-box">
+		      
+		    </vbox>
+		    <hbox>
+		      <hbox>
+			<vbox flex="1"/>
+			<button id="loadVarList" label="Get Variables" oncommand="createvarlist();"/>
+			<button id="save-wrap" label="Study" oncommand="staudywrap();"/>
+			<button id="content-xslt" label="Fetch" oncommand="fetchxsltcom();"/>
+		      </hbox>
+		    </hbox>
+		  </vbox>
+		</vbox>
+		<splitter collapse="before" resizeafter="farthest">
+                  <grippy/>
+                </splitter>
+		
+		<vbox id="browser-box" flex="1">
+
+		</vbox>
+	      </hbox>
+	      
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="Fetch result:"/>
+	      </hbox>
+	      <textbox multiline="true" id="resultc" newlines="pasteintact" readonly="true" flex="3"/>
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="resAddress" value="" flex="1"/>
+		
+		<button id="send-result" label="Send" oncommand="sendresult();"/>
+	      </hbox> 
+	    </vbox>
+	  </tabpanel>
+	  
+	  
+	</tabpanels>
+      </tabbox>
+    </hbox>
+  </vbox>
+
+</window>

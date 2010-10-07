@@ -1,0 +1,17 @@
+//div[@class=\"divShow\"]/dl/dd/a[@target=\"_blank\"]##.
+//div[@class=\"lay02_1con_rig\"]/h3/a##.
+
+var parser = new DOMParser();
+var xmlDoc = parser.parseFromString("<book><chapter/></book>", "text/xml");
+var xmlDoc2 = parser.parseFromString("<yy><chapter/></yy>", "text/xml");
+var node=xmlDoc.importNode(xmlDoc2.documentElement)
+xmlDoc.documentElement.appendChlid(node);
+var serializer = new XMLSerializer();
+var xmlString = serializer.serializeToString(xmlDoc);
+alert("hehe");
+3320 pyrb_dayoo_com_27025             番禺日报  2010-01-12 19:56:03 http://pyrb.dayoo.com                              1 2010-01-12 19:56:03 0 
+3449 ycdtb_dayoo_com_27440            羊城地铁报 2010-01-12 20:00:43 http://ycdtb.dayoo.com/                            1 2010-01-12 20:00:43 0 
+3457 informationtimes_dayoo_com_27067 信息时报  2010-01-12 20:01:04 http://informationtimes.dayoo.com                  1 2010-01-12 20:01:04 0 
+3165 202_84_17_25_26976               经济参考报 2010-01-12 19:50:45 http://202.84.17.25/www/pages/jjckb/paperindex.htm 1 2010-01-12 19:50:45 0 
+3261 gzdaily_dayoo_com_26994          广州日报  2010-01-12 19:54:03 http://gzdaily.dayoo.com                           1 2010-01-12 19:54:03 0 
+3285 newepaper_bjd_com_cn_26989       北京晚报  2010-01-12 19:54:51 http://newepaper.bjd.com.cn/bjwb                   1 2010-01-12 19:54:51 0 

@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+
+
+[scriptable, uuid(557d2727-fb30-47c5-bba5-db56e593936d)]
+interface nsISoapTask:nsISupports
+{
+     attribute long jobId;
+     attribute AUTF8String type;
+     attribute long wrapid;
+     attribute long wrapver;
+     attribute long taskId;
+     void AddUrl(in AUTF8String url,in long uid);
+     long GetUrlCount();
+     void GetUrlByIndex(in long index,out long uid,out AUTF8String url);
+};

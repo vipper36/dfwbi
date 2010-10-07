@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+   id     = "mybrowser"
+   title  = "browser"
+   orient = "horizontal"
+   width  = "1024"
+   height = "768"
+   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   onload = "listJob()">
+  <script src="mybrowser.js"/>
+
+
+  <vbox flex="1">
+    <hbox>
+      <label value="Soap Address:"/>
+      <textbox id="taskAddress" value="http://192.168.4.45:8080/WebServiceCrawler/services/CrawlerCtrl?wsdl" flex="1"/>
+    </hbox>
+    <hbox flex="1">
+      <tabbox id="extra-info-tab" flex="1">
+	<tabs id="comment-tab">
+	  <tab label="Job Check" selected="true"/>
+	</tabs>
+
+	<tabpanels style="background-color: White;" flex="3">
+	  <tabpanel>
+	    <vbox flex="3">
+	      <hbox>
+			<button id="Get-Job" label="Refresh" oncommand="listJob();"/>
+			<button id="update" label="Get URLS" oncommand="getWrapper();"/>
+			<button id="access" label="Access URL" oncommand="accesssel();"/>
+			<button id="xslt" label="Fetch" oncommand="fetchxsltcom();"/>
+	      </hbox>
+          <hbox flex="1">
+			<vbox>
+				<listbox id="job_list" flex="1" preference-editable="true" seltype="multiple" onselect="selectedJobEvent();">
+					<listhead>
+						<listheader label="ID" onclick="sortIdEvent();"/>
+                        <listheader label="Job Name"/>
+						<listheader label="Comment"/>
+						<listheader label="Job Type" onclick="sortTypeEvent();"/>
+					</listhead>
+
+					<listcols>
+						<listcol/>
+                        <listcol/>
+						<listcol flex="1"/>
+						<listcol/>
+					</listcols>
+				</listbox>
+                <hbox>
+                    <label id="total" value="Total:" flex="1"/>
+                    <label value="JobId:" flex="1"/>
+                    <textbox id="searchJobID" value="" minwidth= "45" maxwidth="45" onkeydown="keyEnterEvent(event);"/>
+                    <button id="searchJob" label="Search Job" oncommand="searchJob();"/>
+                    <button id="addJob" label="Add Job" oncommand="addJobs();"/>
+                    <button id="clearWorkJob" label="Clear" oncommand="clearWorkJob();"/>
+                </hbox>
+                <textbox id="workJob"  multiline="true" value="" flex="1" cols="3"/>
+
+				<groupbox>
+					<caption label="Modify Job"/>
+					<hbox>
+						<label value="JobID:" flex="1"/>
+						<textbox id="jobid" readonly = "true" editable = "false" value=""/>
+					</hbox>
+					<hbox>
+						<label value="URL:" flex="1"/>
+						<textbox id="url" value=""/>
+					</hbox>
+					<hbox>
+						<label value="Comment:" flex="1"/>
+						<textbox id="comment" readonly = "true" editable = "false" value=""/>
+					</hbox>
+					<button id = "updateJob" label = "Modify Job" oncommand = "modifyJob();"/>
+					<button id = "deactiveJob" label = "Deactive Job" oncommand = "deactiveJob();"/>
+ 				</groupbox>
+
+
+			</vbox>
+
+			<splitter collapse="before" resizeafter="farthest">
+				<grippy/>
+			</splitter>
+
+		<vbox>
+			<hbox>
+				<label value="URLS:" />
+				<menulist editable="true" id = "URLS" flex = "1">
+					<menupopup>
+					</menupopup>
+				</menulist>
+			</hbox>
+
+
+			<textbox id="wrapper"  multiline="true" value="" flex="1" minwidth= "400" maxwidth="600"/>
+			<hbox height="10" />
+			<vbox id="variable-box">
+			</vbox>
+
+			<button id="loadVarList" label="Get Variables" oncommand="createvarlist();"/>
+			<button id="save varlist" label="Commit" oncommand="savevarlist();"/>
+		</vbox>
+
+		<splitter collapse="before" resizeafter="farthest">
+			<grippy/>
+		 </splitter>
+         <vbox flex="1">
+            <browser flex="3" id="browser" src="" type="content-primary"/>
+            <splitter collapse="before" resizeafter="farthest">
+                <grippy/>
+            </splitter>
+            <textbox flex="1" multiline="true" id="resultc" newlines="pasteintact" readonly="true"/>
+         </vbox>
+	</hbox>
+   </vbox>
+</tabpanel>
+
+
+	</tabpanels>
+      </tabbox>
+    </hbox>
+  </vbox>
+
+</window>

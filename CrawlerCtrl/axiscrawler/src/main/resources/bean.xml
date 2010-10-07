@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	
+<!--bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+<property name="jndiName">
+<value>java:comp/env/jdbc/ucppool</value>
+</property>
+</bean-->	
+<bean id="dataSource" class="oracle.ucp.jdbc.PoolDataSourceFactory" factory-method="getPoolDataSource" destroy-method="close">
+<property name="URL" value="${jdbc.ora_url.crawler}"/>
+<property name="user" value="${jdbc.username.crawler}"/>
+<property name="password" value="${jdbc.password.crawler}"/>
+<property name="connectionFactoryClassName" value="oracle.jdbc.pool.OracleDataSource"/>
+<property name="connectionPoolName" value="crawler_POOL"/>
+<property name="minPoolSize" value="10"/>
+<property name="maxPoolSize" value="50"/>
+<property name="inactiveConnectionTimeout" value="120"/>
+<property name="validateConnectionOnBorrow" value="true"/>
+<property name="maxStatements" value="10"/>
+</bean>
+
+	  
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource">
+      <ref bean="dataSource" />
+    </property>
+  </bean>
+  <bean id="nativeJdbcExtractor"
+	class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"
+	lazy-init="true" />
+  <bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"
+	lazy-init="true">
+    <property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
+  </bean>
+  <bean id="ChlDao" class="nyapc.crawler.dao.ChlDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="WrapDao" class="nyapc.crawler.dao.WrapperDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+    <property name="lobHandler" ref="oracleLobHandler" />
+  </bean>
+  <bean id="ColDao" class="nyapc.crawler.dao.ColDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="UrlDao" class="nyapc.crawler.dao.UrlDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="JobDao" class="nyapc.crawler.dao.JobDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="AgentDao" class="nyapc.crawler.dao.AgentDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="CrawlerDao" class="nyapc.crawler.dao.CrawlerDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="TaskDao" class="nyapc.crawler.dao.TaskDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>
+  <bean id="CookieDao" class="nyapc.crawler.dao.CookieDaoImp">
+    <property name="jdbcTemplate">
+      <ref bean="jdbcTemplate" />
+    </property>
+  </bean>     
+  <!--bean id="dihAddress" class="org.springframework.jndi.JndiObjectFactoryBean">
+<property name="jndiName">
+<value>java:comp/env/dihAddress</value>
+</property>
+</bean>	
+<bean id="zhida" class="org.springframework.jndi.JndiObjectFactoryBean">
+<property name="jndiName">
+<value>java:comp/env/zhidaHome</value>
+</property>
+</bean-->	
+  <bean id="IdxDao" class="nyapc.crawler.dao.IdxDaoImp">
+    <property name="address">
+       <value>${crawler.indexadd}</value>
+        <!--ref bean="dihAddress" /-->
+    </property>
+  </bean>
+  <bean id="ResultHandler" class="nyapc.crawler.ResultHandler">
+    <property name="chldao">
+      <ref bean="ChlDao" />
+    </property>
+     <property name="coldao">
+      <ref bean="ColDao" />
+    </property>
+     <property name="urldao">
+      <ref bean="UrlDao" />
+    </property>
+     <property name="jobdao">
+      <ref bean="JobDao" />
+    </property>
+     <property name="idxdao">
+      <ref bean="IdxDao" />
+    </property>
+     <property name="taskdao">
+      <ref bean="TaskDao" />
+    </property>
+  </bean>
+  <bean id="Crawler" class="nyapc.crawler.Crawler">
+     <property name="taskdao">
+      <ref bean="TaskDao" />
+    </property>
+  </bean>
+</beans>

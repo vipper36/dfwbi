@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+
+interface nsIDOMDocument;
+interface nsIDOMNode;
+interface nsISupportsArray;
+[scriptable, uuid(bd245bf5-2b01-4c41-a76b-573719a72d5e)]
+interface nsIXpathUtil:nsISupports
+{
+     void SetDocument(in nsIDOMDocument doc);
+     AUTF8String GetXpath(in nsIDOMNode node,in short type);
+     void GetNodes(in AUTF8String xpath,out nsISupportsArray nodes);
+     void GetSubNodes(in nsIDOMNode node,in AUTF8String xpath,out nsISupportsArray nodes);
+     AUTF8String GetSubpath(in nsIDOMNode par,in nsIDOMNode sub);
+     void AddAttName(in AUTF8String name);
+};

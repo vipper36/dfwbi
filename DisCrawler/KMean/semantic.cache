@@ -1,0 +1,15 @@
+;; Object KMean/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "KMean/"
+  :tables (list 
+   (semanticdb-table "Makefile"
+    :major-mode 'makefile-gmake-mode
+    :tags '(("OTHERLIBS" variable (:default-value ("-lm")) nil [940 956]) ("KMLLIB" variable (:default-value ("libkml.a")) nil [1264 1282]) ("TESTSOURCES" variable (:default-value ("KM_ANN.cpp" "KMeans.cpp" "KMterm.cpp" "KMrand.cpp" "KCutil.cpp" "KCtree.cpp" "KMdata.cpp" "KMcenters.cpp" "KMfilterCenters.cpp" "KMlocal.cpp")) nil [1283 1427]) ("TESTOBJECTS" variable (:default-value ("$(TESTSOURCES:.cpp=.o)")) nil [1428 1465]) ("CFLAGS" variable (:default-value ("-O3" "-Wall" "-DASSERT" "-fPIC")) nil [2249 2283]) ("all" function (:arguments ("$(KMLLIB)")) nil [2463 2479]) ("$(KMLLIB)" function (:arguments ("$(TESTOBJECTS)")) nil [2480 2532]) ("KM_ANN.o" function (:arguments ("KM_ANN.h" "KM_ANN.cpp")) nil [2707 2770]) ("KMeans.o" function (:arguments ("KM_ANN.h" "KMeans.h" "KMeans.cpp")) nil [2770 2842]) ("KMterm.o" function (:arguments ("KMterm.h" "KMterm.cpp")) nil [2842 2905]) ("KMrand.o" function (:arguments ("KMeans.h" "KMrand.h" "KMrand.cpp")) nil [2905 2977]) ("KCutil.o" function (:arguments ("KMeans.h" "KCutil.h" "KCutil.cpp")) nil [2977 3049]) ("KCtree.o" function (:arguments ("KM_ANN.h" "KMeans.h" "KCutil.h" "KCtree.h" "KCtree.cpp")) nil [3049 3139]) ("KMdata.o" function (:arguments ("KMeans.h" "KMdata.h" "KMdata.cpp")) nil [3139 3211]) ("KMcenters.o" function (:arguments ("KMeans.h" "KMdata.h" "KMcenters.h" "KMcenters.cpp")) nil [3211 3304]) ("KMfilterCenters.o" function (:arguments ("KMeans.h" "KMdata.h" "KMcenters.h" "KMfilterCenters.h" "KMfilterCenters.cpp")) nil [3304 3436]) ("KMlocal.o" function (:arguments ("KMeans.h" "KMdata.h" "KMcenters.h" "KMfilterCenters.h" "KMlocal.h" "KMlocal.cpp")) nil [3436 3554]) ("clean" function nil nil [3724 3785]) ("realclean" function (:arguments ("clean")) nil [3785 3820]))
+    :file "Makefile"
+    :pointmax 3820
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre4"
+  :semanticdb-version "2.0pre4"
+  )

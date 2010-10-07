@@ -1,0 +1,888 @@
+<tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="jobAddress" value="" flex="1"/>
+		<button id="Get-Job" label="List Job" oncommand="soapJob();"/>
+	      </hbox>
+	      <label value="Add JOB:"/>
+	      <hbox flex="1">
+
+		<vbox flex="1">
+		  <hbox>
+		    <label value="JOB NAME:"/>
+		    <textbox id="job-name" value="" flex="1"/>
+		  </hbox>
+		  <hbox>
+		    <label value="JOB Type:"/>
+		    <textbox id="job-type" value="" flex="1"/>
+		  </hbox>
+		  <hbox height="10" />
+		  <hbox>
+		    <label value="JOB URL:"/>
+		    <textbox id="job-url" value="" flex="1"/>
+		  </hbox>
+		  <vbox flex="1">
+		    <label value="JOB Comment:"/>
+		    <hbox flex="1">
+		      <textbox id="job-comment" multiline="true" value="" flex="3"/>
+		    </hbox>
+		  </vbox>
+		</vbox>
+
+		<vbox flex="1">
+		  <vbox flex="1">
+		    <hbox>
+		      <label value="CHL Generator:"/>
+		      <textbox id="chl-gen" value="" flex="1"/>
+		    </hbox>
+		    <label value="CHL Wrapper:"/>
+		    <hbox flex="1">
+		      <textbox id="chl-wrapper" multiline="true" value="" flex="3"/>
+		    </hbox>
+		  </vbox>
+		  <vbox flex="1">
+		    <hbox>
+		      <label value="COL Generator:"/>
+		      <textbox id="col-gen" value="" flex="1"/>
+		    </hbox>
+		    <label value="COL Wrapper:"/>
+		    <hbox flex="1">
+		      <textbox id="col-wrapper" multiline="true" value="" flex="3"/>
+		    </hbox>
+		  </vbox>
+		  <vbox flex="1">
+		    <hbox>
+		      <label value="Content Generator:"/>
+		      <textbox id="con-gen" value="" flex="1"/>
+		    </hbox>
+		    <label value="Content Wrapper:"/>
+		    <hbox flex="1">
+		      <textbox id="con-wrapper" multiline="true" value="" flex="3"/>
+		    </hbox>
+		  </vbox>
+		</vbox>	
+	      </hbox>
+
+	      <hbox>
+		<vbox flex="3"/>
+		<button id="add-job" label="Add Job" oncommand="addjob();"/>
+	      </hbox>
+
+	      <hbox height="10" />
+	      
+	      <listbox id="result_list" flex="1">
+		<listhead>
+		  <listheader label="ID"/>
+		  <listheader label="Name"/>
+		  <listheader label="Seed"/>
+		  <listheader label="SeedType"/>
+		  <listheader label="Comment"/>
+		</listhead>
+		<listcols>
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		  <listcol flex="1" />
+		</listcols>
+	      </listbox>
+
+	      <hbox>
+		<vbox flex="3"/>
+		<button id="Update-job" label="update" oncommand="updatejob();"/>
+	      </hbox>
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox height="10" />
+	      <hbox>
+		<label value="Soap Address:"/>
+		<textbox id="taskAddress" value="" flex="1"/>
+		<button id="Get-Task" label="Soap" oncommand="soapTask();"/>
+	      </hbox>
+	      <vbox>
+		<label value="Job ID:"/>
+		<textbox id="Job-id" value="" flex="1"/>
+		<label value="Job Type:"/>
+		<textbox id="Job-type" value="" flex="1"/>
+		<label value="Wrap ID:"/>
+		<textbox id="Wrap-id" value="" flex="1"/>
+	      </vbox>
+	      <hbox flex="1">
+		<vbox flex="1">
+		  <label value="URL List:"/>
+		  <listbox id="url_list" flex="1">
+		    <listhead>
+		      <listheader label="UID"/>
+		      <listheader label="URLS"/>
+		    </listhead>
+		    <listcols>
+		      <listcol />
+		      <listcol flex="1" />
+		    </listcols>
+		  </listbox>
+		  <hbox>
+		    <vbox flex="3"/>
+		    <button id="access-sel" label="Access Selected" oncommand="accesssel();"/>
+		  </hbox>
+		</vbox>
+		<vbox flex="1">
+		  <label value="Wrapper:"/>
+		  <textbox id="soap-wrapper"  multiline="true" value="" flex="1"/>
+		  <hbox height="10" />
+		  <vbox id="variable-box">
+		    
+		  </vbox>
+		  <hbox>
+		    <vbox flex="3"/>
+		    <button id="loadVarList" label="Get Variables" oncommand="createvarlist();"/>
+		    <button id="save-wrap" label="Save" oncommand="savewrap();"/>
+		    <button id="set-xslt" label="Export" oncommand="setxslt();"/>
+		  </hbox>
+		  
+		</vbox>
+	      </hbox>
+	      <hbox>
+		
+	      </hbox>
+	    </vbox>
+	  </tabpanel>
+	  <!--
+	      <tabpanel>
+		<vbox flex="1">
+		  <hbox id="file-load">
+		    <label value="Load XSLT:"/>
+		    <textbox id="filebar" value="" flex="1" />
+		    <button id="load" label="Load" oncommand="fileload();"/>
+		  </hbox>
+		  <hbox height="10" />
+		  
+		  <hbox id="result-box" flex="1">
+		    <label value="XSLT:"/>
+		    <textbox id="xslt-res"  multiline="true" value="" flex="1"/>
+		    <vbox>
+		      <button id="set-xslt" label="Export" oncommand="setxslt();"/>
+		    </vbox>
+		  </hbox>
+		</vbox>
+	      </tabpanel> -->
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox id="main-box">
+		<label value="Target Address:"/>
+		<textbox id="urlbar" value="" flex="1" onchange="go();"/>
+		<label value="UID:"/>
+		<textbox id="url-id" value=""/>
+		<button id="go" label="Go" oncommand="go();"/>
+	      </hbox>
+	      <hbox height="10" />
+	      <hbox id="fetch-box" height="160">
+		<label value="XSLT Wrapper:"/>
+		<textbox id="wrapper"  multiline="true" value="" flex="1" readonly="true"/>
+		<vbox>
+		  <vbox>
+		    <!--
+			<button id="fetch" label="fetch" oncommand="fetch();" flex="3"/>
+			-->
+		    <button id="xslt" label="Fetch" oncommand="fetchxsltcom();" flex="3"/>
+		  </vbox>
+		</vbox>
+	      </hbox>
+	      <hbox height="10" />
+	      <hbox>
+		<label value="Target browser result:" flex="3"/>
+		<button id="Analysis" label="Analysis" oncommand="Analysis1();"/>
+	      </hbox>
+	      <hbox height="10" />
+	      <browser  flex="1" id="browser" src="" type="content-primary"/>
+	    </vbox>
+	  </tabpanel>
+
+
+
+
+
+
+
+
+
+
+
+var DocSet=null;
+var DocAtt=null;
+var curIndex=0;
+function go() {
+     var urlbar = document.getElementById("urlbar");
+     var browser = document.getElementById("browser");
+      
+     browser.loadURI(urlbar.value, null, null);
+}
+function Analysis() {
+     const cid = "@nyapc.com/XPCOM/nsDocAtt;1";
+     var docatt = Components.classes[cid].createInstance();
+     docatt = docatt.QueryInterface(Components.interfaces.nsIDocAtt);
+     
+     const did="@nyapc.com/XPCOM/nsAttDim;1";
+     var attdim = Components.classes[did].createInstance();
+     attdim = attdim.QueryInterface(Components.interfaces.nsIAttDim);
+     attdim.AddDim(0,"AREA_RATE");
+     attdim.AddDim(1,"STYLE_PAR");
+     attdim.AddDim(2,"STYLE_SIB");
+     attdim.AddDim(3,"DEPTH");
+     attdim.AddDim(4,"WH_RATE");
+     
+     var browser = document.getElementById("browser");
+     var doc=browser.contentDocument;
+
+     docatt.AddDocument(doc);
+     docatt.dim=attdim;
+
+     var resultc = document.getElementById("resultc");
+     var len=docatt.GetVectorCount();
+     alert(len);
+     var resStr="";
+     // for(var i=0;i<len;i++)
+//      {
+// 	  var vec=docatt.GetVectorByIndex(i);
+// 	  var vlen=vec.GetLength();
+// 	  for(var j=0;j<vlen;j++)
+// 	  {
+// 	       var value =vec.GetValueByDim(j);
+// 	       resStr=resStr+value;
+// 	  }
+//      }
+//      alert(resStr);
+     const nid = "@nyapc.com/XPCOM/nsCluster;1";
+     var cluster = Components.classes[nid].createInstance();
+     cluster = cluster.QueryInterface(Components.interfaces.nsICluster);
+     
+     cluster.SetDoubleParam("ATTDIM", attdim.GetCount());
+     cluster.SetAtt(docatt.GetResult());
+     cluster.CaculModel();
+     var model=cluster.GetResultModel();
+     //var len=model.GetClassCount();
+    //  var classid=-1;
+//      var ares=0;
+//      for(var k=0;k<len;k++)
+//      {
+// 	  var vec=model.GetClassAtt(k);
+// 	  var vlen=vec.GetLength();
+// 	  var attStr="";
+// 	  for(var j=0;j<vlen;j++)
+//  	  {
+//  	       var value=vec.GetValueByDim(j);
+//  	       attStr=attStr+value+"  ";
+//  	  }
+// 	  alert(attStr);
+// 	  var newares=vec.GetValueByDim(0);
+// 	  if(ares==0)
+// 	  {
+// 	       ares=newares;
+// 	       classid=k;
+// 	  }
+// 	  else if(newares<ares)
+// 	  {
+// 	       ares=newares;
+// 	       classid=k;
+// 	  }
+//      }
+//      alert(classid+":"+ares);
+//      var cset=model.GetClassSet(classid);
+//      var slen=cset.GetLength();
+//      for(var k=0;k<slen;k++)
+//      {
+// 	  var vec=cset.GetVectorByIndex(k);
+// 	  var box =vec.doc.getBoxObjectFor(vec.node);
+// 	  resStr=resStr.concat(box.x.toString(),",",box.y.toString(),",",box.height.toString(),",",box.width.toString(),";");
+//      }
+     const chid = "@nyapc.com/XPCOM/nsChlVarGenerator;1";
+     var gen = Components.classes[chid].createInstance();
+     gen = gen.QueryInterface(Components.interfaces.nsIVarGenerator);
+
+     gen.SetModel(model);
+     gen.GenVar();
+     var boxpath=gen.GetVar("box");
+     alert(boxpath);
+     resultc.value=resStr;
+}
+
+// function fetch() {
+//      const cid = "@nyapc.com/XPCOM/nsWrapperFetcher;1";
+//      var obj = Components.classes[cid].createInstance();
+//      obj = obj.QueryInterface(Components.interfaces.nsIWrapperFetcher);
+// //     alert(obj);
+//      var result = document.getElementById("resultc");
+//      result.value="";
+//      var browser = document.getElementById("browser");
+//      var doc=browser.contentDocument;
+//      var wrapperbar = document.getElementById("wrapper");
+//      obj.Wrapper=wrapperbar.value;
+//      obj.SetDocument(doc);
+//      var res={};
+//      obj.GetResult("url",res);
+// //     alert(res.value.Content);
+//      var len=res.value.GetSubLen();
+// //     alert(len);
+//      for(var i=0;i<len;i++)
+//      {
+// 	  var sub={};
+// 	  res.value.GetSub(i,sub);
+//  	  result.value=result.value+sub.value.Content+":"+sub.value.Url+"\n";
+	  
+// 	  var slen=sub.value.GetSubLen();
+// 	  alert(slen);
+// 	  for(var j=0;j<slen;j++)
+// 	  {
+// 	      var subsub={};
+// 	      sub.value.GetSub(j,subsub);
+
+// 	      result.value=result.value+"       "+subsub.value.Content+":"+subsub.value.Url+"\n"; 
+// 	  }
+	  
+//      }
+// }
+function soapJob() {
+
+
+     const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+
+     var obj = Components.classes[cid].createInstance();
+
+     obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+
+     var address = document.getElementById("jobAddress");
+     obj.SetAddress(address.value);
+     var jobs= obj.getJobs();
+     var len=jobs.Count();
+     var result = document.getElementById("result_list");
+     removeclassitem(result,"Aitem");
+     for(var i=0;i<len;i++)
+     {
+	  var job=jobs.GetElementAt(i);
+	  job = job.QueryInterface(Components.interfaces.nsISoapJob);
+	  appendjob(job);
+     }
+
+}
+function addjob() {
+     const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+     var obj = Components.classes[cid].createInstance();
+     obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+//     alert(obj);
+     var address = document.getElementById("jobAddress");
+     obj.SetAddress(address.value);
+     
+     var jobname = document.getElementById("job-name");
+     var jobtype = document.getElementById("job-type");
+     var joburl = document.getElementById("job-url");
+     var jobcomment = document.getElementById("job-comment");
+     var chlwrapper = document.getElementById("chl-wrapper");
+     var colwrapper = document.getElementById("col-wrapper");
+     var conwrapper = document.getElementById("con-wrapper");
+     var chlgen = document.getElementById("chl-gen");
+     var colgen = document.getElementById("col-gen");
+     var congen = document.getElementById("con-gen");
+     
+     var jobid=obj.addJob(jobname.value,joburl.value,jobtype.value,jobcomment.value);
+     alert(jobid);
+     alert(congen.value);
+     obj.addWrapper(jobid,"1",chlwrapper.value,chlgen.value,jobcomment.value);
+     obj.addWrapper(jobid,"2",colwrapper.value,colgen.value,jobcomment.value);
+     obj.addWrapper(jobid,"3",conwrapper.value,congen.value,jobcomment.value);
+     var jobs= obj.getJobs();
+     var len=jobs.Count();
+     var result = document.getElementById("result_list");
+     removeclassitem(result,"Aitem");
+     for(var i=0;i<len;i++)
+     {
+	  var job=jobs.GetElementAt(i);
+	  job = job.QueryInterface(Components.interfaces.nsISoapJob);
+	  appendjob(job);
+     }
+
+}
+function soapTask() {
+     const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+     var obj = Components.classes[cid].createInstance();
+     obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+//     alert(obj);
+     var address = document.getElementById("taskAddress");
+     obj.SetAddress(address.value);
+
+     var jobid = document.getElementById("Job-id");
+     var jobtype = document.getElementById("Job-type");
+     var jobid_int;
+     var jobtypestr;
+     
+     if(jobid.value.length>0)
+	  jobid_int=parseInt(jobid.value);
+     if(jobtype.value.length>0)
+	  jobtypestr= jobtype.value;
+     var task;
+     alert(jobid_int);
+     
+     alert(jobtypestr);
+     
+     if(jobid_int&&jobtypestr)
+	  task = obj.getTaskByJobId(1,jobid_int,jobtypestr,5);
+     else
+	  task=obj.getWrapTask(1,5);
+     
+     var wrapid = document.getElementById("Wrap-id");
+     jobid.value=task.jobId;
+     jobtype.value=task.type;
+     wrapid.value=task.wrapid;
+     var urls=document.getElementById("url_list");
+     removeclassitem(urls,"Aitem")
+     var len=task.GetUrlCount();
+     alert(len);
+     for(var i=0;i<len;i++)
+     {
+	  var uid={};
+	  var url={};
+	  task.GetUrlByIndex(i,uid,url);
+	  appendurl(url.value,uid.value);
+     }
+     var wrapper=document.getElementById("soap-wrapper");
+     wrapper.value=obj.getWrapper(task.wrapid);
+}
+function accesssel() {
+     var urls=document.getElementById("url_list");
+     var urlbar = document.getElementById("urlbar");
+     var urlidbar = document.getElementById("url-id");
+     var item=urls.getSelectedItem(0);
+
+     if(item!=null)
+     {
+	  var cells=item.getElementsByTagName("listcell");
+	  var uidele=cells[0];
+
+	  var urlele=cells[1];
+
+	  urlbar.value=urlele.getAttribute("label");
+	  urlidbar.value=uidele.getAttribute("label");
+
+	  go();
+     }else
+     {
+	  alert("Please sellect a item!")
+     }
+}
+function NextUrl() {
+     var urls=document.getElementById("url_list");
+     var count=urls.getRowCount();
+     if(curIndex<count)
+     {
+	     var item=urls.getItemAtIndex(curIndex);
+	     var cells=item.getElementsByTagName("listcell");
+	     var uidele=cells[0];
+	     var urlele=cells[1];
+             var urlvalue=urlele.getAttribute("label");
+	     var browser = document.getElementById("browser2");
+      
+	     browser.loadURI(urlvalue, null, null);
+	     curIndex=curIndex+1;
+
+     }
+}
+function AddColUrl() {
+     var browser = document.getElementById("browser2");
+     if(DocAtt==null)
+     {
+	  const cid = "@nyapc.com/XPCOM/nsDocAtt;1";
+	  DocAtt = Components.classes[cid].createInstance();
+	  DocAtt = DocAtt.QueryInterface(Components.interfaces.nsIDocAtt);
+	  const did="@nyapc.com/XPCOM/nsAttDim;1";
+	  var attdim = Components.classes[did].createInstance();
+	  attdim = attdim.QueryInterface(Components.interfaces.nsIAttDim);
+
+	  attdim.AddDim(0,"AREA_RATE");
+	  attdim.AddDim(1,"STYLE_PAR");
+	  attdim.AddDim(2,"STYLE_SIB");
+	  attdim.AddDim(3,"DEPTH");
+	  attdim.AddDim(4,"WH_RATE");
+	  DocAtt.dim=attdim;
+     }
+     if(DocAtt!=null)
+     {
+	  DocAtt.AddDocument(browser.contentDocument);
+     }
+}
+function AddUrl() {
+     var browser = document.getElementById("browser2");
+     if(DocAtt==null)
+     {
+	  const cid = "@nyapc.com/XPCOM/ContentDocAtt;1";
+	  DocAtt = Components.classes[cid].createInstance();
+	  DocAtt = DocAtt.QueryInterface(Components.interfaces.nsIDocAtt);
+
+	  const did="@nyapc.com/XPCOM/nsAttDim;1";
+          var attdim = Components.classes[did].createInstance();
+          attdim = attdim.QueryInterface(Components.interfaces.nsIAttDim);
+          DocAtt.dim=attdim;
+
+     }
+     if(DocAtt!=null)
+     {
+	  DocAtt.AddDocument(browser.contentDocument);
+     }
+}
+
+function TrainCont() {
+     alert("Start Train");
+     var result = document.getElementById("resultc");
+     if(null != DocAtt)
+     {
+	 {
+	     attdim = DocAtt.dim;
+	     const nid = "@nyapc.com/XPCOM/ThresholdCluster;1";
+	     var cluster = Components.classes[nid].createInstance();
+	     cluster = cluster.QueryInterface(Components.interfaces.nsICluster);
+	     cluster.SetAtt(DocAtt.GetResult());
+	     alert("statistic ok");
+	     cluster.CaculModel();
+
+	     var model = cluster.GetResultModel();
+	     alert("clustering ok");
+	     const chid = "@nyapc.com/XPCOM/ContentVarGen;1";
+	     var gen = Components.classes[chid].createInstance();
+	     gen = gen.QueryInterface(Components.interfaces.nsIVarGenerator);
+	     gen.SetModel(model);
+	     gen.SetAttDim(attdim);
+	     gen.SetParam("similar_node_th","0.7");
+	     alert("start generate variables");
+	     gen.GenVar();
+
+	     var title = gen.GetVar("title");
+	     alert(title.toLowerCase());
+	     var publishdate = gen.GetVar("date");
+	     var author = gen.GetVar("author");
+	     var source = gen.GetVar("source");
+	     var content = gen.GetVar("main_node");
+	     var attr = gen.GetVar("attr");
+
+	     var fetcher = Components.classes["@nyapc.com/XPCOM/nsXSLTFetcher;1"].createInstance();
+	     fetcher = fetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+	     var old_xslt = document.getElementById("soap-wrapper");
+	     fetcher.SetXsltDocStr(old_xslt.value);
+	     if(title.length > 0)
+    		 fetcher.SetXsltVar("title", title.toLowerCase());
+	     if(content.length > 0)
+    		 fetcher.SetXsltVar("content", content.toLowerCase());
+	     if(publishdate.length > 0)
+    		 fetcher.SetXsltVar("publishdate", publishdate.toLowerCase());
+	     if(author.length > 0)
+		 fetcher.SetXsltVar("author", author.toLowerCase());
+	     if(source.length > 0)
+    		 fetcher.SetXsltVar("source", source.toLowerCase());
+	     if(attr.length > 0)
+    		 fetcher.SetXsltVar("attr", attr.toLowerCase());
+	     
+	     old_xslt.value = fetcher.GetXsltDocStr();
+
+	 }
+     }
+     DocAtt=null;
+     curIndex=0;
+}
+
+function TrainCol() {
+     alert("hehe");
+     var result = document.getElementById("resultc");
+     if(null != DocAtt)
+     {
+	  alert("1");
+	  const nid = "@nyapc.com/XPCOM/nsCluster;1";
+	  var cluster = Components.classes[nid].createInstance();
+	  cluster = cluster.QueryInterface(Components.interfaces.nsICluster);
+	  cluster.SetAtt(DocAtt.GetResult());
+	  cluster.SetDoubleParam("CLASS_COUNT",3);
+	  cluster.SetDoubleParam("ATTDIM", DocAtt.dim.GetCount());
+	  cluster.CaculModel();
+	  alert("2");
+	  var model=cluster.GetResultModel();
+	  const chid = "@nyapc.com/XPCOM/nsColVarGenerator;1";
+	  var gen = Components.classes[chid].createInstance();
+	  gen = gen.QueryInterface(Components.interfaces.nsIVarGenerator);
+	  gen.SetModel(model);
+	  gen.GenVar();
+	  alert("3");
+	  var boxpath=gen.GetVar("box");
+	  alert(boxpath);
+	  boxpath=gen.GetVar("sub");
+	  alert(boxpath);
+     }
+     DocAtt=null;
+     curIndex=0;
+}
+
+function updatejob() {
+     var result = document.getElementById("result_list");
+     if(result.selectedItem==null)
+	  alert("You must select a job!");
+     else
+     {
+	  var item=result.selectedItem;
+	  var cells=item.getElementsByTagName("listcell");
+	  var jobid=cells[0].getAttribute("label");
+	  alert(jobid);
+	  const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+	  var obj = Components.classes[cid].createInstance();
+	  obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+	  
+	  var address = document.getElementById("jobAddress");
+	  obj.SetAddress(address.value);
+	  var ret= obj.updateJob(jobid);
+     }
+}
+function removeclassitem(list,class)
+{
+     var cells = list.getElementsByClassName(class);
+     var len=cells.length;
+     for (var i = 0; i < len; i++) { 
+	  list.removeChild(cells[0]);
+     }
+
+}
+function appendurl(url,uid){
+     var result = document.getElementById("url_list");
+     var item =document.createElement("listitem");
+     item.setAttribute("class","Aitem");
+
+     var cell1 =document.createElement("listcell");
+     cell1.setAttribute("label",uid);
+     var cell2 =document.createElement("listcell");
+     cell2.setAttribute("label",url);
+     item.appendChild(cell1);
+     item.appendChild(cell2);
+     result.appendChild(item);
+}
+function appendjob(job){
+     var result = document.getElementById("result_list");
+     var item =document.createElement("listitem");
+     item.setAttribute("class","Aitem");
+
+     var cell1 =document.createElement("listcell");
+     cell1.setAttribute("label",job.id);
+     var cell2 =document.createElement("listcell");
+     cell2.setAttribute("label",job.name);
+     var cell3 =document.createElement("listcell");
+     cell3.setAttribute("label",job.comment);
+     var cell4 =document.createElement("listcell");
+     cell4.setAttribute("label",job.seed);
+     var cell5 =document.createElement("listcell");
+     cell5.setAttribute("label",job.seedType);
+     item.appendChild(cell1);
+     item.appendChild(cell2);
+     item.appendChild(cell4);
+     item.appendChild(cell5);
+     item.appendChild(cell3);
+     result.appendChild(item);
+}
+// function fileload() {
+//      const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+//      var xsltFetcher = Components.classes[cid].createInstance();
+//      xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+//      var filename = document.getElementById("filebar");
+// //     alert(filename.value);
+//      xsltFetcher.OpenXsltFile(filename.value);
+//      var result = document.getElementById("xslt-res");
+//      result.value=xsltFetcher.GetXsltDocStr();
+     
+     
+// }
+function savewrap()
+{
+     const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+     var obj = Components.classes[cid].createInstance();
+     obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+//     alert(obj);
+     var address = document.getElementById("taskAddress");
+     obj.SetAddress(address.value);
+      var wrappid=document.getElementById("Wrap-id");
+     var wrapper=document.getElementById("soap-wrapper");
+     obj.updateWrapper(wrapper.value,wrappid.value);
+}
+function createvarlist()
+{
+     const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+     var xsltFetcher = Components.classes[cid].createInstance();
+     xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+
+     var result = document.getElementById("soap-wrapper");
+
+     if(result.value.length>0)
+	  xsltFetcher.SetXsltDocStr(result.value);
+
+     var len=xsltFetcher.GetVarCount();
+     var varBox = document.getElementById("variable-box");
+     removeclassitem(varBox,"var-list");
+     for(var i=0;i<len;i++)
+     {
+	  var name={};
+	  var value={};
+	  xsltFetcher.GetVarByIndex(i,name,value);	  
+	  create_varbox(name.value,value.value,i);
+     }
+}
+function create_varbox(name,value,index)
+{
+     var varBox = document.getElementById("variable-box");
+     var varList=document.createElement("vbox");
+     varList.setAttribute("class","var-list");
+     var hbox=document.createElement("hbox");
+     var hbox2=document.createElement("hbox");
+     hbox2.setAttribute("height","10");
+
+     var lable1=document.createElement("label");
+     lable1.setAttribute("value","Variable Name:");
+     var lable2=document.createElement("label");
+     lable2.setAttribute("value","Variable Value:");
+
+     var textbox1=document.createElement("textbox");
+     textbox1.setAttribute("id","set-name"+index);
+     textbox1.setAttribute("value",name);
+     textbox1.setAttribute("disabled","true");
+
+     var textbox2=document.createElement("textbox");
+     textbox2.setAttribute("id","set-value"+index);
+     textbox2.setAttribute("value",value);
+     textbox2.setAttribute("flex","1");
+
+     var vbox=document.createElement("vbox");
+     var botton=document.createElement("button");
+     botton.setAttribute("label","Set");
+     botton.setAttribute("id","set-var"+index);
+     botton.setAttribute("oncommand","addvarindex("+index+");");
+
+     hbox.appendChild(lable1);
+     hbox.appendChild(textbox1);
+     hbox.appendChild(lable2);
+     hbox.appendChild(textbox2);
+     vbox.appendChild(botton);
+     hbox.appendChild(vbox);
+     varList.appendChild(hbox);
+     varList.appendChild(hbox2);
+     varBox.appendChild(varList);
+}
+function addvarindex(index) {
+     const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+     var xsltFetcher = Components.classes[cid].createInstance();
+     xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+
+     var wrapper=document.getElementById("soap-wrapper");
+     xsltFetcher.SetXsltDocStr(wrapper.value);
+//     alert(index);
+     var varname = document.getElementById("set-name"+index);
+     var varvalue = document.getElementById("set-value"+index);
+//     alert(varname.value+":"+varvalue.value);
+     xsltFetcher.SetXsltVar(varname.value,varvalue.value);
+     wrapper.value=xsltFetcher.GetXsltDocStr();
+}
+// function addvar() {
+//      const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+//      var xsltFetcher = Components.classes[cid].createInstance();
+//      xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+
+//      var result = document.getElementById("xslt-res");
+
+//      xsltFetcher.SetXsltDocStr(result.value);
+//      var varname = document.getElementById("set-name");
+//      var varvalue = document.getElementById("set-value");
+// //     alert(varname.value+":"+varvalue.value);
+//      xsltFetcher.SetXsltVar(varname.value,varvalue.value);
+//      result.value=xsltFetcher.GetXsltDocStr();
+// }
+// function namechange() {
+//      const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+//      var xsltFetcher = Components.classes[cid].createInstance();
+//      xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+
+//      var result = document.getElementById("xslt-res");
+
+//      xsltFetcher.SetXsltDocStr(result.value);
+
+//      var varname = document.getElementById("set-name");
+//      var varvalue = document.getElementById("set-value");
+//      varvalue.value=xsltFetcher.GetXsltVar(varname.value);
+
+// }
+function setxslt()
+{
+     var wrapperbar = document.getElementById("wrapper");
+     var result = document.getElementById("soap-wrapper");
+     wrapperbar.value=result.value;
+}
+function fetchxsltcom() {
+     const cid = "@nyapc.com/XPCOM/nsXSLTFetcher;1";
+     var xsltFetcher = Components.classes[cid].createInstance();
+     xsltFetcher = xsltFetcher.QueryInterface(Components.interfaces.nsIXSLTFetcher);
+     var resultc = document.getElementById("resultc");
+     resultc.value = "";
+
+     var wrapperbar = document.getElementById("wrapper");
+     var uid=document.getElementById("url-id");
+     
+     var browser = document.getElementById("browser");
+     xsltFetcher.SetXsltDocStr(wrapperbar.value);
+     var doc=browser.contentDocument;
+
+     xsltFetcher.SetDocument(doc);
+
+     xsltFetcher.SetXsltParam("docurl",browser.currentURI.spec);
+     xsltFetcher.SetXsltParam("urlid",uid.value);
+     resultc.value=xsltFetcher.GetResultXML();
+}
+// function fetch_xslt() {
+//      var processor = new XSLTProcessor();
+//      var parser = new DOMParser();
+
+//      var result = document.getElementById("resultc");
+//      result.value="";
+//      var browser = document.getElementById("browser");
+//      var doc=browser.contentDocument;
+
+//      var wrapperbar = document.getElementById("wrapper");
+
+//      var xslt = parser.parseFromString(wrapperbar.value, "text/xml");
+
+//      processor.importStylesheet(xslt);
+
+//      var newDocument = processor.transformToDocument(doc);
+//      var xmlstring = (new XMLSerializer()).serializeToString(newDocument);
+//      result.value=xmlstring;
+// }
+function sendresult()
+{
+     const cid = "@nyapc.com/XPCOM/nsSoapInter;1";
+     var obj = Components.classes[cid].createInstance();
+     obj = obj.QueryInterface(Components.interfaces.nsISoapInter);
+//     alert(obj);
+     var address = document.getElementById("resAddress");
+     var resultc = document.getElementById("resultc");
+
+     obj.SetAddress(address.value);
+     obj.putResult(resultc.value,1);
+}
+function onload() {
+     var urlbar = document.getElementById("urlbar");
+
+     urlbar.value = "http://www.google.com/";
+     listener = new WebProgressListener();
+     
+     var browser = document.getElementById("browser");
+     browser.addProgressListener(listener,
+				 Components.interfaces.nsIWebProgress.NOTIFY_ALL);
+
+     go();
+
+}
+
+addEventListener("load", onload, false);
+
+
+
+/html/body/table/tbody/tr/td[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/div/table/tbody
+

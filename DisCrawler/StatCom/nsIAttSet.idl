@@ -1,0 +1,12 @@
+#include "nsISupports.idl"
+
+interface nsIAttVec;
+[scriptable, uuid(2e4b3c70-d3a8-40be-988d-bee2ac90b9fb)]
+interface nsIAttSet:nsISupports
+{
+     long GetLength();
+     void SetVetor(in long index,in nsIAttVec value);
+     void AppendVector(in nsIAttVec value);
+     void AppendSet(in nsIAttSet set);
+     nsIAttVec GetVectorByIndex(in long index);
+};
