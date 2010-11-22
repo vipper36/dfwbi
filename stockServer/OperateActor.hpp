@@ -24,7 +24,7 @@ protected:
                 parent=message.address;
                 break;
             case AddressMessage::CHILD:
-                childrens.insert(make_pair(message.name,message.address));
+                childrens.insert(std::make_pair(std::string(message.name),message.address));
                 break;
             case AddressMessage::LOG:
                 log=message.address;
@@ -32,7 +32,6 @@ protected:
             default:
                 break;
             }
-            
         }
     std::map<std::string,Theron::Address> childrens;
     Theron::Address parent;

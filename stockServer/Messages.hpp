@@ -3,7 +3,7 @@
 #include <Theron/Address.h>
 #include <boost/assign/list_of.hpp>
 #include "StockPrice.hpp"
-
+#include <boost/shared_ptr.hpp>
 struct AddressMessage
 {
     enum AddType
@@ -13,7 +13,7 @@ struct AddressMessage
         LOG
     };
     AddressMessage(){}
-    AddressMessage(AddType t,std::string n,Theron::Address a):type(t),name(n),address(a)
+    AddressMessage(AddType t,std::string n,Theron::Address a):type(t),address(a),name(n)
         {
         }
     AddType type;          // name of the actor.
@@ -34,8 +34,8 @@ struct OperateMessage
     OperateMessage(OpType t,std::string m):type(t),status(m)
         {
         }
-    OpType type;          // name of the actor.
-    std::string status;         // addres of the actor.
+    OpType type;
+    std::string status;
 };
 struct MapMessage
 {
@@ -51,9 +51,14 @@ struct MapMessage
 };
 struct StockRealMessage
 {
-    StockRealMessage(stock::RealPrice r):rp(r){};
+    StockRealMessage(stock::RealPrice &r){
+        std::stringstream ss;
+        boost::archive::xml_oarchive oa(ss);
+        oa << BOOST_SERIALIZATION_NVP(r);
+        rp=ss.str();
+    };
     StockRealMessage(){};
-    stock::RealPrice rp;
+    std::string rp;
 };
 struct StockKLineMessage
 {

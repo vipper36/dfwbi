@@ -35,9 +35,7 @@ public:
             int sockfd;
             amqp_connection_state_t conn;
 
-            std::stringstream ss;
-            boost::archive::xml_oarchive oa(ss);
-            oa << BOOST_SERIALIZATION_NVP(message.rp);
+            
             
             int port=atoi(attMap["port"].c_str());
             conn = amqp_new_connection();
@@ -68,14 +66,13 @@ public:
                                                0,
                                                0,
                                                &props,
-                                               amqp_cstring_bytes(ss.str().c_str()));
+                                               amqp_cstring_bytes(message.rp.c_str()));
                 }
          
                 amqp_channel_close(conn, 1, AMQP_REPLY_SUCCESS);
                 amqp_connection_close(conn, AMQP_REPLY_SUCCESS);
                 amqp_destroy_connection(conn);
             }
-            
         }
 private:
     std::map<std::string,std::string> attMap;

@@ -55,7 +55,8 @@ public:
                     sstock<<mit->first<<",";
                     mit++;
                 }
-                Send(OperateMessage(OperateMessage::HTTP_GET,sstock.str()), it->second);
+                OperateMessage op(OperateMessage::HTTP_GET,sstock.str());
+                Send(op, it->second);
             }
             m_timer->expires_from_now(boost::posix_time::seconds(5));
             m_timer->async_wait(boost::bind(&StockCollActor::TimerHandler,this,boost::asio::placeholders::error));
