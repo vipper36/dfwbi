@@ -35,6 +35,7 @@ public:
         {
             // Collect the message.
             mMessage = message;
+            std::cout<<message.status<<std::endl;
         }
 
     inline std::string GetStatus() const
@@ -48,11 +49,10 @@ private:
 };
 void GetStatus(std::list<std::pair<std::string,Theron::ActorRef> > actList,Theron::Receiver *receiver,StatusCollector *statusCollector,boost::asio::deadline_timer* timer,const boost::system::error_code& error)
 {
+    std::cout<<"Send status message...."<<std::endl;
     for(std::list<std::pair<std::string,Theron::ActorRef> >::iterator it=actList.begin();it!=actList.end();++it)
     {
         it->second.Push(OperateMessage(OperateMessage::STATUS,""),receiver->GetAddress());
-        receiver->Wait();
-        std::cout<<it->first<<":"<<statusCollector->GetStatus()<<std::endl;
     }
     timer->expires_from_now(boost::posix_time::seconds(5));
     timer->async_wait(boost::bind(GetStatus,actList,receiver,statusCollector,timer,error));
@@ -219,7 +219,7 @@ int main(int argc,char**argv)
                     const xmlpp::Node::NodeList msgNode = (*mit)->get_children(Glib::ustring("MsgHandle"));
                     if(colNode.size()>0)
                     {
-                        const xmlpp::Node* hNode=*colNode.begin();
+                        const xmlpp::Node* hNode=*msgNode.begin();
                         const xmlpp::Node::NodeList mapNode = hNode->get_children(Glib::ustring("Msg"));
                         for(xmlpp::Node::NodeList::const_iterator hit=mapNode.begin();hit!=mapNode.end();++hit)
                         {
@@ -233,6 +233,7 @@ int main(int argc,char**argv)
                             }
                         }
                     }
+                    std::cout<<"msg:"<<msgMap.size()<<std::endl;
                     manActor.Push(MapMessage(MapMessage::MSG,msgMap),receiver.GetAddress());
                 }
                 const xmlpp::Node::NodeList logNode = (*it)->get_children(Glib::ustring("Log"));

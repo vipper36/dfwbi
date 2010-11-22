@@ -1,7 +1,8 @@
-BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread
+BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization
 BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
 XMLLIB=-lxml++-2.6 -licuuc
 LIBCUTL=-lcurl
+LIBMQ=-lrabbitmq
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -25,7 +26,7 @@ all: $(DESC)
 	@echo $@ update to date
 stock:$(BOOSTOBJ)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
 clean:
 	@-rm $(DESC)
 	@-rm -fr *.o *.a *~ "*#"

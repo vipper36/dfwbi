@@ -50,7 +50,7 @@ namespace Factory
                 associations_.clear();
             }
     
-        Factory():m_framework()
+        Factory():m_framework(20)
             {
             }
     private:

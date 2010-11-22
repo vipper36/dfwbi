@@ -3,13 +3,13 @@
   <SysServer>
     <Manager type="MainManagerActor" name="main">
       <ActorCollection type="StockCollActor" name="stock-collection"
-		       count="1" file="sz1.csv" marcket="sz">
+		       count="10" file="sz.csv" marcket="sz">
 	<Actor type="HttpActor">
 	</Actor>
       </ActorCollection>
 
       <ActorCollection type="RingCollActor" count="2" name="mq-collection">
-	<Actor type="MqActor">
+	<Actor type="MqActor" host="localhost" port="5672" exchange="stockreal.amqp" key="stockreal">
 	</Actor>
       </ActorCollection>
       <MsgHandle>

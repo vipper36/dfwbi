@@ -11,8 +11,9 @@ class StockCollActor : public OperateActor
 {
 public:
 
-    inline StockCollActor():OperateActor(),io()
+    inline StockCollActor():OperateActor()
         {
+            RegisterHandler(this, &StockCollActor::StockRealHandler);
             Factory::TimerFactory *tFactory=Factory::TimerFactory::Instance();
             m_timer=tFactory->CreateTimer();
             m_timer->expires_from_now(boost::posix_time::seconds(5));
@@ -20,6 +21,7 @@ public:
         }
     inline void TimerHandler(const boost::system::error_code& error)
         {
+            std::cout<<"Send http message...."<<std::endl;
             if(stockMap.size()==0)
             {
                 std::string file=attMap["file"];
@@ -72,10 +74,13 @@ public:
                 attMap=message.map;
             }
         }
+    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+        {
+            Send(message, parent);
+        }
 private:
     std::map<std::string,std::string> stockMap;
     std::map<std::string,std::string> attMap;
-    boost::asio::io_service io;
     boost::asio::deadline_timer* m_timer;
     bool startd;
 }; 

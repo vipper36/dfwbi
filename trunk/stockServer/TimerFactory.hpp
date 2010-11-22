@@ -37,7 +37,7 @@ namespace Factory
             {
             }
     
-        TimerFactory():io()
+        TimerFactory():io(10)
             {
             }
     private:
