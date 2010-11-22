@@ -1,43 +1,9 @@
 #ifndef __MESSAGES_H__
 #define __MESSAGES_H__
 #include <Theron/Address.h>
-struct RealPrice
-{
-    std::string marcket;
-    std::string code;
-    std::string stockName;
-    double open;
-    double lclose;
-    double close;
-    double high;
-    double low;
-    double buyPrice;
-    double sellPrice;
-    int volum;
-    double money;
-    int buy1Ask;
-    double buy1Price;
-    int buy2Ask;
-    double buy2Price;
-    int buy3Ask;
-    double buy3Price;
-    int buy4Ask;
-    double buy4Price;
-    int buy5Ask;
-    double buy5Price;
-    int sell1Ask;
-    double sell1Price;
-    int sell2Ask;
-    double sell2Price;
-    int sell3Ask;
-    double sell3Price;
-    int sell4Ask;
-    double sell4Price;
-    int sell5Ask;
-    double sell5Price;
-    std::string date;
-    std::string time;
-};
+#include <boost/assign/list_of.hpp>
+#include "StockPrice.hpp"
+
 struct AddressMessage
 {
     enum AddType
@@ -85,6 +51,9 @@ struct MapMessage
 };
 struct StockRealMessage
 {
+    StockRealMessage(stock::RealPrice r):rp(r){};
+    StockRealMessage(){};
+    stock::RealPrice rp;
 };
 struct StockKLineMessage
 {
