@@ -12,7 +12,7 @@
 #include "MainManagerActor.hpp"
 #include "MqActor.hpp"
 #include "RingCollActor.hpp"
-#include "SimpleCollActor.hpp"
+
 #include "HttpActor.hpp"
 #include <Theron/Receiver.h>
 #include "Messages.hpp"
@@ -23,7 +23,6 @@ void RegActor(Factory::Factory *factory)
     factory->Register<MainManagerActor>("MainManagerActor");
     factory->Register<MqActor>("MqActor");
     factory->Register<RingCollActor>("RingCollActor");
-    factory->Register<SimpleCollActor>("SimpleCollActor");
     factory->Register<StockCollActor>("StockCollActor");
     factory->Register<HttpActor>("HttpActor");
 }
@@ -34,18 +33,18 @@ public:
     inline void Handler(const OperateMessage &message, const Theron::Address /*from*/)
         {
             // Collect the message.
-            mMessage = message;
+            mMessage = std::string(message.status);
             std::cout<<message.status<<std::endl;
         }
 
     inline std::string GetStatus() const
         {
-            return mMessage.status;
+            return mMessage;
         }
 
 private:
 
-    OperateMessage mMessage;
+    std::string mMessage;
 };
 void GetStatus(std::list<std::pair<std::string,Theron::ActorRef> > actList,Theron::Receiver *receiver,StatusCollector *statusCollector,boost::asio::deadline_timer* timer,const boost::system::error_code& error)
 {
@@ -110,7 +109,7 @@ int main(int argc,char**argv)
                     std::string manName;
                     std::string manType;
                     const xmlpp::Element* manElement = dynamic_cast<const xmlpp::Element*>(*mit);
-                    MapMessage manmsg;
+                    std::map<std::string,std::string> manAttMap;
                     if(manElement!=NULL)
                     {
                         xmlpp::Element::AttributeList attList=manElement->get_attributes();
@@ -126,13 +125,13 @@ int main(int argc,char**argv)
                             {
                                 manName=std::string(aValue.c_str());
                             }
-                            manmsg.map.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
+                            manAttMap.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
                         }
                     }
                     if(manName.length()==0)
                         manName=manType;
                     Theron::ActorRef manActor=factory->CreateActor(manType);
-                    manActor.Push(manmsg,receiver.GetAddress());
+                    manActor.Push(MapMessage(MapMessage::ATTR,manAttMap),receiver.GetAddress());
                     actList.push_back(make_pair(manName,manActor));
                     //finish init manager actor.
 
@@ -143,7 +142,7 @@ int main(int argc,char**argv)
                         std::string colType;
                         int count=0;
                         const xmlpp::Element* colElement = dynamic_cast<const xmlpp::Element*>(*cit);
-                        MapMessage colmsg;
+                        std::map<std::string,std::string> colAttMap;
                         if(colElement!=NULL)
                         {
                             xmlpp::Element::AttributeList attList=colElement->get_attributes();
@@ -163,13 +162,13 @@ int main(int argc,char**argv)
                                 {
                                     count=atoi(aValue.c_str());
                                 }
-                                colmsg.map.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
+                                colAttMap.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
                             }
                         }
                         if(colName.length()==0)
                             colName=colType;
                         Theron::ActorRef colActor=factory->CreateActor(colType);
-                        colActor.Push(colmsg,receiver.GetAddress());
+                        colActor.Push(MapMessage(MapMessage::ATTR,colAttMap),receiver.GetAddress());
                         manActor.Push(AddressMessage(AddressMessage::CHILD,colName,colActor.GetAddress()),receiver.GetAddress());
                         colActor.Push(AddressMessage(AddressMessage::PARENT,"",manActor.GetAddress()),receiver.GetAddress());
                         actList.push_back(make_pair(colName,colActor));
@@ -181,7 +180,8 @@ int main(int argc,char**argv)
                             std::string actName;
                             std::string actType;
                             const xmlpp::Element* actElement = dynamic_cast<const xmlpp::Element*>(*ait);
-                            MapMessage actmsg;
+
+                            std::map<std::string,std::string> actAttMap;
                             if(actElement!=NULL)
                             {
                                 xmlpp::Element::AttributeList attList=actElement->get_attributes();
@@ -197,7 +197,7 @@ int main(int argc,char**argv)
                                     {
                                         actName=std::string(aValue.c_str());
                                     }
-                                    actmsg.map.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
+                                    actAttMap.insert(make_pair(std::string(aName.c_str()),std::string(aValue.c_str())));
                                 }
                             }
                             if(actName.length()==0)
@@ -210,7 +210,7 @@ int main(int argc,char**argv)
                                 actList.push_back(make_pair(ss.str(),actorTmp));
                                 colActor.Push(AddressMessage(AddressMessage::CHILD,ss.str(),actorTmp.GetAddress()),receiver.GetAddress());
                                 actorTmp.Push(AddressMessage(AddressMessage::PARENT,"",colActor.GetAddress()),receiver.GetAddress());
-                                actorTmp.Push(actmsg,receiver.GetAddress());
+                                actorTmp.Push(MapMessage(MapMessage::ATTR,actAttMap),receiver.GetAddress());
                             }
                         }
                     }
