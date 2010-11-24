@@ -83,6 +83,5 @@ private:
     std::map<std::string,std::string> stockMap;
     std::map<std::string,std::string> attMap;
     boost::asio::deadline_timer* m_timer;
-    bool startd;
 }; 
 #endif

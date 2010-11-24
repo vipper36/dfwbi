@@ -12,8 +12,12 @@
 #include "MainManagerActor.hpp"
 #include "MqActor.hpp"
 #include "RingCollActor.hpp"
+#include "MqListenActor.hpp"
+#include "SimpleCollActor.hpp"
 
 #include "HttpActor.hpp"
+#include "RealActor.hpp"
+
 #include <Theron/Receiver.h>
 #include "Messages.hpp"
 #include "StockCollActor.hpp"
@@ -25,6 +29,9 @@ void RegActor(Factory::Factory *factory)
     factory->Register<RingCollActor>("RingCollActor");
     factory->Register<StockCollActor>("StockCollActor");
     factory->Register<HttpActor>("HttpActor");
+    factory->Register<MqListenActor>("MqListenActor");
+    factory->Register<SimpleCollActor>("SimpleCollActor");
+    factory->Register<RealActor>("RealActor");
 }
 class StatusCollector
 {
@@ -233,7 +240,7 @@ int main(int argc,char**argv)
                             }
                         }
                     }
-                    std::cout<<"msg:"<<msgMap.size()<<std::endl;
+
                     manActor.Push(MapMessage(MapMessage::MSG,msgMap),receiver.GetAddress());
                 }
                 const xmlpp::Node::NodeList logNode = (*it)->get_children(Glib::ustring("Log"));

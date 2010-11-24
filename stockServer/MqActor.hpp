@@ -35,6 +35,11 @@ public:
             int sockfd;
             amqp_connection_state_t conn;
 
+            stock::RealPrice stock=*message.rp;
+            delete message.rp;
+            std::stringstream ss;
+            boost::archive::xml_oarchive oa(ss);
+            oa << BOOST_SERIALIZATION_NVP(stock);
             
             
             int port=atoi(attMap["port"].c_str());
@@ -53,7 +58,7 @@ public:
                 amqp_channel_open(conn, 1);
 
                 amqp_rpc_reply_t rpcRep=amqp_get_rpc_reply(conn);
-                if(logRep.reply_type==AMQP_RESPONSE_NORMAL)
+                if(rpcRep.reply_type==AMQP_RESPONSE_NORMAL)
                 {
                     amqp_basic_properties_t props;
                     props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
@@ -66,7 +71,7 @@ public:
                                                0,
                                                0,
                                                &props,
-                                               amqp_cstring_bytes(message.rp.c_str()));
+                                               amqp_cstring_bytes(ss.str().c_str()));
                 }
          
                 amqp_channel_close(conn, 1, AMQP_REPLY_SUCCESS);
