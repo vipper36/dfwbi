@@ -4,6 +4,7 @@
 #include <boost/assign/list_of.hpp>
 #include "StockPrice.hpp"
 #include <boost/shared_ptr.hpp>
+#define MAX_LEN 40960
 struct AddressMessage
 {
     enum AddType
@@ -13,11 +14,13 @@ struct AddressMessage
         LOG
     };
     AddressMessage(){}
-    AddressMessage(AddType t,std::string n,Theron::Address a):type(t),address(a),name(n)
+    AddressMessage(AddType t,std::string n,Theron::Address a):type(t),address(a)
         {
+            memset(name,0,sizeof(name));
+            strcpy(name,n.c_str());
         }
     AddType type;          // name of the actor.
-    std::string name;
+    char name[1024];
     Theron::Address address;         // addres of the actor.
 };
 struct OperateMessage
@@ -31,11 +34,13 @@ struct OperateMessage
         RESP
     };
     OperateMessage(){}
-    OperateMessage(OpType t,std::string m):type(t),status(m)
+    OperateMessage(OpType t,std::string m):type(t)
         {
+            memset(status,0,sizeof(status));
+            strcpy(status,m.c_str());
         }
     OpType type;
-    std::string status;
+    char status[4096];
 };
 struct MapMessage
 {
@@ -49,16 +54,15 @@ struct MapMessage
     MapType type;
     std::map<std::string,std::string> map;
 };
+//复杂对象使用指针构建消息。
+//对象在创建时手动分配空间，在消费完成后手动销毁！！！
 struct StockRealMessage
 {
-    StockRealMessage(stock::RealPrice &r){
-        std::stringstream ss;
-        boost::archive::xml_oarchive oa(ss);
-        oa << BOOST_SERIALIZATION_NVP(r);
-        rp=ss.str();
+    StockRealMessage(stock::RealPrice *r):rp(r){
+        
     };
     StockRealMessage(){};
-    std::string rp;
+    stock::RealPrice *rp;
 };
 struct StockKLineMessage
 {
