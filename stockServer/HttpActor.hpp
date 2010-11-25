@@ -10,7 +10,7 @@
 #include "OperateActor.hpp"
 #include "StockPrice.hpp"
 
-size_t write_string(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
+static size_t yahoo_write(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
 {
     stream->write((char*)ptr,size*nmemb);
     return size*nmemb;
@@ -42,7 +42,7 @@ public:
 
                     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
                     curl_easy_setopt(curl, CURLOPT_WRITEDATA,&ss);
-                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_string);
+                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, yahoo_write);
 
                     CURLcode res = curl_easy_perform(curl);
                     
@@ -60,7 +60,8 @@ public:
                         std::size_t equPos=lineCon.rfind("=\"");
                         std::size_t endPos=lineCon.rfind("\";");
                         
-                        stock::RealPrice *rp=new stock::RealPrice();
+                        stock::StockPrice *rp=new stock::StockPrice();
+                        rp->type=stock::REAL;
                         if(startpPos!=std::string::npos&&endPos!=std::string::npos)
                         {
                             startpPos+=7;
@@ -94,8 +95,8 @@ public:
                                     //timestr>>rp.time;
                                     rp->time=boost::posix_time::time_from_string(timestr.str());
                                 }
-                                StockRealMessage stockprice(rp);
-                                Send(stockprice, parent);
+                                StockMessage stockprice(rp);
+                                Send(stockprice, from);
                             }                            
                         }
                     }

@@ -10,8 +10,10 @@ LINK=ld
 CFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 DESC=stock
+DESC2=stockonce
 INCLUDE=$(BOOSTINC)
 BOOSTOBJ= main.o   
+BOOSTOBJ2= mainonce.o   
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -22,9 +24,12 @@ BOOSTOBJ= main.o
 	@echo Compiling cc program $< ......
 	@echo c to o
 	$(CXX) $(CFLAGS) $(INCLUDE)  -c $<
-all: $(DESC)
+all: $(DESC) $(DESC2)
 	@echo $@ update to date
-stock:$(BOOSTOBJ)
+$(DESC):$(BOOSTOBJ)
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
+$(DESC2):$(BOOSTOBJ2)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
 clean:

@@ -13,7 +13,8 @@ public:
 
     inline RealActor():OperateActor()
         {
-            RegisterHandler(this, &RealActor::StockRealHandler);
+            RegisterHandler(this, &RealActor::StockHandler);
+            RegisterHandler(this, &RealActor::PriceReqHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -29,16 +30,50 @@ public:
                 attMap=message.map;
             }
         }
-    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+    void StockHandler(const StockMessage &message, const Theron::Address from)
         {
-            stock::RealPrice stock=*message.rp;
+            stock::StockPrice stock=*message.rp;
             delete message.rp;
-            std::stringstream ss;
-            boost::archive::xml_oarchive oa(ss);
-            oa << BOOST_SERIALIZATION_NVP(stock);
-            std::cout<<ss.str()<<std::endl;
+            if(attMap.size()>0)
+            {
+                if(stock.marcket==attMap["marcket"]&&stock.code==attMap["code"])
+                {
+                    priceMap.insert(std::make_pair(stock.time,stock));
+                    std::cout<<stock.stockName<<std::endl;
+                }
+            }
+        }
+    void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
+        {
+            if(attMap.size()>0)
+            {
+                if(message.req->marcket==attMap["marcket"]&&message.req->code==attMap["code"])
+                {
+                    stock::StockPriceList *sl=new stock::StockPriceList();
+                    sl->type=message.req->type;
+                    sl->marcket=message.req->marcket;
+                    sl->code=message.req->code;
+                    for(std::map<boost::posix_time::ptime,stock::StockPrice>::iterator it=priceMap.begin();it!=priceMap.end();it++)
+                    {
+                        if(it->first<message.req->from)
+                        {
+                            continue;
+                        }
+                        else if(it->first<message.req->to)
+                        {
+                            sl->priceList.push_back(it->second);
+                        }
+                        else
+                            break;
+                    }
+                    Send(PriceResMessage(sl), from);
+                    
+                }
+            }
+            delete message.req;
         }
 private:
     std::map<std::string,std::string> attMap;
+    std::map<boost::posix_time::ptime,stock::StockPrice> priceMap;
 }; 
 #endif

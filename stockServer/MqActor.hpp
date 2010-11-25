@@ -17,7 +17,7 @@ public:
 
     inline MqActor()
         {
-            RegisterHandler(this, &MqActor::StockRealHandler);
+            RegisterHandler(this, &MqActor::StockHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -30,12 +30,12 @@ public:
                 attMap=message.map;
             }
         }
-    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+    void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             int sockfd;
             amqp_connection_state_t conn;
 
-            stock::RealPrice stock=*message.rp;
+            stock::StockPrice stock=*message.rp;
             delete message.rp;
             std::stringstream ss;
             boost::archive::xml_oarchive oa(ss);

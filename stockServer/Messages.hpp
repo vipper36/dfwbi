@@ -28,6 +28,7 @@ struct OperateMessage
     enum OpType
     {
         STATUS,
+        SET,
         HTTP_GET,
         MQ_GET,
         MQ_PUT,
@@ -56,15 +57,28 @@ struct MapMessage
 };
 //复杂对象使用指针构建消息。
 //对象在创建时手动分配空间，在消费完成后手动销毁！！！
-struct StockRealMessage
+struct StockMessage
 {
-    StockRealMessage(stock::RealPrice *r):rp(r){
+    StockMessage(stock::StockPrice *r):rp(r){
         
     };
-    StockRealMessage(){};
-    stock::RealPrice *rp;
+    StockMessage(){};
+    stock::StockPrice *rp;
 };
-struct StockKLineMessage
+struct PriceReqMessage
 {
+    PriceReqMessage(stock::PriceReq *r):req(r){
+        
+    };
+    PriceReqMessage(){};
+    stock::PriceReq *req;
+};
+struct PriceResMessage
+{
+    PriceResMessage(stock::StockPriceList *r):list(r){
+        
+    };
+    PriceResMessage(){};
+    stock::StockPriceList *list;
 };
 #endif

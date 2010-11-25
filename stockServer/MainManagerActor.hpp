@@ -10,7 +10,7 @@ public:
 
     inline MainManagerActor()
         {
-            RegisterHandler(this, &MainManagerActor::StockRealHandler);
+            RegisterHandler(this, &MainManagerActor::StockHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -23,9 +23,9 @@ public:
                 msgMap=message.map;
             }
         }
-    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+    void StockHandler(const StockMessage &message, const Theron::Address from)
         {
-            std::map<std::string,std::string>::iterator fit=msgMap.find("StockRealMessage");
+            std::map<std::string,std::string>::iterator fit=msgMap.find("StockMessage");
             if(fit!=msgMap.end())
             {
                 Send(message,childrens[fit->second]);
