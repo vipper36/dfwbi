@@ -13,7 +13,7 @@ public:
 
     inline StockCollActor():OperateActor()
         {
-            RegisterHandler(this, &StockCollActor::StockRealHandler);
+            RegisterHandler(this, &StockCollActor::StockHandler);
             Factory::TimerFactory *tFactory=Factory::TimerFactory::Instance();
             m_timer=tFactory->CreateTimer();
             m_timer->expires_from_now(boost::posix_time::seconds(5));
@@ -43,7 +43,7 @@ public:
                     }
                 }
             }            
-            std::map<Theron::Address,std::string> actMap;
+
             std::map<std::string,std::string>::iterator mit=stockMap.begin();
             int count=ceil(double(stockMap.size())/childrens.size());
 
@@ -75,7 +75,7 @@ public:
                 attMap=message.map;
             }
         }
-    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+    void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }

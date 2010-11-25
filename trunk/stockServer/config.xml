@@ -3,7 +3,7 @@
   <SysServer>
     <Manager type="MainManagerActor" name="main">
       <ActorCollection type="StockCollActor" name="stock-collection"
-		       count="10" file="sz.csv" marcket="sz">
+		       count="10" file="ss.csv" marcket="sh">
 	<Actor type="HttpActor">
 	</Actor>
       </ActorCollection>
@@ -13,7 +13,7 @@
 	</Actor>
       </ActorCollection>
       <MsgHandle>
-	<Msg name="StockRealMessage">mq-collection</Msg>
+	<Msg name="StockMessage">mq-collection</Msg>
       </MsgHandle>
     </Manager>
     <Log path="stock.log"/>

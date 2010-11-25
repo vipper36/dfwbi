@@ -123,11 +123,11 @@ public:
                     ss.write((const char*)frame.payload.body_fragment.bytes,
                              frame.payload.body_fragment.len);
                 }
-                stock::RealPrice *stock=new stock::RealPrice();
+                stock::StockPrice *stock=new stock::StockPrice();
                 boost::archive::xml_iarchive ia(ss);
                 ia >> BOOST_SERIALIZATION_NVP(*stock);
                 
-                StockRealMessage stockprice(stock);
+                StockMessage stockprice(stock);
                 Send(stockprice, parent);
             }
          

@@ -13,7 +13,7 @@ public:
 
     inline SimpleCollActor():OperateActor()
         {
-            RegisterHandler(this, &SimpleCollActor::StockRealHandler);
+            RegisterHandler(this, &SimpleCollActor::StockHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -29,7 +29,7 @@ public:
                 attMap=message.map;
             }
         }
-    void StockRealHandler(const StockRealMessage &message, const Theron::Address from)
+    void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }

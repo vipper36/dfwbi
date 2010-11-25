@@ -14,10 +14,12 @@
 #include "RingCollActor.hpp"
 #include "MqListenActor.hpp"
 #include "SimpleCollActor.hpp"
-
+#include "DynamicCollActor.hpp"
 #include "HttpActor.hpp"
 #include "RealActor.hpp"
-
+#include "ReqListenActor.hpp"
+#include "YahooActor.hpp"
+#include "YahooCollActor.hpp"
 #include <Theron/Receiver.h>
 #include "Messages.hpp"
 #include "StockCollActor.hpp"
@@ -32,6 +34,10 @@ void RegActor(Factory::Factory *factory)
     factory->Register<MqListenActor>("MqListenActor");
     factory->Register<SimpleCollActor>("SimpleCollActor");
     factory->Register<RealActor>("RealActor");
+    factory->Register<DynamicCollActor>("DynamicCollActor");
+    factory->Register<ReqListenActor>("ReqListenActor");
+    factory->Register<YahooActor>("YahooActor");
+    factory->Register<YahooCollActor>("YahooCollActor");
 }
 class StatusCollector
 {
