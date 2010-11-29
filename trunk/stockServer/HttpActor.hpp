@@ -29,7 +29,7 @@ public:
             {
             case OperateMessage::STATUS:
                 std::cout<<"get status...."<<std::endl;
-                Send(OperateMessage(OperateMessage::RESP,"ok"), from);
+                Send(OperateMessage(OperateMessage::RESP,"HttpActor ok"), from);
                 break;
             case OperateMessage::HTTP_GET:
             {

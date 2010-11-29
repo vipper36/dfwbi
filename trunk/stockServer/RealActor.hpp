@@ -18,9 +18,12 @@ public:
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
-            if(message.type==OperateMessage::STATUS)
+            switch(message.type)
             {
-                Send(OperateMessage(OperateMessage::RESP,"ok"), from);
+            case OperateMessage::STATUS:
+                Send(OperateMessage(OperateMessage::RESP,"RealActor ok"), from);
+            default:
+                break;
             }
         }
     void MapHandler(const MapMessage &message, const Theron::Address from)
@@ -38,22 +41,55 @@ public:
             {
                 if(stock.marcket==attMap["marcket"]&&stock.code==attMap["code"])
                 {
-                    priceMap.insert(std::make_pair(stock.time,stock));
                     std::cout<<stock.stockName<<std::endl;
+                    switch(stock.type)
+                    {
+                    case stock::REAL:
+                        RealMap.insert(std::make_pair(stock.time,stock));
+                        break;
+                    case stock::M1:
+                        M1Map.insert(std::make_pair(stock.time,stock));
+                        break;
+                    case stock::DAY:
+                        DayMap.insert(std::make_pair(stock.time,stock));
+                        break;
+                    default:
+                        break;
+                    }
                 }
             }
         }
     void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
         {
+            std::cout<<"RealActor:"<<message.req->code<<":"<<RealMap.size()<<":"<<M1Map.size()<<":"<<DayMap.size()<<std::endl;
             if(attMap.size()>0)
             {
                 if(message.req->marcket==attMap["marcket"]&&message.req->code==attMap["code"])
                 {
+                    std::map<boost::posix_time::ptime,stock::StockPrice>::iterator begin;
+                    std::map<boost::posix_time::ptime,stock::StockPrice>::iterator end;
+                    switch(message.req->type)
+                    {
+                    case stock::REAL:
+                        begin=RealMap.begin();
+                        end=RealMap.end();
+                        break;
+                    case stock::M1:
+                        begin=M1Map.begin();
+                        end=M1Map.end();
+                        break;
+                    case stock::DAY:
+                        begin=DayMap.begin();
+                        end=DayMap.end();
+                        break;
+                    default:
+                        break;
+                    }
                     stock::StockPriceList *sl=new stock::StockPriceList();
                     sl->type=message.req->type;
                     sl->marcket=message.req->marcket;
                     sl->code=message.req->code;
-                    for(std::map<boost::posix_time::ptime,stock::StockPrice>::iterator it=priceMap.begin();it!=priceMap.end();it++)
+                    for(std::map<boost::posix_time::ptime,stock::StockPrice>::iterator it=begin;it!=end;it++)
                     {
                         if(it->first<message.req->from)
                         {
@@ -66,7 +102,8 @@ public:
                         else
                             break;
                     }
-                    Send(PriceResMessage(sl), from);
+                    std::cout<<"send....."<<std::endl;
+                    Send(PriceResMessage(sl,message.resKey), from);
                     
                 }
             }
@@ -74,6 +111,8 @@ public:
         }
 private:
     std::map<std::string,std::string> attMap;
-    std::map<boost::posix_time::ptime,stock::StockPrice> priceMap;
+    std::map<boost::posix_time::ptime,stock::StockPrice> RealMap;
+    std::map<boost::posix_time::ptime,stock::StockPrice> M1Map;
+    std::map<boost::posix_time::ptime,stock::StockPrice> DayMap;
 }; 
 #endif

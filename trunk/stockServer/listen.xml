@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="MainManagerActor" name="main">
+      
+      <ActorCollection type="SimpleCollActor" name="listen-collection"
+		       count="1">
+	<Actor type="MqListenActor" host="localhost" port="5672" exchange="stockday.amqp" key="sh.*">
+	</Actor>
+	<Actor type="MqListenActor" host="localhost" port="5672" exchange="stockday.amqp" key="sz.*">
+	</Actor>
+	<Actor type="MqListenActor" host="localhost" port="5672" exchange="stockreal.amqp" key="sh.*">
+	</Actor>
+	<Actor type="MqListenActor" host="localhost" port="5672" exchange="stockreal.amqp" key="sz.*">
+	</Actor>
+	<Actor type="ReqListenActor" host="localhost" port="5672" exchange="stockreq.amqp" key="*.*">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="DynamicCollActor" name="cal-collection" subType="RealActor">
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="2" name="mq-collection">
+	<Actor type="MqActor" host="localhost" port="5672" exchange="">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="StockMessage">cal-collection</Msg>
+	<Msg name="PriceReqMessage">cal-collection</Msg>
+	<Msg name="PriceResMessage">mq-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>

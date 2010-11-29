@@ -1,0 +1,7 @@
+useDynLib(Rabbir)
+
+export(RabbirRpc
+)
+
+#importFrom( utils, capture.output )
+

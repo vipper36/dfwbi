@@ -39,52 +39,19 @@ void RegActor(Factory::Factory *factory)
     factory->Register<YahooActor>("YahooActor");
     factory->Register<YahooCollActor>("YahooCollActor");
 }
-class StatusCollector
-{
-public:
 
-    inline void Handler(const OperateMessage &message, const Theron::Address /*from*/)
-        {
-            // Collect the message.
-            mMessage = std::string(message.status);
-            std::cout<<message.status<<std::endl;
-        }
 
-    inline std::string GetStatus() const
-        {
-            return mMessage;
-        }
-
-private:
-
-    std::string mMessage;
-};
-void GetStatus(Theron::ActorRef *man,Theron::Receiver *receiver,boost::asio::deadline_timer* timer,const boost::system::error_code& error)
-{
-    std::cout<<"Send status message...."<<std::endl;
-
-    man->Push(OperateMessage(OperateMessage::STATUS,""),receiver->GetAddress());
-
-    timer->expires_from_now(boost::posix_time::seconds(5));
-    timer->async_wait(boost::bind(GetStatus,man,receiver,timer,error));
-}
 int main(int argc,char**argv)
 {
 
     //Init Actor Factory 
-    Factory::TimerFactory *tFactory=Factory::TimerFactory::Instance();
     Factory::Factory *factory=Factory::Factory::Instance();
+    Factory::TimerFactory *tFactory=Factory::TimerFactory::Instance();
     RegActor(factory);
-    boost::asio::deadline_timer* timer=tFactory->CreateTimer();
 
-    //Create Recieser and set the message handler.
     Theron::Receiver receiver;
-    StatusCollector statusCollector;
-    receiver.RegisterHandler(&statusCollector, &StatusCollector::Handler);
-
     //Store all the actors in this list
     std::list<std::pair<std::string,Theron::ActorRef> > actList;
-    Theron::ActorRef manActor;
 
     std::string configFile("config.xml");
     po::options_description desc("Allowed options");
@@ -109,7 +76,6 @@ int main(int argc,char**argv)
         xmlpp::DomParser parser;
         parser.set_substitute_entities(); 
         parser.parse_file(configFile);
-
         if(parser)
         {
             const xmlpp::Node* pNode = parser.get_document()->get_root_node();
@@ -143,7 +109,7 @@ int main(int argc,char**argv)
                     }
                     if(manName.length()==0)
                         manName=manType;
-                    manActor=factory->CreateActor(manType);
+                    Theron::ActorRef manActor=factory->CreateActor(manType);
                     manActor.Push(MapMessage(MapMessage::ATTR,manAttMap),receiver.GetAddress());
                     manActor.Push(AddressMessage(AddressMessage::PARENT,"",receiver.GetAddress()),receiver.GetAddress());
                     actList.push_back(make_pair(manName,manActor));
@@ -263,10 +229,7 @@ int main(int argc,char**argv)
     {
         std::cout << "Exception caught: " << ex.what() << std::endl;
     }
-    //async send status message to all actor!!
-    timer->expires_from_now(boost::posix_time::seconds(5));
-    timer->async_wait(boost::bind(GetStatus,&manActor,&receiver,timer,boost::asio::placeholders::error));
-    
+
     tFactory->Run();
     //Clear actor list and destroy actor factory.
     actList.clear();

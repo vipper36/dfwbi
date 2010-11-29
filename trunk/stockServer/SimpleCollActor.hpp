@@ -14,12 +14,24 @@ public:
     inline SimpleCollActor():OperateActor()
         {
             RegisterHandler(this, &SimpleCollActor::StockHandler);
+            RegisterHandler(this, &SimpleCollActor::PriceReqHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
-            if(message.type==OperateMessage::STATUS)
+            switch(message.type)
             {
-                Send(OperateMessage(OperateMessage::RESP,"ok"), from);
+            case OperateMessage::STATUS:
+                Send(OperateMessage(OperateMessage::RESP,"SimpleCollActor ok"), from);
+                for(std::map<std::string,Theron::Address>::iterator it=childrens.begin();it!=childrens.end();++it)
+                {
+                    Send(message, it->second);
+                }
+                break;
+            case OperateMessage::RESP:
+                Send(message, parent);
+                break;
+            default:
+                break;
             }
         }
     void MapHandler(const MapMessage &message, const Theron::Address from)
@@ -31,6 +43,11 @@ public:
         }
     void StockHandler(const StockMessage &message, const Theron::Address from)
         {
+            Send(message, parent);
+        }
+    void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
+        {
+            std::cout<<"SimpleCollActor"<<message.req->code<<std::endl;
             Send(message, parent);
         }
 private:
