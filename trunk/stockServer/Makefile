@@ -1,5 +1,6 @@
 BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization
 BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
+LOCALINC=-I./stock -I./frame
 XMLLIB=-lxml++-2.6 -licuuc
 LIBCUTL=-lcurl
 LIBMQ=-lrabbitmq
@@ -9,9 +10,9 @@ CXX=g++
 LINK=ld
 CFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
-DESC=stock
+DESC=stockserver
 DESC2=stockonce
-INCLUDE=$(BOOSTINC)
+INCLUDE=$(BOOSTINC) $(LOCALINC)
 BOOSTOBJ= main.o   
 BOOSTOBJ2= mainonce.o   
 .SUFFIXES: .h .cpp .o
