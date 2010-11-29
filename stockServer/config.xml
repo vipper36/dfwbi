@@ -9,7 +9,7 @@
       </ActorCollection>
 
       <ActorCollection type="RingCollActor" count="2" name="mq-collection">
-	<Actor type="MqActor" host="localhost" port="5672" exchange="stockreal.amqp" key="stockreal">
+	<Actor type="MqActor" host="localhost" port="5672" exchange="stockreal.amqp">
 	</Actor>
       </ActorCollection>
       <MsgHandle>

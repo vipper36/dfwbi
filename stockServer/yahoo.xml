@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="MainManagerActor" name="main">
+      <ActorCollection type="YahooCollActor" name="yahoo-collection"
+		       count="10" file="sz.csv" marcket="sz">
+	<Actor type="YahooActor" name="yahoo1">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="YahooCollActor" name="yahoo-collection2"
+		       count="10" file="ss.csv" marcket="sh">
+	<Actor type="YahooActor" name="yahoo2">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="2" name="mq-collection">
+	<Actor type="MqActor" host="localhost" port="5672" exchange="stockday.amqp">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="StockListMessage">mq-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>

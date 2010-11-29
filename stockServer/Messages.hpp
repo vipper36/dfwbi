@@ -65,20 +65,32 @@ struct StockMessage
     StockMessage(){};
     stock::StockPrice *rp;
 };
+struct StockListMessage
+{
+    StockListMessage(stock::StockPriceList *r):list(r){
+        
+    };
+    StockListMessage(){};
+    stock::StockPriceList *list;
+};
 struct PriceReqMessage
 {
-    PriceReqMessage(stock::PriceReq *r):req(r){
-        
+    PriceReqMessage(stock::PriceReq *r,const char *k):req(r){
+        memset(resKey,0,sizeof(resKey));
+        strcpy(resKey,k);
     };
     PriceReqMessage(){};
     stock::PriceReq *req;
+    char resKey[4096];
 };
 struct PriceResMessage
 {
-    PriceResMessage(stock::StockPriceList *r):list(r){
-        
+    PriceResMessage(stock::StockPriceList *r,const char *k):list(r){
+        memset(resKey,0,sizeof(resKey));
+        strcpy(resKey,k);
     };
     PriceResMessage(){};
     stock::StockPriceList *list;
+    char resKey[4096];
 };
 #endif
