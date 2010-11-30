@@ -3,6 +3,7 @@
 #include <Theron/Address.h>
 #include <boost/assign/list_of.hpp>
 #include "StockPrice.hpp"
+#include "FetchInfo.hpp"
 #include <boost/shared_ptr.hpp>
 #define MAX_LEN 40960
 struct AddressMessage
@@ -92,5 +93,19 @@ struct PriceResMessage
     PriceResMessage(){};
     stock::StockPriceList *list;
     char resKey[4096];
+};
+struct FetchTaskMessage
+{
+    FetchTaskMessage(stock::FetchInfo *f):fi(f){
+    };
+    FetchTaskMessage(){};
+    stock::FetchInfo *fi;
+};
+struct FetchResultMessage
+{
+    FetchResultMessage(stock::FetchResult *r):result(r){
+    };
+    FetchResultMessage(){};
+    stock::FetchResult *result;
 };
 #endif

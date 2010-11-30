@@ -10,7 +10,7 @@
 #include "OperateActor.hpp"
 #include "StockPrice.hpp"
 
-static size_t yahoo_write(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
+static size_t http_write(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
 {
     stream->write((char*)ptr,size*nmemb);
     return size*nmemb;
@@ -42,7 +42,7 @@ public:
 
                     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
                     curl_easy_setopt(curl, CURLOPT_WRITEDATA,&ss);
-                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, yahoo_write);
+                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, http_write);
 
                     CURLcode res = curl_easy_perform(curl);
                     
@@ -114,6 +114,10 @@ public:
 
     void MapHandler(const MapMessage &message, const Theron::Address from)
         {
+            if(message.type==MapMessage::ATTR)
+            {
+                attMap=message.map;
+            }
         }
 private:
 }; 
