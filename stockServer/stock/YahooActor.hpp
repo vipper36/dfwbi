@@ -14,7 +14,7 @@
 #include "OperateActor.hpp"
 #include "StockPrice.hpp"
 #include "yahooParser.hpp"
-static size_t  write_string(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
+static size_t  yahoo_write(void *ptr, size_t size, size_t nmemb, std::stringstream *stream)
 {
     stream->write((char*)ptr,size*nmemb);
     return size*nmemb;
@@ -60,7 +60,7 @@ public:
 
                     curl_easy_setopt(curl, CURLOPT_URL, uss.str().c_str());
                     curl_easy_setopt(curl, CURLOPT_WRITEDATA,&ss);
-                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_string);
+                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, yahoo_write);
                     stock::StockPriceList *pl=new stock::StockPriceList();
                     pl->type=stock::DAY;
                     pl->marcket=resv[0];

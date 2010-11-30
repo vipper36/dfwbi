@@ -34,5 +34,5 @@ $(DESC2):$(BOOSTOBJ2)
 	@echo Linking $@ ...
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
 clean:
-	@-rm $(DESC)
+	@-rm $(DESC) $(DESC2)
 	@-rm -fr *.o *.a *~ "*#"
