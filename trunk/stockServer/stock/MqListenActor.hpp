@@ -18,7 +18,7 @@ public:
         {
             Factory::TimerFactory *tFactory=Factory::TimerFactory::Instance();
             m_timer=tFactory->CreateTimer();
-            m_timer->expires_from_now(boost::posix_time::seconds(5));
+            m_timer->expires_from_now(boost::posix_time::seconds(1));
             m_timer->async_wait(boost::bind(&MqListenActor::TimerHandler,this,boost::asio::placeholders::error));                
         }
     inline void HandleMqMsg(std::string msg,amqp_basic_properties_t *p)
