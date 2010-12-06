@@ -114,10 +114,6 @@ public:
 
     void MapHandler(const MapMessage &message, const Theron::Address from)
         {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
         }
 private:
 }; 

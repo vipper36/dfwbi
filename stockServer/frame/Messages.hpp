@@ -96,16 +96,30 @@ struct PriceResMessage
 };
 struct FetchTaskMessage
 {
-    FetchTaskMessage(stock::FetchInfo *f):fi(f){
+    FetchTaskMessage(fetch::FetchInfo *f):fi(f){
     };
     FetchTaskMessage(){};
-    stock::FetchInfo *fi;
+    fetch::FetchInfo *fi;
 };
 struct FetchResultMessage
 {
-    FetchResultMessage(stock::FetchResult *r):result(r){
+    FetchResultMessage(fetch::FetchResult *r):result(r){
     };
     FetchResultMessage(){};
-    stock::FetchResult *result;
+    fetch::FetchResult *result;
+};
+struct ClassifyResultMessage
+{
+    ClassifyResultMessage(fetch::FetchResult *r):result(r){
+    };
+    ClassifyResultMessage(){};
+    fetch::FetchResult *result;
+};
+struct ExtractResultMessage
+{
+    ExtractResultMessage(fetch::FetchResult *r):result(r){
+    };
+    ExtractResultMessage(){};
+    fetch::FetchResult *result;
 };
 #endif
