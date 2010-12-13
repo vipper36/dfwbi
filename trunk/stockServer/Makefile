@@ -1,8 +1,8 @@
 BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization
 BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
 LOCALINC=-I./stock -I./frame -I./fetch
-XMLLIB=-lxml++-2.6 -licuuc
-LIBCUTL=-lcurl
+XMLLIB=-lxml++-2.6 -licuuc -lxslt
+LIBCUTL=-lcurl -ltidy
 LIBMQ=-lrabbitmq
 CC=gcc
 AR=ar -r

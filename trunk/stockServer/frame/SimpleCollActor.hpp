@@ -15,6 +15,8 @@ public:
         {
             RegisterHandler(this, &SimpleCollActor::StockHandler);
             RegisterHandler(this, &SimpleCollActor::PriceReqHandler);
+            RegisterHandler(this, &SimpleCollActor::FetchTaskHandler);
+            RegisterHandler(this, &SimpleCollActor::ExtractResultHanlde);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -47,7 +49,14 @@ public:
         }
     void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
         {
-            std::cout<<"SimpleCollActor"<<message.req->code<<std::endl;
+            Send(message, parent);
+        }
+    void FetchTaskHandler(const FetchTaskMessage &message, const Theron::Address from)
+        {
+            Send(message, parent);
+        }
+    void ExtractResultHanlde(const ExtractResultMessage &message, const Theron::Address from)
+        {
             Send(message, parent);
         }
 private:

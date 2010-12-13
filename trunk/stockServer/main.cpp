@@ -23,6 +23,14 @@
 #include <Theron/Receiver.h>
 #include "Messages.hpp"
 #include "StockCollActor.hpp"
+#include "FetchRouteActor.hpp"
+#include "FTRListenActor.hpp"
+#include "TaskManageActor.hpp"
+#include "FetchMqActor.hpp"
+#include "FTListenActor.hpp"
+#include "FetchActor.hpp"
+#include "XsltExtractActor.hpp"
+#include "ClassifyActor.hpp"
 namespace po = boost::program_options;
 void RegActor(Factory::Factory *factory)
 {
@@ -38,6 +46,14 @@ void RegActor(Factory::Factory *factory)
     factory->Register<ReqListenActor>("ReqListenActor");
     factory->Register<YahooActor>("YahooActor");
     factory->Register<YahooCollActor>("YahooCollActor");
+    factory->Register<FTRListenActor>("FTRListenActor");
+    factory->Register<FetchRouteActor>("FetchRouteActor");
+    factory->Register<TaskManageActor>("TaskManageActor");    
+    factory->Register<FetchMqActor>("FetchMqActor");
+    factory->Register<FTListenActor>("FTListenActor");
+    factory->Register<FetchActor>("FetchActor");
+    factory->Register<ClassifyActor>("ClassifyActor");
+    factory->Register<XsltExtractActor>("XsltExtractActor");
 }
 class StatusCollector
 {
@@ -103,6 +119,11 @@ int main(int argc,char**argv)
     }
     std::map<std::string,std::string> stockList;
     
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    xmlSubstituteEntitiesDefault(1);
+    xmlLoadExtDtdDefaultValue = 1;
+
     try
     {
         //Create The actors by config file.
@@ -270,6 +291,8 @@ int main(int argc,char**argv)
     tFactory->Run();
     //Clear actor list and destroy actor factory.
     actList.clear();
+    xsltCleanupGlobals();
+    
     Factory::TimerFactory::Destroy();
     Factory::Factory::Destroy();
     return 0;
