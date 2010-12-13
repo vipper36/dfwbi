@@ -13,6 +13,10 @@ public:
             RegisterHandler(this, &RingCollActor::StockHandler);
             RegisterHandler(this, &RingCollActor::StockListHandler);
             RegisterHandler(this, &RingCollActor::PriceResHandler);
+            RegisterHandler(this, &RingCollActor::FetchTaskHandler);
+            RegisterHandler(this, &RingCollActor::ClassifyResultHandle);
+            RegisterHandler(this, &RingCollActor::ExtractResultHanlde);
+            RegisterHandler(this, &RingCollActor::FetchResultHandler);
             current=childrens.begin();
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
@@ -48,26 +52,87 @@ public:
         }
     void StockHandler(const StockMessage &message, const Theron::Address from)
         {
-
-            Send(message, current->second);
-            ++current;
-            if(current==childrens.end())
-                current= childrens.begin();
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                Send(message, current->second);
+                ++current;
+                if(current==childrens.end())
+                    current= childrens.begin();
+            }
         }
     void StockListHandler(const StockListMessage &message, const Theron::Address from)
         {
-
-            Send(message, current->second);
-            ++current;
-            if(current==childrens.end())
-                current= childrens.begin();
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
         }
     void PriceResHandler(const PriceResMessage &message, const Theron::Address from)
         {
-            Send(message, current->second);
-            ++current;
-            if(current==childrens.end())
-                current= childrens.begin();
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void FetchTaskHandler(const FetchTaskMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void FetchResultHandler(const FetchResultMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void ClassifyResultHandle(const ClassifyResultMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void ExtractResultHanlde(const ExtractResultMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
         }
 private:
     std::map<std::string,Theron::Address>::iterator current;
