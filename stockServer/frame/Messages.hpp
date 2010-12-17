@@ -4,6 +4,7 @@
 #include <boost/assign/list_of.hpp>
 #include "StockPrice.hpp"
 #include "FetchInfo.hpp"
+#include "SearchInfo.hpp"
 #include <boost/shared_ptr.hpp>
 #define MAX_LEN 40960
 struct AddressMessage
@@ -121,5 +122,32 @@ struct ExtractResultMessage
     };
     ExtractResultMessage(){};
     fetch::FetchResult *result;
+};
+struct IndexMessage
+{
+    IndexMessage(search::IndexInfo *i):index(i){
+    };
+    IndexMessage(){};
+    search::IndexInfo *index;
+};
+struct QueryMessage
+{
+    QueryMessage(search::QueryInfo *q,char *k):query(q){
+        memset(resKey,0,sizeof(resKey));
+        strcpy(resKey,k);
+    };
+    QueryMessage(){};
+    search::QueryInfo *query;
+    char resKey[4096];
+};
+struct QueryResponceMessage
+{
+    QueryResponceMessage(search::DocList *r,char *k):res(r){
+        memset(resKey,0,sizeof(resKey));
+        strcpy(resKey,k);
+    };
+    QueryResponceMessage(){};
+    search::DocList *res;
+    char resKey[4096];
 };
 #endif

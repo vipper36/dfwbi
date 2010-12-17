@@ -29,7 +29,7 @@ class XsltExtractActor : public OperateActor
 {
 public:
 
-    inline XsltExtractActor():urlxslt(NULL),contxslt(NULL)
+    inline XsltExtractActor()
         {
             RegisterHandler(this, &XsltExtractActor::ClassifyResultHandler);
         }
@@ -51,15 +51,6 @@ public:
             if(message.type==MapMessage::ATTR)
             {
                 attMap=message.map;
-                if(urlxslt==NULL)
-                {
-                    std::map<std::string,std::string>::iterator fit= attMap.find("url");
-                    if(fit!=attMap.end())
-                        urlxslt= xsltParseStylesheetFile((xmlChar*)fit->second.c_str());
-                    fit= attMap.find("content");
-                    if(fit!=attMap.end())
-                        contxslt = xsltParseStylesheetFile((xmlChar*)fit->second.c_str());
-                }
             }
         }
     void ClassifyResultHandler(const ClassifyResultMessage &message, const Theron::Address from)
@@ -69,11 +60,23 @@ public:
             switch(message.result->type)
             {
             case fetch::URL:
-                resultStr=Transe(urlxslt,message.result->result);
-                break;
+            {
+                std::map<std::string,std::string>::iterator fit=message.result->attMap.find("url_xslt");
+                if(fit!=message.result->attMap.end())
+                {
+                    resultStr=Transe(fit->second,message.result->result);
+                }
+            }
+            break;
             case fetch::CONTENT:
-                resultStr=Transe(contxslt,message.result->result);
-                break;
+            {
+                std::map<std::string,std::string>::iterator fit=message.result->attMap.find("content_xslt");
+                if(fit!=message.result->attMap.end())
+                {
+                    resultStr=Transe(fit->second,message.result->result);
+                }
+            }
+            break;
             default:
                 break;
             }
@@ -81,8 +84,11 @@ public:
             Send(ExtractResultMessage(message.result),from);
         }
 private:
-    inline std::string Transe(xsltStylesheetPtr xslt,std::string &in)
+    inline std::string Transe(std::string &xsltfile,std::string &in)
         {
+
+            xsltStylesheetPtr xslt= xsltParseStylesheetFile((xmlChar*)xsltfile.c_str());
+
             std::string ret;
             if(xslt!=NULL)
             {
@@ -112,12 +118,11 @@ private:
                     xmlOutputBufferClose(buf);
                 }
                 xmlFreeDoc(res);
-                xsltCleanupGlobals();
             }
+            xsltFreeStylesheet(xslt);
+            xsltCleanupGlobals();
             return ret;
         }
     std::map<std::string,std::string> attMap;
-    xsltStylesheetPtr urlxslt;
-    xsltStylesheetPtr contxslt;
 }; 
 #endif

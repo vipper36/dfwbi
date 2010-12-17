@@ -2,6 +2,7 @@
 #define __CLASSIFY_ACTOR_H_
 #include <boost/algorithm/string.hpp>
 #include "boost/date_time/posix_time/posix_time.hpp" 
+#include <boost/regex.hpp>
 #include <Theron/Actor.h>
 #include <iostream>
 #include <sstream>
@@ -42,74 +43,86 @@ public:
         }
     void FetchResultHandler(const FetchResultMessage &message, const Theron::Address from)
         {
-            if(message.result->type!=fetch::ERROR)
-            {
-                try
-                {
-                    std::cout<<"classify data:"<<message.result->type<<std::endl;
-//                std::cout<<"data:"<<message.result->result<<std::endl;
-                    std::stringstream ss(message.result->result);
-                    xmlpp::DomParser parser;
-                    parser.set_substitute_entities(); 
-                    parser.parse_stream(ss);
-                    xmlpp::Node::PrefixNsMap nsMap;
-                    const xmlpp::Node* root = parser.get_document()->get_root_node();
-                    Glib::ustring prefix;
-                    if(root->get_namespace_uri().length()>0)
-                    {
-                        if(root->get_namespace_prefix().length()>0)
-                            prefix=root->get_namespace_prefix();
-                        else
-                            prefix=Glib::ustring("ns");
-                        nsMap.insert(std::make_pair(prefix,root->get_namespace_uri()));
-                    }
-                    Glib::ustring anpath;
-                    if(prefix.length()>0)
-                        anpath=Glib::ustring("//")+prefix+":a";
-                    else
-                        anpath=Glib::ustring("//a");
-                    const xmlpp::NodeSet  anckor = root->find(anpath,nsMap);
-                    std::string site=getSite(message.result->url);
-                    int ourUrl=0;
-                    for(xmlpp::NodeSet::const_iterator it=anckor.begin();it!=anckor.end();++it)
-                    {
-                        const xmlpp::Element *ele= dynamic_cast<const xmlpp::Element*>(*it);
-                        if(ele!=NULL)
-                        {
-                            Glib::ustring value(ele->get_attribute_value(Glib::ustring("href")));
-                            std::string tmpsite=getSite(std::string(value.c_str()));
-                            if(tmpsite.length()>0&&tmpsite==site)
-                                ourUrl++;
-                        }
-                    }
-                    Glib::ustring textpath;
-                    if(prefix.length()>0)
-                        textpath=Glib::ustring("//")+prefix+":*/text()";
-                    else
-                        textpath=Glib::ustring("//*/text()");
-                    const xmlpp::NodeSet  textSet = root->find(textpath,nsMap);
-                    int textLen=0;
-                    for(xmlpp::NodeSet::const_iterator it=textSet.begin();it!=textSet.end();++it)
-                    {
-                        if((*it)->get_name()==Glib::ustring("text"))
-                        {
-                            const xmlpp::TextNode *ele= dynamic_cast<const xmlpp::TextNode*>(*it);
-                            if(ele!=NULL)
-                            {
-                                Glib::ustring value(ele->get_content());
-                                textLen+=value.length();
-                            }
-                        }
-                    }
-                    std::cout<<"url:"<<message.result->url<<"--urlCount:"<<anckor.size()<<"--outCount"<<ourUrl<<"--outRate"<<double(ourUrl)/double(anckor.size())<<"--textCount:"<<textSet.size()<<"--TextLen:"<<textLen<<"--avrLen:"<<double(textLen)/double(anckor.size())<<std::endl;
-                }catch(std::exception &e)
-                {
-                    std::cout<<e.what()<<std::endl;
-                }
-            }
+            // if(message.result->type!=fetch::ERROR)
+//             {
+//                 try
+//                 {
+//                     std::cout<<"classify data:"<<message.result->type<<std::endl;
+// //                std::cout<<"data:"<<message.result->result<<std::endl;
+//                     std::stringstream ss(message.result->result);
+//                     xmlpp::DomParser parser;
+//                     parser.set_substitute_entities(); 
+//                     parser.parse_stream(ss);
+//                     xmlpp::Node::PrefixNsMap nsMap;
+//                     const xmlpp::Node* root = parser.get_document()->get_root_node();
+//                     Glib::ustring prefix;
+//                     if(root->get_namespace_uri().length()>0)
+//                     {
+//                         if(root->get_namespace_prefix().length()>0)
+//                             prefix=root->get_namespace_prefix();
+//                         else
+//                             prefix=Glib::ustring("ns");
+//                         nsMap.insert(std::make_pair(prefix,root->get_namespace_uri()));
+//                     }
+//                     Glib::ustring anpath;
+//                     if(prefix.length()>0)
+//                         anpath=Glib::ustring("//")+prefix+":a";
+//                     else
+//                         anpath=Glib::ustring("//a");
+//                     const xmlpp::NodeSet  anckor = root->find(anpath,nsMap);
+//                     std::string site=getSite(message.result->url);
+//                     int ourUrl=0;
+//                     for(xmlpp::NodeSet::const_iterator it=anckor.begin();it!=anckor.end();++it)
+//                     {
+//                         const xmlpp::Element *ele= dynamic_cast<const xmlpp::Element*>(*it);
+//                         if(ele!=NULL)
+//                         {
+//                             Glib::ustring value(ele->get_attribute_value(Glib::ustring("href")));
+//                             std::string tmpsite=getSite(std::string(value.c_str()));
+//                             if(tmpsite.length()>0&&tmpsite==site)
+//                                 ourUrl++;
+//                         }
+//                     }
+//                     Glib::ustring textpath;
+//                     if(prefix.length()>0)
+//                         textpath=Glib::ustring("//")+prefix+":*/text()";
+//                     else
+//                         textpath=Glib::ustring("//*/text()");
+//                     const xmlpp::NodeSet  textSet = root->find(textpath,nsMap);
+//                     int textLen=0;
+//                     for(xmlpp::NodeSet::const_iterator it=textSet.begin();it!=textSet.end();++it)
+//                     {
+//                         if((*it)->get_name()==Glib::ustring("text"))
+//                         {
+//                             const xmlpp::TextNode *ele= dynamic_cast<const xmlpp::TextNode*>(*it);
+//                             if(ele!=NULL)
+//                             {
+//                                 Glib::ustring value(ele->get_content());
+//                                 textLen+=value.length();
+//                             }
+//                         }
+//                     }
+//                     std::cout<<"url:"<<message.result->url<<"--urlCount:"<<anckor.size()<<"--outCount"<<ourUrl<<"--outRate"<<double(ourUrl)/double(anckor.size())<<"--textCount:"<<textSet.size()<<"--TextLen:"<<textLen<<"--avrLen:"<<double(textLen)/double(anckor.size())<<std::endl;
+//                 }catch(std::exception &e)
+//                 {
+//                     std::cout<<e.what()<<std::endl;
+//                 }
+//             }
+            
             if(message.result->type==fetch::UNKNOWN)
             {
-                message.result->type=fetch::URL;
+                std::map<std::string,std::string>::iterator fit=message.result->attMap.find("content_url");
+                if(fit!=message.result->attMap.end())
+                {
+                    std::cout<<"express:"<<fit->second<<std::endl;
+                    std::cout<<"url:"<<message.result->url<<std::endl;
+                    boost::regex expression(fit->second);
+                    if(boost::regex_match(message.result->url,expression))
+                        message.result->type=fetch::CONTENT;
+                    std::cout<<"type:"<<message.result->type<<std::endl;
+                }
+                if(message.result->type==fetch::UNKNOWN)
+                    message.result->type=fetch::URL;
                 
             }
             Send(ClassifyResultMessage(message.result),from);            

@@ -28,7 +28,7 @@ class FetchActor : public OperateActor
 {
 public:
 
-    inline FetchActor():noInt(0)
+    inline FetchActor()
         {
             RegisterHandler(this, &FetchActor::FetchTaskHandler);          
         }
@@ -66,15 +66,16 @@ public:
             delete message.fi;
             result->url=fi.url;
             result->pathList=fi.pathList;
+            result->attMap=fi.attMap;
             int errCode=0;
             if(curl!=NULL) {
                 curl_easy_setopt(curl, CURLOPT_URL,url.c_str());
                 curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_errbuf);
 //                curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 //                curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-                curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 60);
+                curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
                 curl_easy_setopt(curl, CURLOPT_NOSIGNAL,1);
-                curl_easy_setopt(curl, CURLOPT_TIMEOUT ,240);
+                curl_easy_setopt(curl, CURLOPT_TIMEOUT ,60);
 
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fetch_write);
                 
@@ -110,9 +111,9 @@ public:
                     tidyOptSetBool(tdoc, TidyShowWarnings, no);
                     tidyOptSetValue(tdoc,TidyDoctype,"omit");
 
-//                tidyOptSetBool(tdoc, TidyFixBackslash, yes);
-
-//                tidyOptSetBool(tdoc, TidyMark, no);
+                    tidyOptSetBool(tdoc, TidyFixBackslash, yes);
+                    
+                    tidyOptSetBool(tdoc, TidyMark, no);
 
                     tidySetCharEncoding(tdoc,"utf8");
 //                tidyBufInit(&docbuf);
@@ -179,7 +180,7 @@ public:
             Send(FetchResultMessage(result), from);
         }
 private:
-    int noInt;
+
     std::map<std::string,std::string> attMap;
 }; 
 #endif
