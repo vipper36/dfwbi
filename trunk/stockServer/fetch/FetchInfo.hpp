@@ -59,6 +59,7 @@ namespace fetch
                 ar & BOOST_SERIALIZATION_NVP(pathList);
                 ar & BOOST_SERIALIZATION_NVP(url);
                 ar & BOOST_SERIALIZATION_NVP(result);
+                ar & BOOST_SERIALIZATION_NVP(attMap);
             }
 
     public:
@@ -66,6 +67,7 @@ namespace fetch
         std::list<std::string> pathList;
         std::string url;
         std::string result;
+        std::map<std::string,std::string> attMap;
     };
     struct FetchTreeNode;
     typedef std::map<std::string,FetchTreeNode>::iterator node_iterator;

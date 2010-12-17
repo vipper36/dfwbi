@@ -49,6 +49,12 @@ public:
                             fn.info.attMap.insert(std::make_pair(std::string("result_type"),std::string("URL")));
                             if(resv[2].length()>0)
                                 fn.info.attMap.insert(std::make_pair(std::string("encode"),resv[2]));
+                            if(resv[3].length()>0)
+                                fn.info.attMap.insert(std::make_pair(std::string("content_url"),resv[3]));
+                            if(resv[4].length()>0)
+                                fn.info.attMap.insert(std::make_pair(std::string("url_xslt"),resv[4]));
+                            if(resv[5].length()>0)
+                                fn.info.attMap.insert(std::make_pair(std::string("content_xslt"),resv[5]));
                             urlMap.insert(std::make_pair(resv[0],fn));
                         }
                     }
@@ -57,7 +63,7 @@ public:
             for(std::map<std::string,fetch::FetchTreeNode>::iterator it=urlMap.begin();it!=urlMap.end();++it)
             {
                 boost::posix_time::ptime now=boost::posix_time::second_clock::local_time();
-                if((it->second.update==boost::posix_time::not_a_date_time)||(now-it->second.update>boost::posix_time::hours(2)))
+                if((it->second.update==boost::posix_time::not_a_date_time)||(now-it->second.update>boost::posix_time::hours(20)))
                 {
 
                     fetch::FetchInfo *fi=new fetch::FetchInfo(it->second.info);
@@ -143,12 +149,15 @@ public:
                             fetch::FetchTreeNode fn;
                             fn.info.type=fetch::NORMAL;
                             fn.info.url=url;
+                            fn.info.pathList=ptNode->second.info.pathList;
                             fn.info.pathList.push_back(name);
                             if(ptNode!=urlMap.end())
                             {
-                                std::map<std::string,std::string>::iterator fit=ptNode->second.info.attMap.find("encode");
-                                if(fit!=ptNode->second.info.attMap.end())
-                                    fn.info.attMap.insert(*fit);
+                                for(std::map<std::string,std::string>::iterator fit=ptNode->second.info.attMap.begin();fit!=ptNode->second.info.attMap.end();++fit)
+                                {
+                                    if(fit->first!=std::string("result_type"))
+                                        fn.info.attMap.insert(*fit);
+                                }
                                 fn.parent=ptNode;
                             }
                             std::pair<fetch::node_iterator,bool> iRet=urlMap.insert(std::make_pair(url,fn));

@@ -27,7 +27,7 @@ public:
             fetch::FetchInfo *task=new fetch::FetchInfo();
             boost::archive::xml_iarchive ia(ss);
             ia >> BOOST_SERIALIZATION_NVP(*task);
-                
+
             FetchTaskMessage taskMsg(task);
             Send(taskMsg, parent);
         }
