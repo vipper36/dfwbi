@@ -17,6 +17,8 @@ public:
             RegisterHandler(this, &SimpleCollActor::PriceReqHandler);
             RegisterHandler(this, &SimpleCollActor::FetchTaskHandler);
             RegisterHandler(this, &SimpleCollActor::ExtractResultHanlde);
+            RegisterHandler(this, &SimpleCollActor::IndexHanlde);
+            RegisterHandler(this, &SimpleCollActor::QueryHanlde);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -59,6 +61,15 @@ public:
         {
             Send(message, parent);
         }
+    void IndexHanlde(const IndexMessage &message, const Theron::Address from)
+        {
+            Send(message, parent);
+        }
+    void QueryHanlde(const QueryMessage &message, const Theron::Address from)
+        {
+            Send(message, parent);
+        }
+    
 private:
     std::map<std::string,std::string> attMap;
 }; 

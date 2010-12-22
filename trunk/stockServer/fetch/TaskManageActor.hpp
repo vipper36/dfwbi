@@ -5,6 +5,7 @@
 #include "OperateActor.hpp"
 #include "TimerFactory.hpp"
 #include <boost/bind.hpp>
+#include "SearchInfo.hpp"
 #include <map>
 #include <string>
 class TaskManageActor : public OperateActor 
@@ -110,15 +111,14 @@ public:
             delete message.result;
             std::string pUrl=result.url;
             fetch::node_iterator ptNode=urlMap.find(pUrl);
-            
             std::stringstream iss(result.result);
             try
             {
-                xmlpp::DomParser parser;
-                parser.set_substitute_entities(); 
-                parser.parse_stream(iss);
                 if(result.type==fetch::URL)
                 {
+                    xmlpp::DomParser parser;
+                    parser.set_substitute_entities(); 
+                    parser.parse_stream(iss);
                     const xmlpp::Node* pNode = parser.get_document()->get_root_node();
                     const xmlpp::Node::NodeList urls = pNode->get_children(Glib::ustring("Urls"));
                     const xmlpp::Node::NodeList urllist = (*urls.begin())->get_children(Glib::ustring("Url"));
@@ -141,6 +141,8 @@ public:
                                 {
                                     url=result.url+"/"+url.c_str();
                                 }
+                                if(url.at(url.length()-1)='/')
+                                    url=url.erase(url.length()-1,1);
                                 tmpsite=getSite(url);
                             }
                         }
@@ -170,6 +172,40 @@ public:
                     }
                 }else if(result.type==fetch::CONTENT)
                 {
+                    
+                    xmlpp::DomParser parser;
+                    parser.set_substitute_entities(); 
+                    parser.parse_stream(iss);
+                    const xmlpp::Node* pNode = parser.get_document()->get_root_node();
+                    const xmlpp::Node::NodeList title = pNode->get_children(Glib::ustring("Title"));
+                    const xmlpp::Node::NodeList content = pNode->get_children(Glib::ustring("Content"));
+                    search::IndexInfo *index=new search::IndexInfo();
+                    index->uid=result.url;
+                    index->db=std::string("news");
+                    if(title.size()>0)
+                    {
+                        const xmlpp::Element* ele = dynamic_cast<const xmlpp::Element*>(*(title.begin()));
+                        const xmlpp::TextNode *text=ele->get_child_text();
+                        if(text!=NULL)
+                        {
+                            std::string value=std::string(text->get_content().c_str());
+                            index->attMap.insert(std::make_pair(std::string("title"),value));
+                        }
+                    }
+                    if(content.size()>0)
+                    {
+                        const xmlpp::Element* ele = dynamic_cast<const xmlpp::Element*>(*(content.begin()));
+                        const xmlpp::TextNode *text=ele->get_child_text();
+                        if(text!=NULL)
+                        {
+                            std::string value=std::string(text->get_content().c_str());
+                            index->content=value;
+                        }
+                    }
+                    if(current==childrens.end())
+                        current= childrens.begin();
+                    Send(IndexMessage(index), current->second);
+                    ++current;
                 }
             }catch(std::exception &e)
             {

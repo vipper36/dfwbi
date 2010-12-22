@@ -18,6 +18,7 @@ public:
         {
             RegisterHandler(this, &FetchMqActor::ExtractResultHandler);
             RegisterHandler(this, &FetchMqActor::FetchTaskHandler);
+            RegisterHandler(this, &FetchMqActor::IndexHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -43,7 +44,7 @@ public:
             std::stringstream ss;
             boost::archive::xml_oarchive oa(ss);
             oa << BOOST_SERIALIZATION_NVP(result);
-            std::cout<<ss.str()<<std::endl;
+//            std::cout<<ss.str()<<std::endl;
             int port=atoi(attMap["port"].c_str());
             if(rc.Connect(attMap["host"],port));
             {
@@ -57,11 +58,25 @@ public:
             std::stringstream ss;
             boost::archive::xml_oarchive oa(ss);
             oa << BOOST_SERIALIZATION_NVP(task);
-            std::cout<<ss.str()<<std::endl;
+//            std::cout<<ss.str()<<std::endl;
             int port=atoi(attMap["port"].c_str());
             if(rc.Connect(attMap["host"],port));
             {
                 rc.Send(ss.str(),attMap["exchange"],attMap["key"]);
+            }
+        }
+    void IndexHandler(const IndexMessage &message, const Theron::Address from)
+        {
+            search::IndexInfo index=*message.index;
+            delete message.index;
+            std::stringstream ss;
+            boost::archive::xml_oarchive oa(ss);
+            oa << BOOST_SERIALIZATION_NVP(index);
+//            std::cout<<ss.str()<<std::endl;
+            int port=atoi(attMap["port"].c_str());
+            if(rc.Connect(attMap["host"],port));
+            {
+                rc.Send(ss.str(),attMap["se_exchange"],attMap["se_key"]);
             }
         }
     

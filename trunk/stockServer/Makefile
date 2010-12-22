@@ -1,9 +1,11 @@
 BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization -lboost_regex
 BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
-LOCALINC=-I./stock -I./frame -I./fetch -I./search
+LOCALINC=-I./stock -I./frame -I./fetch -I./search -I./search/ictclas
 XMLLIB=-lxml++-2.6 -licuuc -lxslt
+WTLIB=-lwt -lwthttp
 LIBCUTL=-lcurl -ltidy
 LIBMQ=-lrabbitmq
+LIBXAPIAN=-L./search/ictclas/Source -lxapian -lictclas
 CC=gcc
 AR=ar -r
 CXX=g++
@@ -12,9 +14,11 @@ CFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 DESC=stockserver
 DESC2=stockonce
+DESC3=tools.fcgi
 INCLUDE=$(BOOSTINC) $(LOCALINC)
 BOOSTOBJ= main.o   
 BOOSTOBJ2= mainonce.o   
+BOOSTOBJ3= fcgiMain.o   
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -25,14 +29,17 @@ BOOSTOBJ2= mainonce.o
 	@echo Compiling cc program $< ......
 	@echo c to o
 	$(CXX) $(CFLAGS) $(INCLUDE)  -c $<
-all: $(DESC) $(DESC2)
+all: $(DESC) $(DESC2) $(DESC3)
 	@echo $@ update to date
 $(DESC):$(BOOSTOBJ)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ} ${LIBXAPIAN}
 $(DESC2):$(BOOSTOBJ2)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ} ${LIBXAPIAN}
+$(DESC3):$(BOOSTOBJ3)
+	@echo Linking $@ ...
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ} ${LIBXAPIAN} ${WTLIB}
 clean:
 	@-rm $(DESC) $(DESC2)
 	@-rm -fr *.o *.a *~ "*#"
