@@ -142,7 +142,7 @@ struct QueryMessage
 };
 struct QueryResponceMessage
 {
-    QueryResponceMessage(search::DocList *r,char *k):res(r){
+    QueryResponceMessage(search::DocList *r,const char *k):res(r){
         memset(resKey,0,sizeof(resKey));
         strcpy(resKey,k);
     };

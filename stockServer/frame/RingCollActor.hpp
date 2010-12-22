@@ -15,8 +15,11 @@ public:
             RegisterHandler(this, &RingCollActor::PriceResHandler);
             RegisterHandler(this, &RingCollActor::FetchTaskHandler);
             RegisterHandler(this, &RingCollActor::ClassifyResultHandle);
-            RegisterHandler(this, &RingCollActor::ExtractResultHanlde);
+            RegisterHandler(this, &RingCollActor::ExtractResultHandle);
             RegisterHandler(this, &RingCollActor::FetchResultHandler);
+            RegisterHandler(this, &RingCollActor::IndexHandle);
+            RegisterHandler(this, &RingCollActor::QueryHandle);
+            RegisterHandler(this, &RingCollActor::QueryResponceHandle);
             current=childrens.begin();
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
@@ -122,7 +125,43 @@ public:
                 ++current;
             }
         }
-    void ExtractResultHanlde(const ExtractResultMessage &message, const Theron::Address from)
+    void ExtractResultHandle(const ExtractResultMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void IndexHandle(const IndexMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void QueryHandle(const QueryMessage &message, const Theron::Address from)
+        {
+            if(from!=parent)
+                Send(message, parent);
+            else
+            {
+                if(current==childrens.end())
+                    current= childrens.begin();
+                Send(message, current->second);
+                ++current;
+            }
+        }
+    void QueryResponceHandle(const QueryResponceMessage &message, const Theron::Address from)
         {
             if(from!=parent)
                 Send(message, parent);

@@ -31,6 +31,12 @@
 #include "FetchActor.hpp"
 #include "XsltExtractActor.hpp"
 #include "ClassifyActor.hpp"
+#include "IndexListenActor.hpp"
+#include "IndexActor.hpp"
+#include "SearchRouteActor.hpp"
+#include "SreqListenActor.hpp"
+#include "SearchMqActor.hpp"
+#include "QueryActor.hpp"
 namespace po = boost::program_options;
 void RegActor(Factory::Factory *factory)
 {
@@ -54,6 +60,12 @@ void RegActor(Factory::Factory *factory)
     factory->Register<FetchActor>("FetchActor");
     factory->Register<ClassifyActor>("ClassifyActor");
     factory->Register<XsltExtractActor>("XsltExtractActor");
+    factory->Register<IndexListenActor>("IndexListenActor");
+    factory->Register<SearchRouteActor>("SearchRouteActor");
+    factory->Register<IndexActor>("IndexActor");
+    factory->Register<SreqListenActor>("SreqListenActor");
+    factory->Register<QueryActor>("QueryActor");
+    factory->Register<SearchMqActor>("SearchMqActor");
 }
 class StatusCollector
 {

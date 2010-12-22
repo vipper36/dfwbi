@@ -64,6 +64,7 @@ public:
             fetch::FetchResult *result=new fetch::FetchResult();
             fetch::FetchInfo fi=*(message.fi);
             delete message.fi;
+            result->type=fetch::UNKNOWN; 
             result->url=fi.url;
             result->pathList=fi.pathList;
             result->attMap=fi.attMap;
@@ -132,15 +133,6 @@ public:
                             hss<<(char*)outbuf.bp;
                             tidyBufFree(&outbuf);
                             result->result=hss.str();
-                            std::map<std::string,std::string>::iterator tfit=fi.attMap.find("result_type");
-                            if(tfit!=fi.attMap.end())
-                            {
-                                if(tfit->second=="URL")
-                                    result->type=fetch::URL;        
-                                else if(tfit->second=="CONTENT")
-                                    result->type=fetch::CONTENT;        
-                            }else
-                                result->type=fetch::UNKNOWN; 
 //                        }
 //                        else
 //                        {

@@ -13,7 +13,7 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
-
+#include <libxml/HTMLparser.h>
 #include "OperateActor.hpp"
 #include "StockPrice.hpp"
 int write_xml_res(void * ctx, const char *buffer, int len) {
@@ -55,7 +55,7 @@ public:
         }
     void ClassifyResultHandler(const ClassifyResultMessage &message, const Theron::Address from)
         {
-            std::cout<<"extrat data...."<<message.result->type<<std::endl;
+          //  std::cout<<"extrat data...."<<message.result->type<<std::endl;
             std::string resultStr;
             switch(message.result->type)
             {
@@ -92,20 +92,11 @@ private:
             std::string ret;
             if(xslt!=NULL)
             {
-                std::stringstream ss(in);
-                xmlpp::DomParser parser;
-                try
-                {
-                    parser.set_substitute_entities(); 
-                    parser.parse_stream(ss);
-                }catch(std::exception &e)
-                {
-                    std::cout<<e.what()<<std::endl;
+                xmlDocPtr doc=htmlParseDoc((xmlChar*)in.c_str(),"utf8");
+                if(doc==NULL)
                     return ret;
-                }
-                xmlpp::Document *doc=parser.get_document();
                 xmlDocPtr res;
-                res = xsltApplyStylesheet(xslt, doc->cobj(), NULL);
+                res = xsltApplyStylesheet(xslt, doc, NULL);
                 const char *params[1];
                 params[0]=NULL;
                 if(res!=NULL)
@@ -118,6 +109,7 @@ private:
                     xmlOutputBufferClose(buf);
                 }
                 xmlFreeDoc(res);
+                xmlFreeDoc(doc);
             }
             xsltFreeStylesheet(xslt);
             xsltCleanupGlobals();
