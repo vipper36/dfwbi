@@ -3,6 +3,7 @@ BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibm
 LOCALINC=-I./stock -I./frame -I./fetch -I./search -I./search/ictclas
 XMLLIB=-lxml++-2.6 -licuuc -lxslt
 WTLIB=-lwt -lwthttp
+FCGILIB=-lfastcgipp -lmysqlclient
 LIBCUTL=-lcurl -ltidy
 LIBMQ=-lrabbitmq
 LIBXAPIAN=-L./search/ictclas/Source -lxapian -lictclas
@@ -15,10 +16,14 @@ CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
 DESC=stockserver
 DESC2=stockonce
 DESC3=tools.fcgi
+DESC4=index.fcgi
+DESC5=query.fcgi
 INCLUDE=$(BOOSTINC) $(LOCALINC)
 BOOSTOBJ= main.o   
 BOOSTOBJ2= mainonce.o   
 BOOSTOBJ3= fcgiMain.o   
+BOOSTOBJ4= index.o   
+BOOSTOBJ5= query.o
 .SUFFIXES: .h .cpp .o
 
 .cpp.o:
@@ -39,7 +44,13 @@ $(DESC2):$(BOOSTOBJ2)
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ} ${LIBXAPIAN}
 $(DESC3):$(BOOSTOBJ3)
 	@echo Linking $@ ...
-	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBCUTL} ${LIBMQ} ${LIBXAPIAN} ${WTLIB}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBMQ} ${WTLIB}
+$(DESC4):$(BOOSTOBJ4)
+	@echo Linking $@ ...
+	$(CXX) -static -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
+$(DESC5):$(BOOSTOBJ5)
+	@echo Linking $@ ...
+	$(CXX) -static -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
 clean:
 	@-rm $(DESC) $(DESC2)
 	@-rm -fr *.o *.a *~ "*#"

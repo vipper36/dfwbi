@@ -3,6 +3,8 @@
 #include <Theron/Actor.h>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/algorithm/string.hpp>
+#include <unicode/ucnv.h> 
 #include "Messages.hpp"
 #include <iostream>
 #include <sstream>
@@ -56,25 +58,22 @@ public:
             if(ii.content.length()>0&&ii.db==attMap["dbname"])
             {
                 std::string rowString=ii.attMap["title"]+ii.content;
-                std::cout<<"row len:"<<rowString.length()<<"row:"<<rowString<<std::endl;
+//                std::cout<<"row len:"<<rowString.length()<<"row:"<<rowString<<std::endl;
                 std::string segString;
                 char *output=new char[rowString.length()*9];
                 char *input=new char[rowString.length()*3];
                 memset(output,0,rowString.length()*9);
                 memset(input,0,rowString.length()*3);
-//                try 
-//                {
-                std::cout<<"+++++++++++++++++++++++++++++++++1a"<<std::endl;
+                try 
+                {
                     UErrorCode  error = U_ZERO_ERROR;
                     ucnv_convert("GBK","UTF-8",input,  rowString.length()*3, rowString.c_str(), rowString.length(), &error );
                     
-                    std::cout<<"+++++++++++++++++++++++++++++++++2a:"<<error<<std::endl;                    
                     bool ret = result->ParagraphProcessing(input, output);
-                    std::cout<<"+++++++++++++++++++++++++++++++++2a:"<<ret<<std::endl;                    
                     if (ret)
                     {
                         int oLen=strlen(output);
-                        std::cout<<"out seg len:"<<oLen<<std::endl;
+
                         char *utf8out=new char[oLen*3];
                         memset(utf8out,0,oLen*3);
                         ucnv_convert("UTF-8","GBK",utf8out,  oLen*3, output, oLen, &error );
@@ -82,22 +81,32 @@ public:
                         segString=std::string(utf8out);
                         delete [] utf8out;
                     }
-//                }
-//                catch (...) {
-//                }
+                }
+                catch (...) {
+                }
                 delete [] output;
                 delete [] input;
                 std::list<std::pair<std::string,std::string> > segList;
                 if(segString.length()>0)
                 {
                     std::vector<std::string> resv;
-                    boost::algorithm::split( resv, segString, boost::algorithm::is_any_of(" ") );
-                    for(std::vector<std::string>::iterator it=resv.begin();it!=resv.end();++it)
+                    std::stringstream segStream(segString);
+                    while(!segStream.eof())
                     {
-                        std::vector<std::string> tmpv;
-                        boost::algorithm::split( tmpv, *it, boost::algorithm::is_any_of("/") );
-                        if(tmpv.size()>1)
-                            segList.push_back(std::make_pair(tmpv[0],tmpv[1]));
+
+                        std::string line;
+                        std::getline(segStream,line);
+                        boost::algorithm::split( resv, line, boost::algorithm::is_any_of(" ") );
+                        for(std::vector<std::string>::iterator it=resv.begin();it!=resv.end();++it)
+                        {
+                            std::vector<std::string> tmpv;
+                            boost::algorithm::split( tmpv, *it, boost::algorithm::is_any_of("/") );
+                            if(tmpv.size()>1)
+                            {
+                                //                              std::cout<<"word:"<<tmpv[0]<<std::endl;
+                                segList.push_back(std::make_pair(tmpv[0],tmpv[1]));
+                            }
+                        }
                     }
                 }
                 doc.add_value(1,ii.uid);
@@ -111,8 +120,10 @@ public:
                 db.begin_transaction();
                 db.add_document(doc);
                 db.commit_transaction();
-                std::cout<<"doc count:"<<db.get_doccount()<<std::endl;
             }
+            std::stringstream  so;
+            so<<"doc count:"<<db.get_doccount()<<std::endl;
+            Send(OperateMessage(OperateMessage::RESP,so.str()), from);
         }
     
 private:
