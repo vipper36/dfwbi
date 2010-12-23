@@ -3,11 +3,14 @@
 #include <Theron/Actor.h>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/algorithm/string.hpp>
+#include <unicode/ucnv.h> 
 #include "Messages.hpp"
 #include <iostream>
 #include <sstream>
 #include "OperateActor.hpp"
-
+#include <xapian.h>
+#include "Source/Result.h"
 // A trivial actor that does nothing.
 class QueryActor : public OperateActor
 {
@@ -46,10 +49,15 @@ public:
                 boost::algorithm::split( resv, fit->second, boost::algorithm::is_any_of(",") );
                 for(std::vector<std::string>::iterator it=resv.begin();it!=resv.end();++it)
                 {
-                    std::cout<<"dbname:"<<dbpath+*it<<std::endl;
-                    Xapian::Database tmpdb(dbpath+*it);
-                    std::cout<<"doc count:"<<tmpdb.get_doccount()<<std::endl;
-                    db.add_database(tmpdb);
+                    try
+                    {
+                        Xapian::Database tmpdb(dbpath+*it);
+                        std::cout<<"doc count:"<<tmpdb.get_doccount()<<std::endl;
+                        db.add_database(tmpdb);
+                    }catch(Xapian::DatabaseOpeningError e)
+                    {
+                        std::cout<<"database:"<<dbpath+*it<<"open error!!"<<std::endl;
+                    }
                 }
             }
             std::cout<<"doc count:"<<db.get_doccount()<<std::endl;
@@ -125,6 +133,7 @@ public:
                             info.content=doc.get_data();
                             dList->docList.push_back(info);
                         }
+                        std::cout<<"doc size:"<<dList->docList.size()<<std::endl;
                         break;
                     }catch(Xapian::DatabaseModifiedError exception)
                     {
