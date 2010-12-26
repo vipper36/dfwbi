@@ -8,4 +8,4 @@ Source/libictclas.a: Source/*.cpp
 	cd Source; g++ -g -c *.cpp
 	cd Source; ar -r libictclas.a *.o
 clean:
-	rm ictclas Source/libictclas.a
+	rm ictclas Source/libictclas.a Source/*.o

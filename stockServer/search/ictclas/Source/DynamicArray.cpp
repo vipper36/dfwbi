@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////
-//ICTCLAS��飺����������ʷ�����ϵͳICTCLAS(Institute of Computing Technology, Chinese Lexical Analysis System)��
-//             �����У����ķִʣ����Ա�ע��δ��¼��ʶ��
-//             �ִ���ȷ�ʸߴ�97.58%(973ר��������)��
-//             δ��¼��ʶ���ٻ��ʾ�����90%�������й�������ʶ���ٻ��ʽӽ�98%;
-//             �����ٶ�Ϊ31.5Kbytes/s��
-//����Ȩ��  Copyright?2002-2005�п�Ժ������ ְ������Ȩ�ˣ��Ż�ƽ ��Ⱥ
-//��ѭЭ�飺��Ȼ���Դ���������Դ����֤1.0
+//ICTCLAS¼ò½é£º¼ÆËãËùººÓï´Ê·¨·ÖÎöÏµÍ³ICTCLAS(Institute of Computing Technology, Chinese Lexical Analysis System)£¬
+//             ¹¦ÄÜÓÐ£ºÖÐÎÄ·Ö´Ê£»´ÊÐÔ±ê×¢£»Î´µÇÂ¼´ÊÊ¶±ð¡£
+//             ·Ö´ÊÕýÈ·ÂÊ¸ß´ï97.58%(973×¨¼ÒÆÀ²â½á¹û)£¬
+//             Î´µÇÂ¼´ÊÊ¶±ðÕÙ»ØÂÊ¾ù¸ßÓÚ90%£¬ÆäÖÐÖÐ¹úÈËÃûµÄÊ¶±ðÕÙ»ØÂÊ½Ó½ü98%;
+//             ´¦ÀíËÙ¶ÈÎª31.5Kbytes/s¡£
+//Öø×÷È¨£º  Copyright?2002-2005ÖÐ¿ÆÔº¼ÆËãËù Ö°ÎñÖø×÷È¨ÈË£ºÕÅ»ªÆ½ ÁõÈº
+//×ñÑ­Ð­Òé£º×ÔÈ»ÓïÑÔ´¦Àí¿ª·Å×ÊÔ´Ðí¿ÉÖ¤1.0
 //Email: zhanghp@software.ict.ac.cn
 //Homepage:www.nlp.org.cn;mtgroup.ict.ac.cn
 /****************************************************************************
@@ -52,7 +52,7 @@ CDynamicArray::CDynamicArray(bool bRowFirst)
 
 CDynamicArray::~CDynamicArray()
 {
-   PARRAY_CHAIN pCur=m_pHead,pTemp;//The pointer of array chain
+   PARRAY_CHAIN pCur=m_pHead,pTemp=NULL;//The pointer of array chain
    while(pCur!=NULL)
    {
 	   pTemp=pCur->next;
@@ -131,7 +131,7 @@ ELEMENT_TYPE CDynamicArray::GetElement(int nRow, int nCol,PARRAY_CHAIN pStart,PA
 
 int CDynamicArray::SetElement(unsigned int nRow, unsigned int nCol, ELEMENT_TYPE fValue,int nPOS,char *sWord)
 {
-   PARRAY_CHAIN pCur=m_pHead,pPre=NULL,pAdd;//The pointer of array chain
+   PARRAY_CHAIN pCur=m_pHead,pPre=NULL,pAdd=NULL;//The pointer of array chain
    if(nRow>m_nRow)//Set the array row
 	   m_nRow=nRow;
    if(nCol>m_nCol)//Set the array col
@@ -161,10 +161,12 @@ int CDynamicArray::SetElement(unsigned int nRow, unsigned int nCol, ELEMENT_TYPE
    else
    {
        pAdd=(PARRAY_CHAIN)malloc(sizeof(ARRAY_CHAIN));//malloc a new node
+       memset(pAdd,0,sizeof(ARRAY_CHAIN));
 	   pAdd->col=nCol;//get the value
 	   pAdd->row=nRow;
 	   pAdd->value=fValue;
 	   pAdd->nPOS=nPOS;
+           pAdd->next=NULL;
 	   if(sWord)//sWord is not empty
 	   {
 		   pAdd->nWordLen=strlen(sWord);
@@ -183,6 +185,8 @@ int CDynamicArray::SetElement(unsigned int nRow, unsigned int nCol, ELEMENT_TYPE
 	   else
 		   pPre->next=pAdd;
    }
+       
+
    return 0;
 }
 /*********************************************************************
@@ -211,6 +215,7 @@ const CDynamicArray & CDynamicArray::operator =(const CDynamicArray &array)
    while(pCur!=NULL)
    {
 	   pAdd=(PARRAY_CHAIN)malloc(sizeof(ARRAY_CHAIN));//malloc a new node
+           memset(pAdd,0,sizeof(ARRAY_CHAIN));
 	   pAdd->col=pCur->col;//get the value
 	   pAdd->row=pCur->row;
 	   pAdd->value=pCur->value;
