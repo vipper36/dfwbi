@@ -238,6 +238,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 								m_pWordSeg[nIndex][k].sWord[nLen-2]=0;
 							strcpy(sCurWord,"Î´##Êý");
 							nPOS=-27904;//'m'*256;Set the POS with 'm'
+							//modify by xiaofei
 //							i--;
 						}
 					}
@@ -249,6 +250,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 		}
 		m_pWordSeg[nIndex][k].nHandle=nPOS;//Get the POS of current word
 		m_pWordSeg[nIndex][k].dValue=fValue;//(int)(MAX_FREQUENCE*exp(-fValue));//Return the frequency of current word
+	//add by xiaofei
                 if(nEndVertex>nStartVertex)
                     m_graphOptimum.SetElement(nStartVertex,nEndVertex,fValue,nPOS,sCurWord);
                 else
