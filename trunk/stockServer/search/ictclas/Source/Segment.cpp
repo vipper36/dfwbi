@@ -69,6 +69,8 @@ CSegment::~CSegment()
 		delete m_pWordSeg[i];
 	}
 	delete m_pWordSeg;
+            if(m_npWordPosMapTable!=NULL)
+                delete m_npWordPosMapTable;
 }
 
 bool CSegment::Segment(char *sSentence,CDictionary &dictCore,int nResultCount)
@@ -79,7 +81,7 @@ bool CSegment::Segment(char *sSentence,CDictionary &dictCore,int nResultCount)
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
 		nSegRoute[i]=new int[MAX_SENTENCE_LEN/2];
-		memset(nSegRoute[i],0,MAX_SENTENCE_LEN/2*sizeof(int));
+		memset(nSegRoute[i],-1,MAX_SENTENCE_LEN/2*sizeof(int));
 	}
 	m_graphSeg.m_segGraph.SetRowFirst(false);
 	m_graphOptimum.SetRowFirst(false);
@@ -109,7 +111,8 @@ bool CSegment::Segment(char *sSentence,CDictionary &dictCore,int nResultCount)
 bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 {
 	unsigned int i=0,k=0;
-	int j,nStartVertex,nEndVertex,nPOS;
+            int j,nStartVertex,nEndVertex;
+            int nPOS;
 	char sAtom[WORD_MAXLENGTH],sNumCandidate[100],sCurWord[100];
 	ELEMENT_TYPE fValue;
 	while(nSegRoute[nIndex][i]!=-1&&nSegRoute[nIndex][i+1]!=-1&&nSegRoute[nIndex][i]<nSegRoute[nIndex][i+1])
@@ -118,6 +121,8 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 		j=nStartVertex;//Set the start vertex
 		nEndVertex=nSegRoute[nIndex][i+1];//Set the end vertex
 		nPOS=0;
+                        
+
 		m_graphSeg.m_segGraph.GetElement(nStartVertex,nEndVertex,&fValue,&nPOS);
 		sAtom[0]=0;
 		while(j<nEndVertex)
@@ -135,6 +140,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 			i++;//Skip to next atom now 
 			sAtom[0]=0;
 			
+
 			while(j<nSegRoute[nIndex][i+1])
 			{//Generate the word according the segmentation route
 				strcat(sAtom,m_graphSeg.m_sAtom[j]);
@@ -232,7 +238,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 								m_pWordSeg[nIndex][k].sWord[nLen-2]=0;
 							strcpy(sCurWord,"Î´##Êý");
 							nPOS=-27904;//'m'*256;Set the POS with 'm'
-							i--;
+//							i--;
 						}
 					}
 					i--;//Not num, back to previous word
@@ -436,6 +442,7 @@ bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &di
 
 	m_graphOptimum.SetEmpty();//Set graph optimum empty
 	i=0;
+
 	while(i<m_nSegmentCount)
 	{
 		BiPath2UniPath(nSegRoute[i]);
@@ -444,7 +451,7 @@ bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &di
 		//Gernerate word according the Segmentation route
 		i++;
 	}
-
+            
 	//free the memory
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{

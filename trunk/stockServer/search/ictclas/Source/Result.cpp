@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 #if defined (unix)
     #include "Utility.h"
 #else
@@ -467,8 +468,12 @@ bool CResult::ParagraphProcessing(char *sParagraph,char *sResult)
 	char *sSentence,sChar[3];
 	char *sSentenceResult;
 	unsigned int nLen=strlen(sParagraph)+13;
-	sSentence=new char[nLen];//malloc buffer
-	sSentenceResult=new char[nLen*3];//malloc buffer
+            //sSentence=new char[nLen];//malloc buffer
+        sSentence=(char*)malloc(nLen);
+        memset(sSentence,0,nLen);
+	//sSentenceResult=new char[nLen*3];//malloc buffer
+        sSentenceResult=(char*)malloc(nLen*3);
+        memset(sSentenceResult,0,nLen*3);
 	sSentence[0]=0;
 	unsigned int nPosIndex=0,nParagraphLen=strlen(sParagraph),nSentenceIndex=0;
 	sChar[2]=0;
@@ -537,8 +542,10 @@ bool CResult::ParagraphProcessing(char *sParagraph,char *sResult)
 		Output(m_pResult[0],sSentenceResult,bFirstIgnore);//Output to the imediate result
 		strcat(sResult,sSentenceResult);//Store in the result buffer
 	}
-	delete []  sSentence;//FREE sentence buffer 	
-	delete []  sSentenceResult;//free buffer
+//	delete []  sSentence;//FREE sentence buffer 	
+//	delete []  sSentenceResult;//free buffer
+            free(sSentence);
+            free(sSentenceResult);
 	return true;
 }
 
