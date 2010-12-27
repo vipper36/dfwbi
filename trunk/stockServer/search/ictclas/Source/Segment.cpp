@@ -52,9 +52,11 @@ CSegment::CSegment()
 {
 	//malloc buffer
 	m_pWordSeg=new PWORD_RESULT[MAX_SEGMENT_NUM];
+            memset(m_pWordSeg,0,sizeof(PWORD_RESULT)*MAX_SEGMENT_NUM);
 	for(int i=0;i<MAX_SEGMENT_NUM;i++)
 	{
 		m_pWordSeg[i]=new WORD_RESULT[MAX_WORDS];
+                    memset(m_pWordSeg[i],0,sizeof(WORD_RESULT)*MAX_WORDS);
 	}
 	m_npWordPosMapTable=0;//Record the start position of possible words
 	m_nWordCount=0;//Record the End position of possible words
@@ -66,17 +68,19 @@ CSegment::~CSegment()
 	//free buffer
 	for(int i=0;i<MAX_SEGMENT_NUM;i++)
 	{
-		delete m_pWordSeg[i];
+		delete [] m_pWordSeg[i];
 	}
-	delete m_pWordSeg;
+	delete [] m_pWordSeg;
             if(m_npWordPosMapTable!=NULL)
-                delete m_npWordPosMapTable;
+                delete [] m_npWordPosMapTable;
 }
 
 bool CSegment::Segment(char *sSentence,CDictionary &dictCore,int nResultCount)
 {
-	int **nSegRoute;//The segmentation route
-	nSegRoute=new int*[MAX_SEGMENT_NUM];
+//	int **nSegRoute;//The segmentation route
+//	nSegRoute=new int*[MAX_SEGMENT_NUM];
+    intPtr nSegRoute[MAX_SEGMENT_NUM];
+    memset(nSegRoute,0,MAX_SEGMENT_NUM*sizeof(intPtr));
     int i;
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
@@ -103,13 +107,14 @@ bool CSegment::Segment(char *sSentence,CDictionary &dictCore,int nResultCount)
 	{
 		delete [] nSegRoute[i];//free the pointer memory
 	}
-	delete [] nSegRoute;//free the pointer array
+//	delete [] nSegRoute;//free the pointer array
 	
 	return true;
 }
 //Generate Word according the segmentation route
 bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 {
+
 	unsigned int i=0,k=0;
             int j,nStartVertex,nEndVertex;
             int nPOS;
@@ -117,11 +122,11 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 	ELEMENT_TYPE fValue;
 	while(nSegRoute[nIndex][i]!=-1&&nSegRoute[nIndex][i+1]!=-1&&nSegRoute[nIndex][i]<nSegRoute[nIndex][i+1])
 	{
+
 		nStartVertex=nSegRoute[nIndex][i];
 		j=nStartVertex;//Set the start vertex
 		nEndVertex=nSegRoute[nIndex][i+1];//Set the end vertex
 		nPOS=0;
-                        
 
 		m_graphSeg.m_segGraph.GetElement(nStartVertex,nEndVertex,&fValue,&nPOS);
 		sAtom[0]=0;
@@ -130,6 +135,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 			strcat(sAtom,m_graphSeg.m_sAtom[j]);
 			j++;
 		}
+
 		m_pWordSeg[nIndex][k].sWord[0]=0;//Init the result ending
 		strcpy(sNumCandidate,sAtom);
 		while(sAtom[0]!=0&&(IsAllNum((unsigned char *)sNumCandidate)||IsAllChineseNum(sNumCandidate)))
@@ -260,6 +266,7 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
                 }
 		//Generate optimum segmentation graph according the segmentation result
 		i++;//Skip to next atom
+	//if the while condition can not terminate the loop this k will out range of m_pWordSeg,then casue stange error!!!!
 		k++;//Accept next word
 	}
 	m_pWordSeg[nIndex][k].sWord[0]=0;
@@ -288,12 +295,15 @@ bool CSegment::GenerateWord(int **nSegRoute, int nIndex)
 //After unknown word recognition
 bool CSegment::OptimumSegmet(int nResultCount)
 {
-	int **nSegRoute;//The segmentation route
-	nSegRoute=new int*[MAX_SEGMENT_NUM];
+//	int **nSegRoute;//The segmentation route
+//	nSegRoute=new int*[MAX_SEGMENT_NUM];
+    intPtr nSegRoute[MAX_SEGMENT_NUM];
+    memset(nSegRoute,0,MAX_SEGMENT_NUM*sizeof(intPtr));
     int i;
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
 		nSegRoute[i]=new int[MAX_SENTENCE_LEN/2];
+                    memset(nSegRoute[i],-1,MAX_SENTENCE_LEN/2*sizeof(int));
 	}
 	CNShortPath sp(&m_graphOptimum,nResultCount);
 	sp.ShortPath();
@@ -313,7 +323,7 @@ bool CSegment::OptimumSegmet(int nResultCount)
 	{
 		delete [] nSegRoute[i];//free the pointer memory
 	}
-	delete [] nSegRoute;//free the pointer array
+//	delete [] nSegRoute;//free the pointer array
 	return true;
 }
 
@@ -379,7 +389,10 @@ bool CSegment::BiGraphGenerate(CDynamicArray &aWord, CDynamicArray &aBinaryWordN
 		m_npWordPosMapTable=0;
 	}
 	if(m_nWordCount>0)//Word count is greater than 0
+        {
 		m_npWordPosMapTable=new int[m_nWordCount];//Record the  position of possible words
+                memset(m_npWordPosMapTable,0,m_nWordCount*sizeof(int));
+        }
 	pCur=aWord.GetHead();
 	while(pCur!=NULL)//Set the position map of words
 	{
@@ -423,14 +436,16 @@ bool CSegment::BiGraphGenerate(CDynamicArray &aWord, CDynamicArray &aBinaryWordN
 
 bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &dictCore, CDictionary &dictBinary, unsigned int nResultCount)
 {
-	int **nSegRoute;//The segmentation route
-	nSegRoute=new int*[MAX_SEGMENT_NUM];
+//	int **nSegRoute;//The segmentation route
+//	nSegRoute=new int*[MAX_SEGMENT_NUM];
+    intPtr nSegRoute[MAX_SEGMENT_NUM];
+    memset(nSegRoute,0,MAX_SEGMENT_NUM*sizeof(intPtr));
 	unsigned int nLen=strlen(sSentence)+10;
     int i;
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
-		nSegRoute[i]=new int[nLen/2];
-		memset(nSegRoute[i],-1,nLen/2*sizeof(int));
+		nSegRoute[i]=new int[nLen];
+		memset(nSegRoute[i],-1,nLen*sizeof(int));
 	}
  	m_graphSeg.GenerateWordNet(sSentence,dictCore,true);//Generate words array
     CDynamicArray aBiwordsNet;
@@ -441,8 +456,10 @@ bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &di
 	sp.ShortPath();
 	sp.Output(nSegRoute,false,&m_nSegmentCount);
 	
+            
 
 	m_graphOptimum.SetEmpty();//Set graph optimum empty
+
 	i=0;
 
 	while(i<m_nSegmentCount)
@@ -459,7 +476,7 @@ bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &di
 	{
 		delete [] nSegRoute[i];//free the pointer memory
 	}
-	delete [] nSegRoute;//free the pointer array
+//	delete [] nSegRoute;//free the pointer array
 	
 	return true;
 }
@@ -483,8 +500,10 @@ bool CSegment::BiPath2UniPath(int *npPath)
 
 bool CSegment::BiOptimumSegment(unsigned int nResultCount,double dSmoothingPara, CDictionary &dictBinary, CDictionary &dictCore)
 {
-	int **nSegRoute;//The segmentation route
-	nSegRoute=new int*[MAX_SEGMENT_NUM];
+//	int **nSegRoute;//The segmentation route
+//	nSegRoute=new int*[MAX_SEGMENT_NUM];
+    intPtr nSegRoute[MAX_SEGMENT_NUM];
+    memset(nSegRoute,0,MAX_SEGMENT_NUM*sizeof(intPtr));
     int i;
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
@@ -516,6 +535,6 @@ bool CSegment::BiOptimumSegment(unsigned int nResultCount,double dSmoothingPara,
 	{
 		delete [] nSegRoute[i];//free the pointer memory
 	}
-	delete [] nSegRoute;//free the pointer array
+//	delete [] nSegRoute;//free the pointer array
 	return true;
 }

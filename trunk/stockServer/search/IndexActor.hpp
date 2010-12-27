@@ -58,7 +58,7 @@ public:
             if(ii.content.length()>0&&ii.db==attMap["dbname"])
             {
                 std::string rowString=ii.attMap["title"]+ii.content;
-//                std::cout<<"row len:"<<rowString.length()<<"row:"<<rowString<<std::endl;
+  //              std::cout<<"row len:"<<rowString.length()<<"row:"<<rowString<<std::endl;
                 std::string segString;
                 char *output=new char[rowString.length()*9];
                 char *input=new char[rowString.length()*3];

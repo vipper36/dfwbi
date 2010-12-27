@@ -46,6 +46,7 @@
 #include "SegGraph.h"//The segmentation graph
 #define MAX_WORDS 650
 #define MAX_SEGMENT_NUM 10
+typedef int * intPtr;
 class CSegment  
 {
 public:

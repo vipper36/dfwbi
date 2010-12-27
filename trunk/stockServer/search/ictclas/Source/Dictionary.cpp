@@ -57,7 +57,7 @@ CDictionary::~CDictionary()
 	for(int i=0;i<CC_NUM;i++)
 	{//delete the memory of word item array in the dictionary
 		for(int j=0;j<m_IndexTable[i].nCount;j++)
-			delete m_IndexTable[i].pWordItemHead[j].sWord;
+			delete [] m_IndexTable[i].pWordItemHead[j].sWord;
 		delete [] m_IndexTable[i].pWordItemHead;
 	}
     DelModified();
