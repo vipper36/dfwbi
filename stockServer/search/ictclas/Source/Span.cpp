@@ -47,7 +47,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-CSpan::CSpan()
+CSpan::CSpan():m_tagType(TT_NORMAL)
 {
 	if(m_tagType!=TT_NORMAL)
 	      m_nTags[0][0]=100;//Begin tag
@@ -62,7 +62,7 @@ CSpan::CSpan()
 	m_nWordPosition[1]=0;
 	m_sWords[0][0]=0;
 
-	m_tagType=TT_NORMAL;//Default tagging type
+	
 }
 
 CSpan::~CSpan()

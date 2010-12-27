@@ -105,7 +105,7 @@ CResult::~CResult()
 	{
 		delete [] m_pResult[i];
 	}
-	delete m_pResult;
+	delete [] m_pResult;
 
 }
 

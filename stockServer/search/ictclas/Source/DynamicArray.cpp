@@ -56,6 +56,7 @@ CDynamicArray::~CDynamicArray()
    while(pCur!=NULL)
    {
 	   pTemp=pCur->next;
+               pCur->next=NULL;
        if(pCur->sWord)
 			delete [] pCur->sWord;
 	   free(pCur); 
@@ -245,6 +246,7 @@ void CDynamicArray::SetEmpty()
    while(pCur!=NULL)//delete the node 
    {
 	   pTemp=pCur->next;
+               pCur->next=NULL;
  	   if(pCur->nWordLen>0)
 			delete [] pCur->sWord;
        free(pCur); 

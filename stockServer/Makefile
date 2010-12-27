@@ -47,10 +47,10 @@ $(DESC3):$(BOOSTOBJ3)
 	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${LIBMQ} ${WTLIB}
 $(DESC4):$(BOOSTOBJ4)
 	@echo Linking $@ ...
-	$(CXX) -static -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
 $(DESC5):$(BOOSTOBJ5)
 	@echo Linking $@ ...
-	$(CXX) -static -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
+	$(CXX) -o $@ $^ ${BOOSTLIB} ${XMLLIB} ${FCGILIB} ${LIBXAPIAN}
 clean:
 	@-rm $(DESC) $(DESC2)
 	@-rm -fr *.o *.a *~ "*#"
