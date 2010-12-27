@@ -444,6 +444,7 @@ bool CSegment::BiSegment(char *sSentence, double dSmoothingPara, CDictionary &di
     int i;
 	for(i=0;i<MAX_SEGMENT_NUM;i++)
 	{
+	//modify by xiaofei
 		nSegRoute[i]=new int[nLen];
 		memset(nSegRoute[i],-1,nLen*sizeof(int));
 	}
