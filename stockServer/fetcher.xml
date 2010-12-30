@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="FetchRouteActor" name="main">
+      
+      <ActorCollection type="SimpleCollActor" name="listen-collection"
+		       count="1">
+	<Actor type="FTListenActor" host="localhost" port="5672" exchange="fetch.amqp" key="task">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="10" name="fetch-collection">
+	<Actor type="FetchActor">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="1" name="classify-collection">
+	<Actor type="ClassifyActor">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="1" name="extract-collection">
+	<Actor type="XsltExtractActor">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="1" name="mq-collection">
+	<Actor type="FetchMqActor" host="localhost" port="5672"
+	       exchange="fetch.amqp" key="result">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="ExtractResultMessage">mq-collection</Msg>
+	<Msg name="FetchTaskMessage">fetch-collection</Msg>
+	<Msg name="FetchResultMessage">classify-collection</Msg>
+	<Msg name="ClassifyResultMessage">extract-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>

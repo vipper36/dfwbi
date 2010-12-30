@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="SearchRouteActor" name="main">
+      
+      <ActorCollection type="SimpleCollActor" name="listen-collection"
+		       count="1">
+	<Actor type="SreqListenActor" host="localhost" port="5672" exchange="search.amqp" key="query">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="1" name="query-collection">
+	<Actor type="QueryActor" dbnames="news1.db"
+	       dicpath="./search/ictclas/" dbpath="./">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="2" name="mq-collection">
+	<Actor type="SearchMqActor" host="localhost" port="5672" exchange="">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="QueryMessage">query-collection</Msg>
+	<Msg name="QueryResponceMessage">mq-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>
