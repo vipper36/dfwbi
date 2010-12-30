@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="FetchRouteActor" name="main">
+      
+      <ActorCollection type="SimpleCollActor" name="listen-collection"
+		       count="1">
+	<Actor type="FTRListenActor" host="localhost" port="5672" exchange="fetch.amqp" key="result">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="TaskManageActor" count="2" name="mq-collection" file="url.csv">
+	<Actor type="FetchMqActor" host="localhost" port="5672"
+	       exchange="fetch.amqp" key="task" se_exchange="search.amqp" se_key="index">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="ExtractResultMessage">mq-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>

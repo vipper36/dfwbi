@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+  <SysServer>
+    <Manager type="SearchRouteActor" name="main">
+      
+      <ActorCollection type="SimpleCollActor" name="listen-collection"
+		       count="1">
+	<Actor type="IndexListenActor" host="localhost" port="5672" exchange="search.amqp" key="index">
+	</Actor>
+      </ActorCollection>
+      <ActorCollection type="RingCollActor" count="1" name="index-collection" file="url.csv">
+	<Actor type="IndexActor" dbpath="./news1.db"
+	       dicpath="./search/ictclas/" dbname="news">
+	</Actor>
+      </ActorCollection>
+      <MsgHandle>
+	<Msg name="IndexMessage">index-collection</Msg>
+      </MsgHandle>
+    </Manager>
+    <Log path="stock.log"/>
+  </SysServer>
+</Server>
