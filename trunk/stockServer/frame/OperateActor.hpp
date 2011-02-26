@@ -15,7 +15,6 @@ public:
     }
 protected:
     virtual void OperateHandler(const OperateMessage &message, const Theron::Address from)=0;
-    virtual void MapHandler(const MapMessage &message, const Theron::Address from)=0;
     void AddressHandler(const AddressMessage &message, const Theron::Address from)
         {
             switch(message.type)
@@ -33,8 +32,17 @@ protected:
                 break;
             }
         }
+    void MapHandler(const MapMessage &message, const Theron::Address from)
+        {
+            if(message.type==MapMessage::ATTR)
+            {
+                attMap=message.map;
+            }
+        }
     std::map<std::string,Theron::Address> childrens;
     Theron::Address parent;
     Theron::Address log;
+    std::map<std::string,std::string> attMap;
+    
 }; 
 #endif

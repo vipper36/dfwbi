@@ -22,13 +22,12 @@
 #include <list>
 #include <algorithm>
 #include "da.h"
-#include "GLSFitting.h"
 #include <dlib/svm.h>
+#include "GLSFitting.h"
 
 
 namespace po = boost::program_options;
 using namespace boost::assign;
-using namespace boost::numeric::ublas;
 using namespace Base;
 static double lastval=0;
 void OutStock(std::ostream &ost,StockPrice sp)

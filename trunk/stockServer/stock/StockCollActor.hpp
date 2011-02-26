@@ -78,20 +78,12 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
     void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
 private:
     std::map<std::string,std::string> stockMap;
-    std::map<std::string,std::string> attMap;
     boost::asio::deadline_timer* m_timer;
 }; 
 #endif

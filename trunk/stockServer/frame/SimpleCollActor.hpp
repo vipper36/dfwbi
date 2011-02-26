@@ -13,12 +13,12 @@ public:
 
     inline SimpleCollActor():OperateActor()
         {
-            RegisterHandler(this, &SimpleCollActor::StockHandler);
-            RegisterHandler(this, &SimpleCollActor::PriceReqHandler);
-            RegisterHandler(this, &SimpleCollActor::FetchTaskHandler);
-            RegisterHandler(this, &SimpleCollActor::ExtractResultHanlde);
-            RegisterHandler(this, &SimpleCollActor::IndexHanlde);
-            RegisterHandler(this, &SimpleCollActor::QueryHanlde);
+            RegisterHandler(this, &SimpleCollActor::StockMessageHandler);
+            RegisterHandler(this, &SimpleCollActor::PriceReqMessageHandler);
+            RegisterHandler(this, &SimpleCollActor::FetchTaskMessageHandler);
+            RegisterHandler(this, &SimpleCollActor::ExtractResultMessageHandler);
+            RegisterHandler(this, &SimpleCollActor::IndexMessageHandler);
+            RegisterHandler(this, &SimpleCollActor::QueryMessageHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -38,39 +38,31 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
-    void StockHandler(const StockMessage &message, const Theron::Address from)
+    void StockMessageHandler(const StockMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
+    void PriceReqMessageHandler(const PriceReqMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    void FetchTaskHandler(const FetchTaskMessage &message, const Theron::Address from)
+    void FetchTaskMessageHandler(const FetchTaskMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    void ExtractResultHanlde(const ExtractResultMessage &message, const Theron::Address from)
+    void ExtractResultMessageHandler(const ExtractResultMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    void IndexHanlde(const IndexMessage &message, const Theron::Address from)
+    void IndexMessageHandler(const IndexMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    void QueryHanlde(const QueryMessage &message, const Theron::Address from)
+    void QueryMessageHandler(const QueryMessage &message, const Theron::Address from)
         {
             Send(message, parent);
         }
-    
 private:
-    std::map<std::string,std::string> attMap;
+
 }; 
 #endif

@@ -26,13 +26,6 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
     void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             stock::StockPrice stock=*message.rp;
@@ -110,7 +103,6 @@ public:
             delete message.req;
         }
 private:
-    std::map<std::string,std::string> attMap;
     std::map<boost::posix_time::ptime,stock::StockPrice> RealMap;
     std::map<boost::posix_time::ptime,stock::StockPrice> M1Map;
     std::map<boost::posix_time::ptime,stock::StockPrice> DayMap;

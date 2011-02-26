@@ -14,6 +14,7 @@ public:
             RegisterHandler(this, &FetchRouteActor::FetchResultHandler);
             RegisterHandler(this, &FetchRouteActor::ClassifyResultHandle);
             RegisterHandler(this, &FetchRouteActor::ExtractResultHanlde);
+            RegisterHandler(this, &FetchRouteActor::MapHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -45,9 +46,14 @@ public:
             {
                 msgMap=message.map;
             }
+            if(message.type==MapMessage::ATTR)
+            {
+                attMap=message.map;
+            }
         }
     void FetchTaskHandler(const FetchTaskMessage &message, const Theron::Address from)
         {
+
             std::map<std::string,std::string>::iterator fit=msgMap.find("FetchTaskMessage");
             
             if(fit!=msgMap.end())
@@ -69,7 +75,6 @@ public:
         }
     void ClassifyResultHandle(const ClassifyResultMessage &message, const Theron::Address from)
         {
-            std::cout<<"classify  route........................"<<std::endl;
             std::map<std::string,std::string>::iterator fit=msgMap.find("ClassifyResultMessage");
             
             if(fit!=msgMap.end())

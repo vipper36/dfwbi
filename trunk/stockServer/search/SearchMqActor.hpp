@@ -28,13 +28,7 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
+
     void QueryResponceHandler(const QueryResponceMessage &message, const Theron::Address from)
         {
             search::DocList result=*message.res;
@@ -50,6 +44,5 @@ public:
         }    
 private:
     AMQP::RabbitClient rc;
-    std::map<std::string,std::string> attMap;
 }; 
 #endif

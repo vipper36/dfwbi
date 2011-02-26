@@ -46,13 +46,6 @@ public:
             }
         }
 
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
     void ClassifyResultHandler(const ClassifyResultMessage &message, const Theron::Address from)
         {
           //  std::cout<<"extrat data...."<<message.result->type<<std::endl;
@@ -115,6 +108,5 @@ private:
             xsltCleanupGlobals();
             return ret;
         }
-    std::map<std::string,std::string> attMap;
 }; 
 #endif
