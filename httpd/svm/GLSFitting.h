@@ -16,8 +16,8 @@
 #include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include "LSFitting.h"
-using namespace boost::accumulators;
-using namespace boost::numeric::ublas;
+namespace ba = boost::accumulators;
+namespace bu = boost::numeric::ublas;
 namespace lsf
 {
   template <typename Type>
@@ -26,7 +26,7 @@ namespace lsf
 
   public:
 
-       GLSFitting( const matrix<Type> &xn, const vector<Type> &yn,const matrix<Type> &L)
+       GLSFitting( const bu::matrix<Type> &xn, const vector<Type> &yn,const bu::matrix<Type> &L)
     {
       m_x=xn;
       m_L=L;
@@ -39,33 +39,33 @@ namespace lsf
 
     void calcParams()
     {
-	 matrix<Type> Lx=prod(m_L,m_x);
-	 vector<Type> Ly=prod(m_L,m_y);
+	 bu::matrix<Type> Lx=bu::prod(m_L,m_x);
+	 bu::vector<Type> Ly=bu::prod(m_L,m_y);
 
 
-	 matrix<Type> xx=prod(trans (Lx),Lx);
+	 bu::matrix<Type> xx=bu::prod(bu::trans (Lx),Lx);
 
-	 vector<Type> xy=prod(trans (Lx),Ly);
+	 bu::vector<Type> xy=bu::prod(bu::trans (Lx),Ly);
 	 
 
-	 matrix<Type> Invxx(xx.size1(),xx.size2());
+	 bu::matrix<Type> Invxx(xx.size1(),xx.size2());
 	 InvertMatrix(xx,Invxx);
 
-	 pars=prod(Invxx,xy);
+	 pars=bu::prod(Invxx,xy);
     }
     void calcVar()
     {
-      matrix<Type> Lx=prod(m_L,m_x);
-      vector<Type> Ly=prod(m_L,m_y);
-      vector<Type> u=Ly-prod(Lx,pars);
+      bu::matrix<Type> Lx=bu::prod(m_L,m_x);
+      bu::vector<Type> Ly=bu::prod(m_L,m_y);
+      bu::vector<Type> u=Ly-bu::prod(Lx,pars);
 
-      accumulator_set<Type, stats<tag::variance > > acc;
+      ba::accumulator_set<Type, ba::stats<ba::tag::variance > > acc;
 
       for(typename vector<Type>::iterator it=u.begin();it!=u.end();++it)
 	{
 	  acc(*it);
 	}
-      var=variance(acc);
+      var=ba::variance(acc);
     }
     vector<Type> getParams() const
     {
@@ -77,10 +77,10 @@ namespace lsf
     }
 	  
   private:
-    matrix<Type> m_x;
-    matrix<Type> m_L;
-    vector<Type> m_y;
-    vector<Type> pars;     // fitted parameters
+    bu::matrix<Type> m_x;
+    bu::matrix<Type> m_L;
+    bu::vector<Type> m_y;
+    bu::vector<Type> pars;     // fitted parameters
     Type  var;       // fitted functions
 
   };

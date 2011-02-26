@@ -13,6 +13,7 @@ public:
             RegisterHandler(this, &SearchRouteActor::IndexHandler);
             RegisterHandler(this, &SearchRouteActor::QueryHanlde);
             RegisterHandler(this, &SearchRouteActor::QueryResponceHandle);
+            RegisterHandler(this, &SearchRouteActor::MapHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {

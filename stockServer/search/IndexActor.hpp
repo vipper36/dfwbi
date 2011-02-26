@@ -19,6 +19,7 @@ public:
     inline IndexActor():result(NULL)
         {
             RegisterHandler(this, &IndexActor::IndexHandler);
+            RegisterHandler(this, &IndexActor::MapHandler);
         }
     inline ~IndexActor()
         {
@@ -129,6 +130,5 @@ public:
 private:
     Xapian::WritableDatabase db;
     CResult  *result;
-    std::map<std::string,std::string> attMap;
 }; 
 #endif

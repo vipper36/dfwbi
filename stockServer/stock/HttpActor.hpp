@@ -111,10 +111,6 @@ public:
                 break;
             }
         }
-
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-        }
 private:
 }; 
 #endif

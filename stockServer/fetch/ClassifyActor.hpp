@@ -34,13 +34,6 @@ public:
             }
         }
 
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
     void FetchResultHandler(const FetchResultMessage &message, const Theron::Address from)
         {
             if(message.result->type==fetch::UNKNOWN)
@@ -71,7 +64,7 @@ public:
             Send(ClassifyResultMessage(message.result),from);            
         }
 private:
-    std::map<std::string,std::string> attMap;
+
     inline std::string getSite(std::string url)
         {
             size_t siteStart=url.find("://");

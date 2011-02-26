@@ -36,13 +36,7 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
+
     void StockHandler(const StockMessage &message, const Theron::Address from)
         {
             std::stringstream nss;
@@ -97,7 +91,6 @@ public:
         }
 private:
     Factory::Factory *factory;
-    std::map<std::string,std::string> attMap;
     std::list<Theron::ActorRef> subList;
 }; 
 #endif

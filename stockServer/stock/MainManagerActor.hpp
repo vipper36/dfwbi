@@ -10,10 +10,11 @@ public:
 
     inline MainManagerActor()
         {
-            RegisterHandler(this, &MainManagerActor::StockHandler);
-            RegisterHandler(this, &MainManagerActor::StockListHandler);
-            RegisterHandler(this, &MainManagerActor::PriceReqHandler);
-            RegisterHandler(this, &MainManagerActor::PriceResHandler);
+            RegisterHandler(this, &MainManagerActor::StockMessageHandler);
+            RegisterHandler(this, &MainManagerActor::StockListMessageHandler);
+            RegisterHandler(this, &MainManagerActor::PriceResMessageHandler);
+            RegisterHandler(this, &MainManagerActor::PriceReqMessageHandler);
+            RegisterHandler(this, &MainManagerActor::MapHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -45,8 +46,12 @@ public:
             {
                 msgMap=message.map;
             }
+            if(message.type==MapMessage::ATTR)
+            {
+                attMap=message.map;
+            }
         }
-    void StockHandler(const StockMessage &message, const Theron::Address from)
+    void StockMessageHandler(const StockMessage &message, const Theron::Address from)
         {
             std::map<std::string,std::string>::iterator fit=msgMap.find("StockMessage");
             if(fit!=msgMap.end())
@@ -54,36 +59,27 @@ public:
                 Send(message,childrens[fit->second]);
             }
         }
-    void StockListHandler(const StockListMessage &message, const Theron::Address from)
+    void StockListMessageHandler(const StockListMessage &message, const Theron::Address from)
         {
-
             std::map<std::string,std::string>::iterator fit=msgMap.find("StockListMessage");
-            
             if(fit!=msgMap.end())
             {
-
                 Send(message,childrens[fit->second]);
             }
         }
-    void PriceReqHandler(const PriceReqMessage &message, const Theron::Address from)
+    void PriceResMessageHandler(const PriceResMessage &message, const Theron::Address from)
         {
-
-            std::map<std::string,std::string>::iterator fit=msgMap.find("PriceReqMessage");
-            
-            if(fit!=msgMap.end())
-            {
-
-                Send(message,childrens[fit->second]);
-            }
-        }
-    void PriceResHandler(const PriceResMessage &message, const Theron::Address from)
-        {
-
             std::map<std::string,std::string>::iterator fit=msgMap.find("PriceResMessage");
-            
             if(fit!=msgMap.end())
             {
-
+                Send(message,childrens[fit->second]);
+            }
+        }
+    void PriceReqMessageHandler(const PriceReqMessage &message, const Theron::Address from)
+        {
+            std::map<std::string,std::string>::iterator fit=msgMap.find("PriceReqMessage");
+            if(fit!=msgMap.end())
+            {
                 Send(message,childrens[fit->second]);
             }
         }

@@ -10,7 +10,7 @@
 #include "WMA.h"
 
 using namespace boost::assign;
-using namespace boost::accumulators;
+namespace ba = boost::accumulators;
 namespace Base
 {
      template<typename DC>
@@ -19,7 +19,7 @@ namespace Base
      public:
 	  void operator () (DC &tar,DC &src,int step)
 	       {
-		    accumulator_set<typename DC::value_type, stats<tag::rolling_mean> > acc(tag::rolling_window::window_size = step);
+		    ba::accumulator_set<typename DC::value_type, ba::stats<ba::tag::rolling_mean> > acc(ba::tag::rolling_window::window_size = step);
 		    
 		    for(typename DC::iterator it=src.begin();it!=src.end();++it)
 		    {
@@ -34,7 +34,7 @@ namespace Base
      public:
 	  void operator () (DC &tar,DC &src,double fac)
 	       {
-		    accumulator_set<typename DC::value_type, stats<tag::ema> > acc(fact=fac);
+		    ba::accumulator_set<typename DC::value_type, ba::stats<ba::tag::ema> > acc(ba::fact=fac);
 		    
 		    for(typename DC::iterator it=src.begin();it!=src.end();++it)
 		    {
@@ -49,7 +49,7 @@ namespace Base
      public:
 	  void operator () (DC &tar,DC &src,double fac)
 	       {
-		    accumulator_set<typename DC::value_type, stats<tag::wma> > acc(tag::rolling_window::window_size = fac);
+		    ba::accumulator_set<typename DC::value_type, ba::stats<ba::tag::wma> > acc(ba::tag::rolling_window::window_size = fac);
 		    
 		    for(typename DC::iterator it=src.begin();it!=src.end();++it)
 		    {

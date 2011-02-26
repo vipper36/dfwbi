@@ -62,15 +62,8 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
+
 private:
-    std::map<std::string,std::string> attMap;
     boost::asio::deadline_timer* m_timer;
     AMQP::RabbitClient rc;
 }; 

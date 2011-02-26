@@ -108,9 +108,6 @@ public:
             }
         }
 
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-        }
     std::list<yahoo::YearData> parseDayResult(std::string result)
     {
         using boost::spirit::qi::phrase_parse;

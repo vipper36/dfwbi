@@ -2,6 +2,7 @@
 #define __RINGCOLL_ACTOR_H__
 #include <Theron/Actor.h>
 #include <iostream>
+#include "Messages.hpp"
 #include "OperateActor.hpp"
 // A trivial actor that does nothing.
 class RingCollActor : public OperateActor
@@ -10,16 +11,16 @@ public:
 
     inline RingCollActor()
         {            
-            RegisterHandler(this, &RingCollActor::StockHandler);
-            RegisterHandler(this, &RingCollActor::StockListHandler);
-            RegisterHandler(this, &RingCollActor::PriceResHandler);
-            RegisterHandler(this, &RingCollActor::FetchTaskHandler);
-            RegisterHandler(this, &RingCollActor::ClassifyResultHandle);
-            RegisterHandler(this, &RingCollActor::ExtractResultHandle);
-            RegisterHandler(this, &RingCollActor::FetchResultHandler);
-            RegisterHandler(this, &RingCollActor::IndexHandle);
-            RegisterHandler(this, &RingCollActor::QueryHandle);
-            RegisterHandler(this, &RingCollActor::QueryResponceHandle);
+            RegisterHandler(this, &RingCollActor::StockMessageHandler);
+            RegisterHandler(this, &RingCollActor::StockListMessageHandler);
+            RegisterHandler(this, &RingCollActor::PriceResMessageHandler);
+            RegisterHandler(this, &RingCollActor::FetchTaskMessageHandler);
+            RegisterHandler(this, &RingCollActor::FetchResultMessageHandler);
+            RegisterHandler(this, &RingCollActor::ClassifyResultMessageHandler);
+            RegisterHandler(this, &RingCollActor::ExtractResultMessageHandler);
+            RegisterHandler(this, &RingCollActor::IndexMessageHandler);
+            RegisterHandler(this, &RingCollActor::QueryMessageHandler);
+            RegisterHandler(this, &RingCollActor::QueryResponceMessageHandler);
             current=childrens.begin();
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
@@ -46,26 +47,8 @@ public:
                 break;
             }
         }
-    void MapHandler(const MapMessage &message, const Theron::Address from)
-        {
-            if(message.type==MapMessage::ATTR)
-            {
-                attMap=message.map;
-            }
-        }
-    void StockHandler(const StockMessage &message, const Theron::Address from)
-        {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                Send(message, current->second);
-                ++current;
-                if(current==childrens.end())
-                    current= childrens.begin();
-            }
-        }
-    void StockListHandler(const StockListMessage &message, const Theron::Address from)
+    template<typename MSG>
+    void MSGHandler(const MSG &message, const Theron::Address from)
         {
             if(from!=parent)
                 Send(message, parent);
@@ -77,104 +60,47 @@ public:
                 ++current;
             }
         }
-    void PriceResHandler(const PriceResMessage &message, const Theron::Address from)
+    void StockMessageHandler(const StockMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void FetchTaskHandler(const FetchTaskMessage &message, const Theron::Address from)
+    void StockListMessageHandler(const StockListMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void FetchResultHandler(const FetchResultMessage &message, const Theron::Address from)
+    void PriceResMessageHandler(const PriceResMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void ClassifyResultHandle(const ClassifyResultMessage &message, const Theron::Address from)
+    void FetchTaskMessageHandler(const FetchTaskMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void ExtractResultHandle(const ExtractResultMessage &message, const Theron::Address from)
+    void FetchResultMessageHandler(const FetchResultMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void IndexHandle(const IndexMessage &message, const Theron::Address from)
+    void ClassifyResultMessageHandler(const ClassifyResultMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void QueryHandle(const QueryMessage &message, const Theron::Address from)
+    void ExtractResultMessageHandler(const ExtractResultMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
         }
-    void QueryResponceHandle(const QueryResponceMessage &message, const Theron::Address from)
+    void IndexMessageHandler(const IndexMessage &message, const Theron::Address from)
         {
-            if(from!=parent)
-                Send(message, parent);
-            else
-            {
-                if(current==childrens.end())
-                    current= childrens.begin();
-                Send(message, current->second);
-                ++current;
-            }
+            MSGHandler(message,from);
+        }
+    void QueryMessageHandler(const QueryMessage &message, const Theron::Address from)
+        {
+            MSGHandler(message,from);
+        }
+    void QueryResponceMessageHandler(const QueryResponceMessage &message, const Theron::Address from)
+        {
+            MSGHandler(message,from);
         }
 private:
     std::map<std::string,Theron::Address>::iterator current;
-    std::map<std::string,std::string> attMap;
 }; 
 #endif

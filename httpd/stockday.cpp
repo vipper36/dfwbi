@@ -65,8 +65,10 @@ public:
   }
   result_type operator ()(StockPrice sp,matrix<double> &x,vector<double> &y)
   {
-    double curval=log(sp.PriceValues["money"]/sp.PriceValues["volum"]);
-    double deltaval=100*(curval-m_last);
+    //double curval=log(sp.PriceValues["money"]/sp.PriceValues["volum"]);
+    //double deltaval=100*(curval-m_last);
+    double curval=sp.PriceValues["close"];
+    double deltaval=100*(curval-m_last)/m_last;
     if(m_last==0)
       {
 	m_last=curval;
@@ -158,19 +160,19 @@ int main(int argc, char* argv[])
 	  //ptime from(date(2010,1,1),hours(0));
 	  ptime now = second_clock::local_time();
 	  greg_weekday wd = now.date().day_of_week();
-	  now=now-days(1);
+	  now=now;
 	  if(wd.as_number()<6)
 	    {	
-	      ptime from=now-days(100);
+	      ptime from=now-days(21);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
 		  std::cout<<"-------------1--"<<now<<std::endl;
 		  std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
 		  std::cout<<"-------------2--"<<now<<std::endl;
-		  if(spList.size()>5*4&&spList.back().time.date()==now.date())
-		    //if(spList.size()>10)
+		  //if(spList.size()>3*4&&spList.back().time.date()==now.date())
+		    if(spList.size()>10)
 		    {
-		      GetMatrix getMatrix(5);
+		      GetMatrix getMatrix(4);
 		      matrix<double> xs;
 		      vector<double> ys;
 		    
@@ -222,10 +224,13 @@ int main(int argc, char* argv[])
 		      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
 		      
 		      std::ofstream resof("result.txt",std::ios::app);
-		      if(fabs(delta)>3*ls.getVar())
+		      if(fabs(delta)>3*ls.getVar()&&delta>0)
 			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
-		    
 		      resof.close();
+		      std::ofstream resof1("result1.txt",std::ios::app);
+		      if(ls.getVar()<0.1&&yt>3)
+			resof1<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
+		      resof1.close();
 		    }
 		}
 	    }

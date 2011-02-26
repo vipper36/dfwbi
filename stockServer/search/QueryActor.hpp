@@ -19,6 +19,7 @@ public:
     inline QueryActor()
         {
             RegisterHandler(this, &QueryActor::QueryHandler);
+            RegisterHandler(this, &QueryActor::MapHandler);
         }
     void OperateHandler(const OperateMessage &message, const Theron::Address from)
         {
@@ -154,6 +155,5 @@ public:
 private:
     Xapian::Database db;
     CResult  *result;
-    std::map<std::string,std::string> attMap;
 }; 
 #endif
