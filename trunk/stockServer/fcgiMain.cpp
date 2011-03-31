@@ -86,7 +86,7 @@ void HelloApplication::greet()
     boost::archive::xml_oarchive oa(ss);
     oa << BOOST_SERIALIZATION_NVP(qi);
     
-    AMQP::RabbitClient rc("192.168.16.41",5672);
+    AMQP::RabbitClient rc("localhost",5672);
     std::string res=rc.RpcCall(ss.str(),std::string("search.amqp"),std::string("query"));
     std::stringstream resSS(res);
     search::DocList docs;

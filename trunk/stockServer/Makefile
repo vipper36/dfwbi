@@ -1,8 +1,9 @@
 BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization -lboost_regex
 BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
-LOCALINC=-I./stock -I./frame -I./fetch -I./search -I./search/ictclas
+LOCALINC=-I./stock -I./frame -I./fetch -I./search -I./grammer -I./search/ictclas
 XMLLIB=-lxml++-2.6 -licuuc -lxslt
-WTLIB=-lwt -lwthttp
+#WTLIB=-lwt -lwthttp
+WTLIB=-lwt -lwtfcgi
 FCGILIB=-lfastcgipp -lmysqlclient
 LIBCUTL=-lcurl -ltidy
 LIBMQ=-lrabbitmq

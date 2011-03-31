@@ -111,7 +111,7 @@ public:
     std::list<yahoo::YearData> parseDayResult(std::string result)
     {
         using boost::spirit::qi::phrase_parse;
-        using boost::spirit::ascii::space;
+        using boost::spirit::standard::space;
         using boost::phoenix::push_back;
         using boost::phoenix::ref;
   
