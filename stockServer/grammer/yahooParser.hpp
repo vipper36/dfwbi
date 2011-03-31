@@ -14,8 +14,7 @@
 namespace yahoo
 {
   namespace qi = boost::spirit::qi;
-  namespace ascii = boost::spirit::ascii;
-
+  namespace standard  = boost::spirit::standard ;
   struct DayPrice
   {
     int date;
@@ -31,6 +30,11 @@ namespace yahoo
     int year;
     std::list<DayPrice> price_list;
   };
+
+  struct YearsData
+  {
+    std::list<YearData> year_list;
+  };
   
   struct MinPrice
   {
@@ -45,6 +49,11 @@ namespace yahoo
   {
     int date;
     std::list<MinPrice> price_list;
+  };
+  struct DaysData
+  {
+    int date;
+    std::list<DayData> price_list;
   };
 }
   BOOST_FUSION_ADAPT_STRUCT(
@@ -63,6 +72,10 @@ namespace yahoo
 			    (std::list<yahoo::DayPrice>, price_list)
 			    )
   BOOST_FUSION_ADAPT_STRUCT(
+        		    yahoo::YearsData,
+        		    (std::list<yahoo::YearData>, year_list)
+        		    )
+  BOOST_FUSION_ADAPT_STRUCT(
 			    yahoo::MinPrice,
 			    (double, open)
 			    (double, high)
@@ -76,10 +89,14 @@ namespace yahoo
 			    (int, date)
 			    (std::list<yahoo::MinPrice>, price_list)
 			    )
+  BOOST_FUSION_ADAPT_STRUCT(
+        		    yahoo::DaysData,
+        		    (std::list<yahoo::DayData>, day_list)
+        		    )
 namespace yahoo
 {
   template <typename Iterator>
-  struct yhday_parser : qi::grammar<Iterator, DayPrice(), ascii::space_type>
+  struct yhday_parser : qi::grammar<Iterator, DayPrice(), standard::space_type>
   {
     yhday_parser() : yhday_parser::base_type(start)
     {
@@ -97,11 +114,11 @@ namespace yahoo
 	>>  double_ >> ']'
 	;
     }
-    qi::rule<Iterator, DayPrice(), ascii::space_type> start;
+    qi::rule<Iterator, DayPrice(), standard::space_type> start;
   };
 
   template <typename Iterator>
-  struct yhy_parser : qi::grammar<Iterator, YearData(), ascii::space_type>
+  struct yhy_parser : qi::grammar<Iterator, YearData(), standard::space_type>
   {
     yhy_parser() : yhy_parser::base_type(start)
     {
@@ -114,11 +131,24 @@ namespace yahoo
 	;
     }
     yhday_parser<Iterator> yhday_;
-    qi::rule<Iterator, YearData(), ascii::space_type> start;
+    qi::rule<Iterator, YearData(), standard::space_type> start;
+  };
+
+  template <typename Iterator>
+  struct yhyl_parser : qi::grammar<Iterator, YearsData(), standard::space_type>
+  {
+    yhyl_parser() : yhyl_parser::base_type(start)
+    {
+      start =
+          '['>>yhy_%','>>"]0"
+        ;
+    }
+    yhy_parser<Iterator> yhy_;
+    qi::rule<Iterator, YearsData(), standard::space_type> start;
   };
   
   template <typename Iterator>
-  struct yhmin_parser : qi::grammar<Iterator, MinPrice(), ascii::space_type>
+  struct yhmin_parser : qi::grammar<Iterator, MinPrice(), standard::space_type>
   {
     yhmin_parser() : yhmin_parser::base_type(start)
     {
@@ -134,10 +164,10 @@ namespace yahoo
 	>>  double_ >> ']'
 	;
     }
-    qi::rule<Iterator, MinPrice(), ascii::space_type> start;
+    qi::rule<Iterator, MinPrice(), standard::space_type> start;
   };
   template <typename Iterator>
-  struct yhd_parser : qi::grammar<Iterator, DayData(), ascii::space_type>
+  struct yhd_parser : qi::grammar<Iterator, DayData(), standard::space_type>
   {
     yhd_parser() : yhd_parser::base_type(start)
     {
@@ -150,7 +180,19 @@ namespace yahoo
 	;
     }
     yhmin_parser<Iterator> yhmin_;
-    qi::rule<Iterator, DayData(), ascii::space_type> start;
+    qi::rule<Iterator, DayData(), standard::space_type> start;
+  };
+  template <typename Iterator>
+  struct yhdl_parser : qi::grammar<Iterator, DaysData(), standard::space_type>
+  {
+    yhdl_parser() : yhdl_parser::base_type(start)
+    {
+      start =
+          '['>>yhd_%','>>"]0"
+        ;
+    }
+    yhd_parser<Iterator> yhd_;
+    qi::rule<Iterator, DaysData(), standard::space_type> start;
   };
 }
 #endif
