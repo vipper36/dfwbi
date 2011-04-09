@@ -1,0 +1,9 @@
+useDynLib(Ryahoo)
+
+export(yahooData
+)
+export(yahooDatas
+)
+
+#importFrom( utils, capture.output )
+
