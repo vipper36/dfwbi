@@ -163,16 +163,16 @@ int main(int argc, char* argv[])
 	  now=now;
 	  if(wd.as_number()<6)
 	    {	
-	      ptime from=now-days(21);
+	      ptime from=now-days(100);
 	      for(std::map<std::string,std::string>::iterator it=stockList.begin();it!=stockList.end();++it)
 		{
 		  std::cout<<"-------------1--"<<now<<std::endl;
 		  std::list<StockPrice> &spList=tp->GetHisPrice(it->first,from, now,stock_inter::DAY);
 		  std::cout<<"-------------2--"<<now<<std::endl;
 		  //if(spList.size()>3*4&&spList.back().time.date()==now.date())
-		    if(spList.size()>10)
+		    if(spList.size()>20)
 		    {
-		      GetMatrix getMatrix(4);
+		      GetMatrix getMatrix(10);
 		      matrix<double> xs;
 		      vector<double> ys;
 		    
@@ -223,14 +223,19 @@ int main(int argc, char* argv[])
 		      double delta=yt_l-ytt_l;
 		      std::cout<< "delta: " << delta<<" var:"<<ls.getVar()<<std::endl;
 		      
-		      std::ofstream resof("result.txt",std::ios::app);
-		      if(fabs(delta)>3*ls.getVar()&&delta>0)
-			resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
+                      std::ofstream resof("result.txt",std::ios::app);
+		      if(ls.getVar()<0.07)
+		        resof<<it->second<<","<<spList.back().time<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
 		      resof.close();
-		      std::ofstream resof1("result1.txt",std::ios::app);
-		      if(ls.getVar()<0.1&&yt>3)
-			resof1<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
-		      resof1.close();
+
+		      // std::ofstream resof("result.txt",std::ios::app);
+		      // if(fabs(delta)>3*ls.getVar()&&delta>0)
+		      //   resof<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
+		      // resof.close();
+		      // std::ofstream resof1("result1.txt",std::ios::app);
+		      // if(ls.getVar()<0.1&&yt>3)
+		      //   resof1<<it->second<<","<<spList.back().time<<","<<ls.getParams()<<","<<ls.getVar()<<","<<delta<<","<<yt<<","<<ytt_l*lquan<<std::endl;
+		      // resof1.close();
 		    }
 		}
 	    }
