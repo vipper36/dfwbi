@@ -1,9 +1,13 @@
+#include <boost/program_options.hpp>
+#include "boost/date_time/posix_time/posix_time.hpp"
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <string.h>
+#include <map>
 #pragma pack(1)
 
-using namespace std;
+namespace po = boost::program_options;
 struct GLOBAL_DATA { 
     int dayflag; 
     int reserve1; 
@@ -29,68 +33,88 @@ struct DAY_DATA
     unsigned short int rise; 
     unsigned short int fall; 
 };
+int main(int argc,char**argv)
+{
+    int length;
+    GLOBAL_DATA head;
+    INDEX_DATA index;
+    std::ifstream is;
+    std::string dataFile("DAY.DAT");
+    std::string stock;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "usage message")
+        ("config,f", po::value(&dataFile), "data file")
+        ("stock,s", po::value(&stock), "data file")
+        ;
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        std::cout << "usage:httpd -f [config file]" << "\n";
+        return 0;
+    }
+    is.open (dataFile.c_str(), std::ios::binary );
+    
+    // get length of file:
+//  is.seekg (0, std::ios::end);
+//  length = is.tellg();
+//  is.seekg (0, std::ios::beg);
+//  std::cout<<length<<std::endl;
+    // allocate memory:
 
-int main () {
-  int length;
-  GLOBAL_DATA *h;
-  INDEX_DATA *s;
-  ifstream is;
-  is.open ("DAY.DAT", ios::binary );
-
-  // get length of file:
-  is.seekg (0, ios::end);
-  length = is.tellg();
-  is.seekg (0, ios::beg);
-  std::cout<<length<<std::endl;
-  // allocate memory:
-  h = new GLOBAL_DATA();
-  s =new INDEX_DATA();
-  // read data as a block:
-  is.read ((char*)h,sizeof(GLOBAL_DATA));
-  is.seekg (sizeof(INDEX_DATA)*400, ios::cur);
-  is.read ((char*)s,sizeof(INDEX_DATA));
-
-  std::cout<<"flag:"<<h->dayflag<<std::endl;
-  std::cout<<"count:"<<h->stocksum<<std::endl;
-  std::cout<<"startblock:"<<h->startblock<<std::endl;
-  std::cout<<"lastblock:"<<h->lastblock<<std::endl;
-
-  std::cout<<"code:"<<s->code<<std::endl;
-  std::cout<<"uval:"<<s->dayrecordnum<<std::endl;
-  char *data=new char[8192*25];
-  for(int i=0;i<25;i++)
-  {
-      char tmp[8192];
-      std::cout<<"record"<<i<<":"<<s->record[i]<<std::endl;
-      if(s->record[i]<h->startblock)
-      {
-          is.seekg (0x41000+8192*s->record[i], ios::beg);
-          is.read (tmp,8192);
-          memcpy(data+8192*i,tmp,8192);
-      }
-  }
-  
-  is.close();
-  int index=0;
-  while(index<256*25)
-  {
-      DAY_DATA day;
-      memcpy(&day,data+index*32,32);
-      index++;
-      if(day.date==0)
-          break;
-      std::cout<<"date:"<<day.date<<std::endl;
-      std::cout<<"open:"<<day.open<<std::endl;
-      std::cout<<"high:"<<day.high<<std::endl;
-      std::cout<<"low:"<<day.low<<std::endl;
-      std::cout<<"close:"<<day.close<<std::endl;
-      std::cout<<"amount:"<<day.amount<<std::endl;
-      std::cout<<"money:"<<day.money<<std::endl;
-      std::cout<<"rise:"<<day.rise<<std::endl;
-      std::cout<<"fall:"<<day.fall<<std::endl;
-  }
-  
-  delete [] data;
-  delete h;
-  return 0;
+    // read data as a block:
+    is.read ((char*)&head,sizeof(GLOBAL_DATA));
+    std::map<std::string,INDEX_DATA> stockMap;
+    for(int i=0;i<head.stocksum;i++)
+    {
+        is.read ((char*)&index,sizeof(INDEX_DATA));
+        stockMap.insert(std::make_pair<std::string,INDEX_DATA>(std::string(index.code),index));
+    }
+    std::map<std::string,INDEX_DATA>::iterator beg;
+    std::map<std::string,INDEX_DATA>::iterator end;
+    if(stock.length()>0)
+    {
+        beg= stockMap.find(stock);
+        if(beg!=stockMap.end())
+        {
+            end=beg;
+            ++end;
+        }
+    }else
+    {
+        beg= stockMap.begin();
+        end= stockMap.end();
+    }
+    for(std::map<std::string,INDEX_DATA>::iterator it=beg;it!=end;++it)
+    {
+        char data[8192*25];
+        for(int i=0;i<25;i++)
+        {
+            char tmp[8192];
+            if(it->second.record[i]<head.startblock)
+            {
+                is.seekg (0x41000+8192*it->second.record[i], std::ios::beg);
+                is.read (tmp,8192);
+                memcpy(data+8192*i,tmp,8192);
+            }
+        }
+        std::cout<<"'Date','Open','High','Low','Close','Volume','Money','Rise','Fall','Ticker'"<<std::endl;
+        int ind=0;
+        while(ind<256*25)
+        {
+            DAY_DATA day;
+            memcpy(&day,data+ind*32,32);
+            ind++;
+            if(day.date==0)
+                break;
+            boost::posix_time::ptime pdate=boost::posix_time::from_time_t(day.date);
+            std::cout<<"'"<<to_simple_string(pdate)<<"','"<<day.open<<"','"
+                     <<day.high<<"','"<<day.low<<"','"<<day.close<<"','"<<day.amount
+                     <<"','"<<day.money<<"','"<<day.rise<<"','"<<day.fall<<"','"<<it->first<<"'"<<std::endl;
+        }
+    }
+    is.close();
+    return 0;
 }
