@@ -1,0 +1,34 @@
+VCAttr<-function(C){
+	CAttr<-C
+	val<-CAttr[2:dim(CAttr)[1],]
+
+	CAttr$VEMA<-EMA(data[,"Volume"])
+	CAttr$VEMA30<-EMA(data[,"Volume"],30)
+	CAttr$VEMA60<-EMA(data[,"Volume"],60)
+	CAttr$VEMA120<-EMA(data[,"Volume"],120)
+	CAttr$CEMA<-EMA(data[,"Close"])
+	CAttr$CEMA30<-EMA(data[,"Close"],30)
+	CAttr$CEMA60<-EMA(data[,"Close"],60)
+	CAttr$CEMA120<-EMA(data[,"Close"],120)
+	
+	val$vret<-diff(CAttr[,"Volume"])/CAttr[1:dim(CAttr)[1]-1,"Volume"]
+	val$cret<-diff(CAttr[,"Close"])/CAttr[1:dim(CAttr)[1]-1,"Close"]
+	val$VED<-(CAttr[2:dim(CAttr)[1],"VEMA"]-CAttr[2:dim(CAttr)[1],"Volume"])/CAttr[2:dim(CAttr)[1],"VEMA"]
+	val$VED30<-(CAttr[2:dim(CAttr)[1],"VEMA30"]-CAttr[2:dim(CAttr)[1],"Volume"])/CAttr[2:dim(CAttr)[1],"VEMA30"]
+	val$VED60<-(CAttr[2:dim(CAttr)[1],"VEMA60"]-CAttr[2:dim(CAttr)[1],"Volume"])/CAttr[2:dim(CAttr)[1],"VEMA60"]
+	val$VED120<-(CAttr[2:dim(CAttr)[1],"VEMA120"]-CAttr[2:dim(CAttr)[1],"Volume"])/CAttr[2:dim(CAttr)[1],"VEMA120"]
+	val$CED<-(CAttr[2:dim(CAttr)[1],"CEMA"]-CAttr[2:dim(CAttr)[1],"Close"])/CAttr[2:dim(CAttr)[1],"VEMA"]
+	val$CED30<-(CAttr[2:dim(CAttr)[1],"CEMA30"]-CAttr[2:dim(CAttr)[1],"Close"])/CAttr[2:dim(CAttr)[1],"CEMA30"]
+	val$CED60<-(CAttr[2:dim(CAttr)[1],"CEMA60"]-CAttr[2:dim(CAttr)[1],"Close"])/CAttr[2:dim(CAttr)[1],"CEMA60"]
+	val$CED120<-(CAttr[2:dim(CAttr)[1],"CEMA120"]-CAttr[2:dim(CAttr)[1],"Close"])/CAttr[2:dim(CAttr)[1],"CEMA120"]
+	begin<-dim(val)[1]-29
+	end<-dim(val)[1]
+	rvec<-as.vector(as.matrix(val[begin:end,4:13]))
+        while(begin>1)
+	{
+		begin=begin-1
+		end=end-1
+		rvec<-rbind(rvec,as.vector(as.matrix(val[begin:end,4:13])))
+	}
+	rvec
+}
