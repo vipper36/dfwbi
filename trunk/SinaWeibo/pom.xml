@@ -1,0 +1,181 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.yxhs.kettle</groupId>
+  <artifactId>SinaWeibo</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <properties>
+		<pdi.plugin.dir>plugins/steps/${name}</pdi.plugin.dir>		
+		<pdi.plugin.lib_name>SinaWeibo_plugin.jar</pdi.plugin.lib_name>		
+		<pdi.home>/home/xiao/Download/kettle</pdi.home>
+		<maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+  <dependencies>
+		<!-- kettle core -->
+		<dependency>
+			<groupId>pentaho.kettle</groupId>
+			<artifactId>kettle-core</artifactId>
+			<version>4.2.0-RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho.kettle</groupId>
+			<artifactId>kettle-db</artifactId>
+			<version>4.2.0-RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho.kettle</groupId>
+			<artifactId>kettle-engine</artifactId>
+			<version>4.2.0-RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pentaho.kettle</groupId>
+			<artifactId>kettle-ui-swt</artifactId>
+			<version>4.2.0-RC1</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.eclipse.swt.gtk.linux</groupId>
+		    <artifactId>x86_64</artifactId>
+		    <version>3.3.0-v3346</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse</groupId>
+		    <artifactId>jface</artifactId>
+		    <version>3.3.0-I20070606-0010</version>
+		</dependency>
+        <dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.16</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.sina</groupId>
+			<artifactId>Weibo</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 		    <groupId>commons-logging</groupId> -->
+<!-- 		    <artifactId>commons-logging</artifactId> -->
+<!-- 		    <version>1.1.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>commons-httpclient</groupId> -->
+<!-- 		    <artifactId>commons-httpclient</artifactId> -->
+<!-- 		    <version>3.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>commons-codec</groupId> -->
+<!-- 		    <artifactId>commons-codec</artifactId> -->
+<!-- 		    <version>1.5</version> -->
+<!-- 		</dependency> -->
+  </dependencies>
+	<build>
+		<outputDirectory>target/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assemble/plugin-lib.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.3</version>
+
+				<executions>
+					<execution>
+						<id>default-cli</id>
+						<configuration>
+							<tasks>
+								<echo>Copying images etc to pdi plugin directory
+									(${pdi.plugin.dir})</echo>
+								<copy todir="${pdi.plugin.dir}" overwrite="true">
+									<fileset dir="${project.build.outputDirectory}"
+										includes="**/*.png,**/*.xml,**/*.properties" />
+								</copy>
+								<echo>Copying the plugin lib to pdi plugin directory
+									(${pdi.plugin.dir})</echo>
+								<copy 								    
+									toFile="${pdi.plugin.dir}/${pdi.plugin.lib_name}" 
+									file="${project.build.directory}/${artifactId}-${version}-plugin-lib.jar"
+									overwrite="true" />
+
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+		</plugins>
+
+	</build>
+	<repositories>
+	
+                <repository>
+                        <id>pentaho-repo</id>
+                        <url>http://repo.pentaho.org/artifactory/pentaho/</url>
+                </repository>
+                <repository>
+                        <id>pentaho-third-party</id>
+                        <url>http://repo.pentaho.org/artifactory/third-party/</url>
+                </repository>
+				<repository>
+                        <id>maven</id>
+                        <url>http://repo2.maven.org/maven2/</url>
+                </repository>
+    </repositories>
+</project>
