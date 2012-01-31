@@ -26,8 +26,8 @@ VCAttr<-function(C){
 	rvec<-as.vector(as.matrix(val[begin:end,4:13]))
         while(begin>1)
 	{
-		begin=begin-1
-		end=end-1
+		begin<-begin-1
+		end<-end-1
 		rvec<-rbind(rvec,as.vector(as.matrix(val[begin:end,4:13])))
 	}
 	rvec
