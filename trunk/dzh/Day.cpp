@@ -87,9 +87,11 @@ int main(int argc,char**argv)
         beg= stockMap.begin();
         end= stockMap.end();
     }
+    std::cout<<"'Date','Open','High','Low','Close','Volume','Money','Rise','Fall','Ticker'"<<std::endl;
     for(std::map<std::string,INDEX_DATA>::iterator it=beg;it!=end;++it)
     {
         char data[8192*25];
+	memset(data,0,sizeof(data));
         for(int i=0;i<25;i++)
         {
             char tmp[8192];
@@ -100,7 +102,6 @@ int main(int argc,char**argv)
                 memcpy(data+8192*i,tmp,8192);
             }
         }
-        std::cout<<"'Date','Open','High','Low','Close','Volume','Money','Rise','Fall','Ticker'"<<std::endl;
         int ind=0;
         while(ind<256*25)
         {
@@ -110,7 +111,7 @@ int main(int argc,char**argv)
             if(day.date==0)
                 break;
             boost::posix_time::ptime pdate=boost::posix_time::from_time_t(day.date);
-            std::cout<<"'"<<to_simple_string(pdate)<<"','"<<day.open<<"','"
+            std::cout<<"'"<<boost::gregorian::to_iso_extended_string(pdate.date())<<"','"<<day.open<<"','"
                      <<day.high<<"','"<<day.low<<"','"<<day.close<<"','"<<day.amount
                      <<"','"<<day.money<<"','"<<day.rise<<"','"<<day.fall<<"','"<<it->first<<"'"<<std::endl;
         }
