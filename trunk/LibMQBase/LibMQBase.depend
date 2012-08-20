@@ -1,0 +1,92 @@
+# depslib dependency file v1.0
+1342883837 source:/home/xiao/workspace/LibMQBase/MqRpcClient.cpp
+	"MqRpcClient.h"
+
+1342961565 /home/xiao/workspace/LibMQBase/MqRpcClient.h
+	<boost/uuid/uuid.hpp>
+	<boost/uuid/uuid_generators.hpp>
+	<boost/uuid/uuid_io.hpp>
+	<sstream>
+	<zmq.hpp>
+	<string>
+	<queue>
+	<Theron/Framework.h>
+	"IXMessage.h"
+	"RpcActor.h"
+
+1345445129 /home/xiao/workspace/LibMQBase/IXMessage.h
+	<string>
+	<map>
+	<json_spirit.h>
+	<iostream>
+	<list>
+
+1345447452 /home/xiao/workspace/LibMQBase/RpcActor.h
+	<Theron/Actor.h>
+	<zmq.hpp>
+	"MqUtil.h"
+
+1345444935 source:/home/xiao/workspace/LibMQBase/ActorCreator.cpp
+	<stdio.h>
+	"BaseException.h"
+	"ActorCreator.h"
+
+1345444899 /home/xiao/workspace/LibMQBase/BaseException.h
+	<errno.h>
+	<string>
+
+1345442943 /home/xiao/workspace/LibMQBase/ActorCreator.h
+	"dllapi.h"
+	<Theron/Actor.h>
+
+1345444804 /home/xiao/workspace/LibMQBase/dllapi.h
+	"os.h"
+
+1345442428 /home/xiao/workspace/LibMQBase/os.h
+	<time.h>
+	<windows.h>
+	<winbase.h>
+	<assert.h>
+	<io.h>
+	<direct.h>
+	<errno.h>
+	<signal.h>
+	<sys/wait.h>
+	<dlfcn.h>
+	<dl.h>
+
+1345446721 source:/home/xiao/workspace/LibMQBase/Listener.cpp
+	<boost/uuid/uuid.hpp>
+	<boost/uuid/uuid_generators.hpp>
+	<boost/uuid/uuid_io.hpp>
+	<sstream>
+	"Listener.h"
+
+1345445748 /home/xiao/workspace/LibMQBase/Listener.h
+	<queue>
+	<zmq.hpp>
+	"MqUtil.h"
+	<Theron/Framework.h>
+	<Theron/Actor.h>
+	"MqMessage.h"
+
+1345445442 /home/xiao/workspace/LibMQBase/MqUtil.h
+	<zmq.hpp>
+	<list>
+	"MqMessage.h"
+
+1345447624 /home/xiao/workspace/LibMQBase/MqMessage.h
+	<string>
+	<map>
+	<json_spirit.h>
+	"IXMessage.h"
+
+1345447426 source:/home/xiao/workspace/LibMQBase/MqUtil.cpp
+	"MqUtil.h"
+
+1345447670 source:/home/xiao/workspace/LibMQBase/RpcActor.cpp
+	<boost/uuid/uuid.hpp>
+	<boost/uuid/uuid_generators.hpp>
+	<boost/uuid/uuid_io.hpp>
+	"RpcActor.h"
+
