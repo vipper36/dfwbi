@@ -6,6 +6,7 @@
 #include <Theron/Framework.h>
 #include <Theron/Actor.h>
 #include "MqMessage.h"
+#include <map>
 class BaseMqMessageCollector
 {
 public:
@@ -27,31 +28,32 @@ private:
 class Listener
 {
 public:
-    explicit Listener(std::string mAdd,int type,zmq::context_t *mContext);
-    void setActor(Theron::ActorRef actor)
+    static const std::string LISTEN_IPC;
+    explicit Listener(zmq::context_t *mContext);
+    void AddDispatcher(std::string msg_type,Theron::ActorRef actor)
     {
-        m_actor=actor;
+        m_actorMap.insert(std::make_pair(msg_type,actor));
     }
     Theron::Address getReceiveAddr()
     {
         receiver.GetAddress();
     }
+    void AddAddress(std::string msg_type,int sock_type,std::string Address,bool isBind=true);
     void start();
-    ~Listener()
+    void stop()
     {
-        delete m_socket;
-        delete m_ilsocket;
+        run=false;
     }
-
+    ~Listener();
 private:
     Theron::Receiver receiver;
     BaseMqMessageCollector collector;
-    Theron::ActorRef m_actor;
+    std::map<std::string,Theron::ActorRef> m_actorMap;
     std::string m_cid;
-    std::string m_Address;
-    zmq::socket_t *m_socket;
-    zmq::socket_t *m_ilsocket;
+    std::map<std::string,zmq::socket_t *> m_SockMap;
+    zmq::socket_t m_ilsocket;
     zmq::context_t *m_context;
+    bool run;
 };
 
 #endif // LISTENACTOR_H

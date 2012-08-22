@@ -5,129 +5,7 @@
 #include <json_spirit.h>
 #include <iostream>
 #include <list>
-
-template<typename T>
-class ValueUtil
-{
-    public:
-    static json_spirit::Value toValue(T body)
-    {
-        return json_spirit::Value(body);
-    }
-    static T fromValue(json_spirit::Value v)
-    {
-        return v.get_value<T>();
-    }
-};
-template<>
-class ValueUtil< std::map<std::string,json_spirit::Value> >
-{
-    public:
-    static json_spirit::Value toValue(std::map<std::string,json_spirit::Value> body)
-    {
-        json_spirit::Object addr_obj;
-        for(std::map<std::string,json_spirit::Value>::iterator it=body.begin();it!=body.end();++it)
-        {
-            addr_obj.push_back( json_spirit::Pair( it->first, it->second ) );
-        }
-        return json_spirit::Value(addr_obj);
-    }
-    static std::map<std::string,json_spirit::Value> fromValue(json_spirit::Value v)
-    {
-        std::map<std::string,json_spirit::Value> ret;
-        if(v.type()==json_spirit::obj_type)
-        {
-            json_spirit::Object obj=v.get_value<json_spirit::Object>();
-            for(json_spirit::Object::iterator it= obj.begin();it!=obj.end();++it)
-            {
-                ret.insert(std::make_pair(it->name_,it->value_));
-            }
-        }
-        return ret;
-    }
-};
-template<>
-class ValueUtil< std::list<json_spirit::Value> >
-{
-    public:
-    static json_spirit::Value toValue(std::list<json_spirit::Value> body)
-    {
-        json_spirit::Array arr;
-        for(std::list<json_spirit::Value>::iterator it=body.begin();it!=body.end();++it)
-        {
-            arr.push_back(*it);
-        }
-        return json_spirit::Value(arr);
-    }
-    static std::list<json_spirit::Value> fromValue(json_spirit::Value v)
-    {
-        std::list<json_spirit::Value> ret;
-        if(v.type()==json_spirit::array_type)
-        {
-            json_spirit::Array arr=v.get_value<json_spirit::Array>();
-            for(json_spirit::Array::iterator it= arr.begin();it!=arr.end();++it)
-            {
-                ret.push_back(*it);
-            }
-        }
-        return ret;
-    }
-};
-template<typename T>
-class ValueUtil< std::map<std::string,T> >
-{
-public:
-    static json_spirit::Value toValue(std::map<std::string,T> body)
-    {
-        std::map<std::string,json_spirit::Value> vmap;
-        for(typename std::map<std::string,T>::iterator it=body.begin();it!=body.end();++it)
-        {
-            json_spirit::Value v=ValueUtil<T>::toValue(it->second);
-            vmap.insert(std::make_pair(it->first,v));
-        }
-        return ValueUtil< std::map<std::string,json_spirit::Value> >::toValue(vmap);
-    }
-    static std::map<std::string,T> fromValue(json_spirit::Value v)
-    {
-        std::map<std::string,T> ret;
-        if(v.type()==json_spirit::obj_type)
-        {
-            json_spirit::Object obj=v.get_value<json_spirit::Object>();
-            for(json_spirit::Object::iterator it= obj.begin();it!=obj.end();++it)
-            {
-                ret.insert(std::make_pair(it->name_,ValueUtil<T>::fromValue(it->value_)));
-            }
-        }
-        return ret;
-    }
-};
-template<typename T>
-class ValueUtil< std::list<T> >
-{
-
-    static json_spirit::Value toValue(std::list<T> body)
-    {
-        std::list<json_spirit::Value> vlist;
-        for(typename std::list<T>::iterator it=body.begin();it!=body.end();++it)
-        {
-            vlist.push_back(ValueUtil<T>::toValue(*it));
-        }
-        return ValueUtil< std::list<json_spirit::Value> >::toValue(vlist);
-    }
-    static std::list<T> fromValue(json_spirit::Value v)
-    {
-        std::list<T> ret;
-        if(v.type()==json_spirit::array_type)
-        {
-            json_spirit::Array arr=v.get_value<json_spirit::Array>();
-            for(json_spirit::Array::iterator it= arr.begin();it!=arr.end();++it)
-            {
-                ret.push_back(ValueUtil<T>::fromValue(*it));
-            }
-        }
-        return ret;
-    }
-};
+#include "ValueUtil.h"
 class Message
 {
     public:
@@ -168,7 +46,7 @@ class IXMessage:public Message
         {
             std::stringstream ss(json);
             json_spirit::Value value;
-            read( ss, value );
+            json_spirit::read( ss, value );
             if(value.type()==json_spirit::obj_type)
             {
                 json_spirit::Object obj=value.get_value<json_spirit::Object>();

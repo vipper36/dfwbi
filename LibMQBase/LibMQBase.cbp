@@ -49,8 +49,10 @@
 		<Unit filename="MqServer.h" />
 		<Unit filename="MqUtil.cpp" />
 		<Unit filename="MqUtil.h" />
+		<Unit filename="PluginBase.h" />
 		<Unit filename="RpcActor.cpp" />
 		<Unit filename="RpcActor.h" />
+		<Unit filename="ValueUtil.h" />
 		<Unit filename="dllapi.cpp" />
 		<Unit filename="dllapi.h" />
 		<Unit filename="os.h" />

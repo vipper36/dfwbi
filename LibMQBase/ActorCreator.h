@@ -1,8 +1,8 @@
 #ifndef _ACTOR_CREATOR_
 #define _ACTOR_CREATOR_
 #include "dllapi.h"
-#include <Theron/Actor.h>
-typedef void* (*DLLFUN)();
+#include "PluginBase.h"
+
 class ActorCreator
 {
 private:
@@ -16,7 +16,7 @@ public:
     }
     void setPath(const std::string &path);
     ActorCreator(const std::string &path);
-    Theron::Actor *operator()(const std::string &funName);
+    PluginBase *operator()(const std::string &funName,PluginParam &param);
     ~ActorCreator()
     {
         myFreeLibrary(funHandle);

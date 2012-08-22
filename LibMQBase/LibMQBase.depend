@@ -90,3 +90,92 @@
 	<boost/uuid/uuid_io.hpp>
 	"RpcActor.h"
 
+1345451017 source:/home/xiao/workspace/dfwbi/LibMQBase/ActorCreator.cpp
+	<stdio.h>
+	"BaseException.h"
+	"ActorCreator.h"
+
+1345444899 /home/xiao/workspace/dfwbi/LibMQBase/BaseException.h
+	<errno.h>
+	<string>
+
+1345450795 /home/xiao/workspace/dfwbi/LibMQBase/ActorCreator.h
+	"dllapi.h"
+	"PluginBase.h"
+
+1345444804 /home/xiao/workspace/dfwbi/LibMQBase/dllapi.h
+	"os.h"
+
+1345442428 /home/xiao/workspace/dfwbi/LibMQBase/os.h
+	<time.h>
+	<windows.h>
+	<winbase.h>
+	<assert.h>
+	<io.h>
+	<direct.h>
+	<errno.h>
+	<signal.h>
+	<sys/wait.h>
+	<dlfcn.h>
+	<dl.h>
+
+1345450923 /home/xiao/workspace/dfwbi/LibMQBase/PluginBase.h
+	<Theron/Actor.h>
+
+1345446721 source:/home/xiao/workspace/dfwbi/LibMQBase/Listener.cpp
+	<boost/uuid/uuid.hpp>
+	<boost/uuid/uuid_generators.hpp>
+	<boost/uuid/uuid_io.hpp>
+	<sstream>
+	"Listener.h"
+
+1345445748 /home/xiao/workspace/dfwbi/LibMQBase/Listener.h
+	<queue>
+	<zmq.hpp>
+	"MqUtil.h"
+	<Theron/Framework.h>
+	<Theron/Actor.h>
+	"MqMessage.h"
+
+1345445442 /home/xiao/workspace/dfwbi/LibMQBase/MqUtil.h
+	<zmq.hpp>
+	<list>
+	"MqMessage.h"
+
+1345447624 /home/xiao/workspace/dfwbi/LibMQBase/MqMessage.h
+	<string>
+	<map>
+	<json_spirit.h>
+	"IXMessage.h"
+
+1345543516 /home/xiao/workspace/dfwbi/LibMQBase/IXMessage.h
+	<string>
+	<map>
+	<json_spirit.h>
+	<iostream>
+	<list>
+	"ValueUtil.h"
+
+1345543427 /home/xiao/workspace/dfwbi/LibMQBase/ValueUtil.h
+	<json_spirit.h>
+	<list>
+	<map>
+
+1345447426 source:/home/xiao/workspace/dfwbi/LibMQBase/MqUtil.cpp
+	"MqUtil.h"
+
+1345447670 source:/home/xiao/workspace/dfwbi/LibMQBase/RpcActor.cpp
+	<boost/uuid/uuid.hpp>
+	<boost/uuid/uuid_generators.hpp>
+	<boost/uuid/uuid_io.hpp>
+	"RpcActor.h"
+
+1345447452 /home/xiao/workspace/dfwbi/LibMQBase/RpcActor.h
+	<Theron/Actor.h>
+	<zmq.hpp>
+	"MqUtil.h"
+
+1345447682 source:/home/xiao/workspace/dfwbi/LibMQBase/dllapi.cpp
+	"dllapi.h"
+	<string.h>
+

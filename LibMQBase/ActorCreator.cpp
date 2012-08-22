@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "BaseException.h"
 #include "ActorCreator.h"
+typedef void* (*DLLFUN)(void* param);
 void ActorCreator::setPath(const std::string &path)
 {
     if(dll_path.length()>0&&funHandle!=NULL)
@@ -24,7 +25,7 @@ ActorCreator::ActorCreator(const std::string &path)
         throw BaseException(UnKnownActor, "Unknown Actor" );
     }
 }
-Theron::Actor *ActorCreator::operator()(const std::string &funName)
+PluginBase *ActorCreator::operator()(const std::string &funName,PluginParam &param)
 {
 
     DLLFUN fun=(DLLFUN)myGetProcAddress(funHandle,const_cast<char *>(funName.c_str()));
@@ -32,7 +33,7 @@ Theron::Actor *ActorCreator::operator()(const std::string &funName)
     {
         throw BaseException(UnKnownActor, "Error Actor Type" );
     }
-    Theron::Actor *ret=(Theron::Actor *)fun();
+    PluginBase *ret=(PluginBase *)fun((void*)&param);
     if (ret==NULL)
     {
         throw BaseException(UnKnownActor, "Error Create Actor" );
