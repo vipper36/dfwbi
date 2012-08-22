@@ -3,47 +3,91 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <sstream>
 #include "Listener.h"
-Listener::Listener(std::string mAdd,int type,zmq::context_t *mContext):collector(mContext)
+const std::string Listener::LISTEN_IPC="ipc://listener.ipc";
+Listener::Listener(zmq::context_t *mContext):collector(mContext),m_ilsocket(*m_context,ZMQ_DEALER),run(true)
 {
     receiver.RegisterHandler(&collector, &BaseMqMessageCollector::Handler);
     m_context=mContext;
-    m_socket=new zmq::socket_t(*m_context,type);
-    m_ilsocket=new zmq::socket_t(*m_context,ZMQ_DEALER);
-
-    m_Address=mAdd;
+    m_ilsocket.bind(LISTEN_IPC.c_str());
+}
+Listener::~Listener()
+{
+    for(std::map<std::string,zmq::socket_t *>::iterator it=m_SockMap.begin();it!=m_SockMap.end();++it)
+    {
+        delete it->second;
+    }
+}
+ void Listener::AddAddress(std::string msg_type,int sock_type,std::string Address,bool isBind)
+{
+    zmq::socket_t *tmpSocket=new zmq::socket_t(*m_context,sock_type);
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
     std::stringstream ss;
     ss<<uuid;
     m_cid=ss.str();
-    m_socket->setsockopt( ZMQ_IDENTITY, m_cid.data(), m_cid.size());
-    m_socket->connect(m_Address.c_str());
-    m_ilsocket->bind("ipc://routing.ipc");
+    tmpSocket->setsockopt( ZMQ_IDENTITY, m_cid.data(), m_cid.size());
+    if(isBind)
+        tmpSocket->bind(Address.c_str());
+    else
+        tmpSocket->connect(Address.c_str());
+    m_SockMap.insert(std::make_pair(msg_type,tmpSocket));
 }
 void Listener::start()
 {
-    zmq::pollitem_t items [] =
+    int map_size=m_SockMap.size();
+    if(map_size>0)
     {
-        { *m_socket, 0, ZMQ_POLLIN, 0 },
-        { *m_ilsocket, 0, ZMQ_POLLIN, 0 }
-    };
-    while(1)
-    {
-        zmq::poll (&items [0], 2, -1);
-        if (items [0].revents & ZMQ_POLLIN)
+        zmq::pollitem_t *items=new zmq::pollitem_t[map_size+1];
+        items[0]={ m_ilsocket, 0, ZMQ_POLLIN, 0 };
+
+        std::map<int,std::string> indexMap;
+        int i=1;
+        for(std::map<std::string,zmq::socket_t *>::iterator it=m_SockMap.begin();it!=m_SockMap.end();++it,i++)
         {
-            BaseMqMessage mq_msg=MqUtil::RecvMqMessage(m_socket);
-            if(mq_msg.getMsg().size()>0)
-            {
-                m_actor.Push(mq_msg,receiver.GetAddress());
-            }
+            zmq::pollitem_t item={*(it->second),0,ZMQ_POLLIN, 0};
+            items[i]=item;
+            indexMap.insert(std::make_pair(i,it->first));
         }
-        if (items [1].revents & ZMQ_POLLIN)
+        while(run)
         {
-            BaseMqMessage mq_msg=MqUtil::RecvMqMessage(m_socket);
-            if(mq_msg.getMsg().size()>0)
+            zmq::poll (items, map_size+1, -1);
+            if (items [0].revents & ZMQ_POLLIN)
             {
-                MqUtil::SendMqMessage(m_socket,mq_msg);
+                BaseMqMessage mq_msg=MqUtil::RecvMqMessage(&m_ilsocket);
+                if(mq_msg.getMsg().size()>0)
+                {
+                    std::string type=mq_msg.getHeadAtt("type");
+                    if(type.length()>0)
+                    {
+                        std::map<std::string,zmq::socket_t *>::iterator fit=m_SockMap.find(type);
+                        if(fit!=m_SockMap.end())
+                        {
+                            MqUtil::SendMqMessage(fit->second,mq_msg);
+                        }
+                    }
+                }
             }
+            for(std::map<int,std::string>::iterator it=indexMap.begin();it!=indexMap.end();++it)
+            {
+                if (items [it->first].revents & ZMQ_POLLIN)
+                {
+                    std::map<std::string,zmq::socket_t *>::iterator fit=m_SockMap.find(it->second);
+                    if(fit!=m_SockMap.end())
+                    {
+                        BaseMqMessage mq_msg=MqUtil::RecvMqMessage(fit->second);
+                        if(mq_msg.getMsg().size()>0)
+                        {
+                            std::map<std::string,Theron::ActorRef>::iterator ait=m_actorMap.find(it->second);
+                            if(ait!=m_actorMap.end())
+                            {
+                                ait->second.Push(mq_msg,receiver.GetAddress());
+                            }
+
+                        }
+                    }
+                }
+            }
+
         }
+        delete [] items;
     }
 }

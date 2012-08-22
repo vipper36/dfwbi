@@ -8,20 +8,26 @@ class MqServer
         MqServer(int count,std::string mAdd,std::string name):
             m_context(count),
             m_framework(count),
-            m_listener(mAdd,ZMQ_DEALER,&m_context);
+            m_listener(&m_context);
         {
             m_name=name;
             DispatchActor::Parameters params;
             params.count=count;
             params.frame=&m_framework;
             params.sAdd=m_listener.getReceiveAddr();
+            m_listener.AddAddress("rpc",ZMQ_DEALER,mAdd,false);
             m_dActor=m_framework.CreateActor<DispatchActor<Actor> >(params);
-            m_listener.setActor(m_dActor);
+            m_listener.AddDispatcher("rpc",m_dActor);
+            RegServer();
         }
         virtual ~MqServer() {}
         void Start()
         {
             m_listener.start();
+        }
+        void Stop()
+        {
+            m_listener.stop();
         }
     protected:
         Listener m_listener;
@@ -37,7 +43,7 @@ class MqServer
             msg.addHeadAtt("name","server");
             msg.Setbody(m_name);
             IXMqMessage mq_msg(msg);
-            mq_msg.addHeadAtt("type","reg");
+            mq_msg.addHeadAtt("type","rpc");
             Theron::Receiver receiver;
             BaseMqMessage b_msg(mq_msg);
             m_dActor.Push(b_msg,receiver.GetAddress());
