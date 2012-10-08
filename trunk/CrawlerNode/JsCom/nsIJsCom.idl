@@ -1,0 +1,11 @@
+#include "nsIDOMWindow.idl"
+#include "nsIWebNavigation.idl"
+#include "nsIWebProgress.idl"
+[scriptable, uuid(4c7d8c9f-c8bb-4f53-bd5f-3d737302e9a3)]
+interface nsIJsCom:nsISupports
+{
+    void SetBrowerInfo( in nsIWebNavigation nav,in nsIWebProgress progress);
+    AUTF8String execJs(in AUTF8String script);
+    AUTF8String execWinJs(in AUTF8String script,in nsIDOMWindow win);
+    void open(in AUTF8String url,in AUTF8String script);
+};
