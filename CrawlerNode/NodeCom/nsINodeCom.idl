@@ -1,0 +1,8 @@
+#include "nsIWebBrowser.idl"
+
+interface nsISupportsArray;
+[scriptable, uuid(d861ef74-27a4-4205-be47-3b9572909f8f)]
+interface nsINodeCom:nsISupports
+{
+	void SetBrowser( in nsIWebBrowser browser);
+};
