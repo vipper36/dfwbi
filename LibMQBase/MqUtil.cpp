@@ -40,9 +40,13 @@ BaseMqMessage MqUtil::RecvMqMessage(zmq::socket_t *socket)
     {
         zmq::message_t rmessage;
         bool isrecv=socket->recv(&rmessage);
+
+        int size = rmessage.size();
+        std::string data(static_cast<char*>(rmessage.data()), size);
+
         if(!isrecv)
             break;
-        msgList.push_back(std::string(static_cast<char*>(rmessage.data()), rmessage.size()));
+        msgList.push_back(data);
         int64_t more;
         size_t more_size = sizeof (more);
         socket->getsockopt(ZMQ_RCVMORE, &more, &more_size);
@@ -66,6 +70,7 @@ BaseMqMessage MqUtil::RecvMqMessage(zmq::socket_t *socket)
         if(it!=msgList.rend())
         {
             std::list<std::string>::iterator bit=msgList.begin();
+            std::cout<<*it<<std::endl;
             msg.setIdentify(*bit);
         }
     }

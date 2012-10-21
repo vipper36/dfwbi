@@ -95,7 +95,7 @@
 	"BaseException.h"
 	"ActorCreator.h"
 
-1345444899 /home/xiao/workspace/dfwbi/LibMQBase/BaseException.h
+1347529608 /home/xiao/workspace/dfwbi/LibMQBase/BaseException.h
 	<errno.h>
 	<string>
 
@@ -122,33 +122,42 @@
 1345450923 /home/xiao/workspace/dfwbi/LibMQBase/PluginBase.h
 	<Theron/Actor.h>
 
-1345446721 source:/home/xiao/workspace/dfwbi/LibMQBase/Listener.cpp
+1348035046 source:/home/xiao/workspace/dfwbi/LibMQBase/Listener.cpp
 	<boost/uuid/uuid.hpp>
 	<boost/uuid/uuid_generators.hpp>
 	<boost/uuid/uuid_io.hpp>
 	<sstream>
 	"Listener.h"
+	"ContextManager.h"
 
-1345445748 /home/xiao/workspace/dfwbi/LibMQBase/Listener.h
+1347259637 /home/xiao/workspace/dfwbi/LibMQBase/Listener.h
 	<queue>
 	<zmq.hpp>
 	"MqUtil.h"
 	<Theron/Framework.h>
 	<Theron/Actor.h>
+	<boost/thread/thread.hpp>
 	"MqMessage.h"
+	<map>
+	<Theron/Actor.h>
 
 1345445442 /home/xiao/workspace/dfwbi/LibMQBase/MqUtil.h
 	<zmq.hpp>
 	<list>
 	"MqMessage.h"
 
-1345447624 /home/xiao/workspace/dfwbi/LibMQBase/MqMessage.h
+1347789081 /home/xiao/workspace/dfwbi/LibMQBase/MqMessage.h
 	<string>
 	<map>
 	<json_spirit.h>
-	"IXMessage.h"
+	<iostream>
+	<list>
+	"ValueUtil.h"
+	<boost/enable_shared_from_this.hpp>
+	<boost/shared_ptr.hpp>
+	"MsgFactory.h"
 
-1345543516 /home/xiao/workspace/dfwbi/LibMQBase/IXMessage.h
+1345645636 /home/xiao/workspace/dfwbi/LibMQBase/IXMessage.h
 	<string>
 	<map>
 	<json_spirit.h>
@@ -161,16 +170,17 @@
 	<list>
 	<map>
 
-1345447426 source:/home/xiao/workspace/dfwbi/LibMQBase/MqUtil.cpp
+1346298367 source:/home/xiao/workspace/dfwbi/LibMQBase/MqUtil.cpp
 	"MqUtil.h"
 
-1345447670 source:/home/xiao/workspace/dfwbi/LibMQBase/RpcActor.cpp
+1345650192 source:/home/xiao/workspace/dfwbi/LibMQBase/RpcActor.cpp
 	<boost/uuid/uuid.hpp>
 	<boost/uuid/uuid_generators.hpp>
 	<boost/uuid/uuid_io.hpp>
 	"RpcActor.h"
+	"ContextManager.h"
 
-1345447452 /home/xiao/workspace/dfwbi/LibMQBase/RpcActor.h
+1345650043 /home/xiao/workspace/dfwbi/LibMQBase/RpcActor.h
 	<Theron/Actor.h>
 	<zmq.hpp>
 	"MqUtil.h"
@@ -178,4 +188,44 @@
 1345447682 source:/home/xiao/workspace/dfwbi/LibMQBase/dllapi.cpp
 	"dllapi.h"
 	<string.h>
+
+1346301617 /home/xiao/workspace/dfwbi/LibMQBase/ContextManager.h
+	<string>
+	<map>
+	<zmq.hpp>
+	"BaseException.h"
+	<Theron/Framework.h>
+
+1346300982 source:/home/xiao/workspace/dfwbi/LibMQBase/ContextManager.cpp
+	"ContextManager.h"
+
+1347976042 source:/home/xiao/workspace/dfwbi/LibMQBase/ListenInter.cpp
+	"ListenInter.h"
+	"ContextManager.h"
+	<zmq.hpp>
+	"MqUtil.h"
+
+1347961319 /home/xiao/workspace/dfwbi/LibMQBase/ListenInter.h
+	<Theron/Actor.h>
+	<zmq.hpp>
+	"MqMessage.h"
+
+1347789190 /home/xiao/workspace/dfwbi/LibMQBase/MsgFactory.h
+	<boost/type_traits.hpp>
+	<boost/shared_ptr.hpp>
+
+1347787122 source:/home/xiao/workspace/dfwbi/LibMQBase/MsgFactory.cpp
+	<json_spirit.h>
+	"MsgFactory.h"
+	"BaseException.h"
+	"MqMessage.h"
+
+1347787952 source:/home/xiao/workspace/dfwbi/LibMQBase/MsgClient.cpp
+	"MsgClient.h"
+
+1347788079 /home/xiao/workspace/dfwbi/LibMQBase/MsgClient.h
+	<Theron/Framework.h>
+	"ContextManager.h"
+	"MqMessage.h"
+	"MsgFactory.h"
 
