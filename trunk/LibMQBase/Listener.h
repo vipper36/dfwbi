@@ -5,55 +5,34 @@
 #include "MqUtil.h"
 #include <Theron/Framework.h>
 #include <Theron/Actor.h>
+#include <boost/thread/thread.hpp>
 #include "MqMessage.h"
 #include <map>
-class BaseMqMessageCollector
+#include <Theron/Actor.h>
+struct Interval
 {
-public:
-    BaseMqMessageCollector(zmq::context_t *mContext)
-    {
-        m_context=mContext;
-        m_issocket=new zmq::socket_t(*m_context,ZMQ_DEALER);
-        m_issocket->connect("ipc://routing.ipc");
-    }
-    inline void Handler(const BaseMqMessage &message, const Theron::Address /*from*/)
-    {
-        MqUtil::SendMqMessage(m_issocket,message);
-    }
-
-private:
-    zmq::socket_t *m_issocket;
-    zmq::context_t *m_context;
+    int value;
 };
-class Listener
+class Listener:public Theron::Actor
 {
 public:
-    static const std::string LISTEN_IPC;
-    explicit Listener(zmq::context_t *mContext);
-    void AddDispatcher(std::string msg_type,Theron::ActorRef actor)
-    {
-        m_actorMap.insert(std::make_pair(msg_type,actor));
-    }
-    Theron::Address getReceiveAddr()
-    {
-        receiver.GetAddress();
-    }
-    void AddAddress(std::string msg_type,int sock_type,std::string Address,bool isBind=true);
-    void start();
-    void stop()
-    {
-        run=false;
-    }
+    struct Parameters
+        {
+            Theron::ActorRef listenInter;
+            std::string interAdd;
+            std::string outerAdd;
+            int outerType;
+            bool outerBind;
+        };
+    Listener(Parameters params);
     ~Listener();
+    void LoopHandler(const Interval &msg, const Theron::Address from);
 private:
-    Theron::Receiver receiver;
-    BaseMqMessageCollector collector;
-    std::map<std::string,Theron::ActorRef> m_actorMap;
-    std::string m_cid;
-    std::map<std::string,zmq::socket_t *> m_SockMap;
-    zmq::socket_t m_ilsocket;
-    zmq::context_t *m_context;
-    bool run;
+    void listen(const int timeout);
+    Theron::ActorRef m_listenInter;
+    zmq::pollitem_t *m_items;
+    zmq::socket_t *m_olsocket;
+    zmq::socket_t *m_ilsocket;
 };
 
 #endif // LISTENACTOR_H

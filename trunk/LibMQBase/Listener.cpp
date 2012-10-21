@@ -3,91 +3,71 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <sstream>
 #include "Listener.h"
-const std::string Listener::LISTEN_IPC="ipc://listener.ipc";
-Listener::Listener(zmq::context_t *mContext):collector(mContext),m_ilsocket(*m_context,ZMQ_DEALER),run(true)
+#include "ContextManager.h"
+Listener::Listener(Parameters params)
 {
-    receiver.RegisterHandler(&collector, &BaseMqMessageCollector::Handler);
-    m_context=mContext;
-    m_ilsocket.bind(LISTEN_IPC.c_str());
-}
-Listener::~Listener()
-{
-    for(std::map<std::string,zmq::socket_t *>::iterator it=m_SockMap.begin();it!=m_SockMap.end();++it)
-    {
-        delete it->second;
-    }
-}
- void Listener::AddAddress(std::string msg_type,int sock_type,std::string Address,bool isBind)
-{
-    zmq::socket_t *tmpSocket=new zmq::socket_t(*m_context,sock_type);
+    RegisterHandler(this, &Listener::LoopHandler);
+    ContextManager *cm=ContextManager::Instance();
+
+    m_ilsocket=new zmq::socket_t(*(cm->getZmqContext()),ZMQ_DEALER);
+    m_ilsocket->connect(params.interAdd.c_str());
+
+    m_olsocket=new zmq::socket_t(*(cm->getZmqContext()),params.outerType);
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
     std::stringstream ss;
     ss<<uuid;
-    m_cid=ss.str();
-    tmpSocket->setsockopt( ZMQ_IDENTITY, m_cid.data(), m_cid.size());
-    if(isBind)
-        tmpSocket->bind(Address.c_str());
+    std::string cid=ss.str();
+    m_olsocket->setsockopt( ZMQ_IDENTITY, cid.data(), cid.size());
+
+    if(params.outerBind)
+        m_olsocket->bind(params.outerAdd.c_str());
     else
-        tmpSocket->connect(Address.c_str());
-    m_SockMap.insert(std::make_pair(msg_type,tmpSocket));
+        m_olsocket->connect(params.outerAdd.c_str());
+
+    m_listenInter=params.listenInter;
+
+    m_items=new zmq::pollitem_t[2];
+    m_items[0]= { *m_ilsocket, 0, ZMQ_POLLIN, 0 };
+    m_items[1]= { *m_olsocket, 0, ZMQ_POLLIN, 0 };
 }
-void Listener::start()
+Listener::~Listener()
 {
-    int map_size=m_SockMap.size();
-    if(map_size>0)
+    delete m_ilsocket;
+    delete m_olsocket;
+    delete [] m_items;
+}
+void Listener::LoopHandler(const Interval &msg, const Theron::Address from)
+{
+    std::cout<<"loop.......\n";
+    listen(msg.value);
+    Send(msg,from);
+}
+void Listener::listen(const int timeout)
+{
+    zmq::poll (m_items, 2, -1);
+    if (m_items [0].revents & ZMQ_POLLIN)
     {
-        zmq::pollitem_t *items=new zmq::pollitem_t[map_size+1];
-        items[0]={ m_ilsocket, 0, ZMQ_POLLIN, 0 };
-
-        std::map<int,std::string> indexMap;
-        int i=1;
-        for(std::map<std::string,zmq::socket_t *>::iterator it=m_SockMap.begin();it!=m_SockMap.end();++it,i++)
+        BaseMqMessage mq_msg=MqUtil::RecvMqMessage(m_ilsocket);
+        std::cout<<"send out"<<std::endl;
+        mq_msg.print();
+        if(mq_msg.getMsg().size()>0)
         {
-            zmq::pollitem_t item={*(it->second),0,ZMQ_POLLIN, 0};
-            items[i]=item;
-            indexMap.insert(std::make_pair(i,it->first));
+            std::string type=mq_msg.getHeadAtt("type");
+            if(type.length()>0)
+            {
+                MqUtil::SendMqMessage(m_olsocket,mq_msg);
+            }
         }
-        while(run)
+    }
+
+    if (m_items [1].revents & ZMQ_POLLIN)
+    {
+        BaseMqMessage mq_msg=MqUtil::RecvMqMessage(m_olsocket);
+        std::cout<<"recv"<<std::endl;
+        mq_msg.print();
+        if(mq_msg.getMsg().size()>0)
         {
-            zmq::poll (items, map_size+1, -1);
-            if (items [0].revents & ZMQ_POLLIN)
-            {
-                BaseMqMessage mq_msg=MqUtil::RecvMqMessage(&m_ilsocket);
-                if(mq_msg.getMsg().size()>0)
-                {
-                    std::string type=mq_msg.getHeadAtt("type");
-                    if(type.length()>0)
-                    {
-                        std::map<std::string,zmq::socket_t *>::iterator fit=m_SockMap.find(type);
-                        if(fit!=m_SockMap.end())
-                        {
-                            MqUtil::SendMqMessage(fit->second,mq_msg);
-                        }
-                    }
-                }
-            }
-            for(std::map<int,std::string>::iterator it=indexMap.begin();it!=indexMap.end();++it)
-            {
-                if (items [it->first].revents & ZMQ_POLLIN)
-                {
-                    std::map<std::string,zmq::socket_t *>::iterator fit=m_SockMap.find(it->second);
-                    if(fit!=m_SockMap.end())
-                    {
-                        BaseMqMessage mq_msg=MqUtil::RecvMqMessage(fit->second);
-                        if(mq_msg.getMsg().size()>0)
-                        {
-                            std::map<std::string,Theron::ActorRef>::iterator ait=m_actorMap.find(it->second);
-                            if(ait!=m_actorMap.end())
-                            {
-                                ait->second.Push(mq_msg,receiver.GetAddress());
-                            }
-
-                        }
-                    }
-                }
-            }
-
+            Send(mq_msg,m_listenInter.GetAddress());
         }
-        delete [] items;
     }
 }

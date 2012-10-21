@@ -15,7 +15,9 @@
 enum ErrorCode
 {
     no_error= 0,
-    UnKnownActor=10001
+    UnKnownActor=10001,
+    UnKnownMsg=10002,
+    TimeOut=10003
 };
 /**
  *
