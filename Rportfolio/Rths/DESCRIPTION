@@ -1,0 +1,17 @@
+Package: Rths
+Type: Package
+Title: Rths R call
+Version: 0.1.1
+Date: $Date: 2010-07-28 20:24:09 -0500 (Wed, 28 Jul 2010) $
+Author: xiaofei
+Maintainer: xiaofei
+	<xiaofei@163.com>
+Description: 
+Depends: R (>= 2.11.0), Rcpp (>= 0.8.4), timeDate, timeSeries
+LinkingTo: Rcpp
+Suggests: RUnit
+SystemRequirements: GNU make
+License: GPL (>= 2)
+Packaged: 2010-07-29 21:41:46 UTC; edd
+Repository: CRAN
+Date/Publication: 2010-07-30 05:02:02

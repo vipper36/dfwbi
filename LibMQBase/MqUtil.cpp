@@ -1,4 +1,5 @@
 #include "MqUtil.h"
+#include "ContextManager.h"
 bool MqUtil::SendMqMessage(zmq::socket_t *socket,const MqMessage &msg)
 {
     bool headSend=true;
