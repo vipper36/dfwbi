@@ -1,55 +1,40 @@
 #ifndef _ACTOR_CREATOR_
 #define _ACTOR_CREATOR_
 #include "dllapi.h"
-#include "PluginBase.h"
+#include <string>
+#include "BaseException.h"
+#include "ContextManager.h"
 typedef void* (*DLLFUN)(void* param);
 class PluginParam
 {
+    public:
     std::string name;
-    Theron::Framework *m_framework;
+    int count;
+    Theron::Framework *framework;
+    Theron::Address listenInterAdd;
 };
-class ActorCreator<Param>
+template<typename Param>
+class ActorCreator
 {
-private:
-    std::string dll_path;
-    HINSTANCE funHandle;
 public:
     ActorCreator()
-        :dll_path(),
-         funHandle(NULL)
     {
     }
-    void setPath(const std::string &path)
+    Theron::ActorRef *operator()(const std::string &path,const std::string &createName,const std::string &regName,Param &param)
     {
-        if(dll_path.length()>0&&funHandle!=NULL)
-        {
-            myFreeLibrary(funHandle);
-        }
-        dll_path=path;
-        funHandle=myLoadLibrary(const_cast<char*>(dll_path.c_str()));
-        if (funHandle==NULL)
-        {
-            throw BaseException(UnKnownActor, "Unknown Actor" );
-        }
-    }
-    ActorCreator(const std::string &path)
-        :dll_path(path),
-         funHandle(NULL)
-    {
-        funHandle=myLoadLibrary(const_cast<char*>(dll_path.c_str()));
-        if (funHandle==NULL)
-        {
-            throw BaseException(UnKnownActor, "Unknown Actor" );
-        }
-    }
-    Theron::ActorRef *operator()(const std::string &funName,Param &param)
-    {
-
-        DLLFUN fun=(DLLFUN)myGetProcAddress(funHandle,const_cast<char *>(funName.c_str()));
+        ContextManager *cm=ContextManager::Instance();
+        HINSTANCE funHandle=cm->getFunHandler(path);
+        DLLFUN fun=(DLLFUN)myGetProcAddress(funHandle,const_cast<char *>(createName.c_str()));
         if (fun==NULL)
         {
             throw BaseException(UnKnownActor, "Error Actor Type" );
         }
+        DLLFUN regfun=(DLLFUN)myGetProcAddress(funHandle,const_cast<char *>(regName.c_str()));
+        if (regfun==NULL)
+        {
+            throw BaseException(UnKnownActor, "Error Actor Type" );
+        }
+        regfun((void*)cm);
         Theron::ActorRef *ret=(Theron::ActorRef *)fun((void*)&param);
         if (ret==NULL)
         {
@@ -59,7 +44,7 @@ public:
     }
     ~ActorCreator()
     {
-        myFreeLibrary(funHandle);
+
     }
 };
 #endif

@@ -9,6 +9,7 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 #include "MsgFactory.h"
+#include "ContextManager.h"
 class MqMessage
 {
 public:
@@ -139,7 +140,8 @@ public:
 
     virtual void setMsg(std::string &msg)
     {
-        MsgFactory *factory=MsgFactory::Instance();
+        ContextManager *cm=ContextManager::Instance();
+        MsgFactory *factory=cm->GetMsgFactory();
         m_msg=factory->CreateMSG(msg);
     }
 

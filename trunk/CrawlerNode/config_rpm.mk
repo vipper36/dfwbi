@@ -18,7 +18,7 @@ IDL=$(GECKO_SDK_PATH)/bin/xpidl
 # #include "mozilla-config.h" to each of your .cpp files. 
 GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/mozilla-config.h 
 
-IDL_INCLUDE= -I $(GECKO_SDK_PATH)/include -I $(GECKO_SDK_PATH)/sdk/include
+IDL_INCLUDE= -I $(GECKO_SDK_PATH)/include -I $(GECKO_SDK_PATH)/sdk/include -I ../include
 GECKO_INCLUDES =-I $(GECKO_SDK_PATH)/include	\
 		-I $(GECKO_SDK_PATH)/sdk/include	\
 		-I /usr/include/nspr4/			\

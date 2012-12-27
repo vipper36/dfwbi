@@ -1,0 +1,13 @@
+useDynLib(Rths)
+
+export(thsInit
+)
+export(thsDay
+)
+export(thsMin
+)
+export(thsMinOfDay
+)
+
+#importFrom( utils, capture.output )
+

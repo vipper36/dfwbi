@@ -13,7 +13,7 @@ GECKO_COM = $(GECKO_SDK_PATH)/bin/components/
 # #include "mozilla-config.h" to each of your .cpp files. 
 GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/mozilla-config.h 
 
-IDL_INCLUDE=-I /usr/local/xulrunner-sdk/idl
+IDL_INCLUDE=-I /usr/local/xulrunner-sdk/idl -I ../include
 GECKO_INCLUDES =-I $(GECKO_SDK_PATH)/sdk/include	\
 		-I $(GECKO_SDK_PATH)/include/xpcom	\
 		-I $(GECKO_SDK_PATH)/include/nspr	\

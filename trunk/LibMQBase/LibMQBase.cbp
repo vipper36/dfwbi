@@ -39,7 +39,6 @@
 			<Add option="-D_XLNX64" />
 			<Add directory="/usr/local/include/External" />
 		</Compiler>
-		<Unit filename="ActorCreator.cpp" />
 		<Unit filename="ActorCreator.h" />
 		<Unit filename="BaseDispatchActor.h" />
 		<Unit filename="BaseException.h" />
@@ -50,13 +49,14 @@
 		<Unit filename="ListenInter.h" />
 		<Unit filename="Listener.cpp" />
 		<Unit filename="Listener.h" />
+		<Unit filename="MqClientUtil.cpp" />
+		<Unit filename="MqClientUtil.h" />
 		<Unit filename="MqMessage.h" />
 		<Unit filename="MqUtil.cpp" />
 		<Unit filename="MqUtil.h" />
 		<Unit filename="MsgClient.h" />
 		<Unit filename="MsgFactory.cpp" />
 		<Unit filename="MsgFactory.h" />
-		<Unit filename="PluginBase.h" />
 		<Unit filename="SnDispachActor.h" />
 		<Unit filename="SubPubActor.h" />
 		<Unit filename="ValueUtil.h" />

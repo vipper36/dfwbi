@@ -1,6 +1,7 @@
 #ifndef DISPATCHACTOR_H
 #define DISPATCHACTOR_H
 #include "ContextManager.h"
+#include "MqMessage.h"
 template<typename Actor>
 class DispatchActor: public Theron::Actor
 {
@@ -24,10 +25,12 @@ public:
         RegisterHandler(this, &DispatchActor<Actor>::MQMessageHandler);
         RegisterHandler(this, &DispatchActor<Actor>::WMessageHandler);
     }
+
     virtual ~DispatchActor() {}
 
     void MQMessageHandler(const BaseMqMessage &msg, const Theron::Address from)
     {
+
         ActorMqMessage aMsg(msg);
         MsgWrapper wMsg(aMsg.getActorMsg());
         if(m_cit==m_actorList.end())
@@ -38,7 +41,9 @@ public:
     void WMessageHandler(const MsgWrapper &msg, const Theron::Address from)
     {
         ActorMqMessage aMsg(msg.getMsg());
-        Send(aMsg,m_source);
+        aMsg.addHeadAtt("type",msg.getMsg()->getMsgType());
+        BaseMqMessage bMsg(aMsg);
+        Send(bMsg,m_source);
     }
 private:
     Theron::Address m_source;
