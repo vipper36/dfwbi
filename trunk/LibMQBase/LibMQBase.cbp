@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/libMQBase" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/MQBase" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -18,7 +18,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/libMQBase" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/MQBase" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -38,7 +38,14 @@
 			<Add option="-DTHERON_USE_BOOST_THREADS=1" />
 			<Add option="-D_XLNX64" />
 			<Add directory="/usr/local/include/External" />
+			<Add directory="/usr/lib64/R/include" />
+			<Add directory="/usr/lib64/R/library/RInside/include" />
+			<Add directory="/usr/lib64/R/library/Rcpp/include" />
 		</Compiler>
+		<Linker>
+			<Add library="RInside" />
+			<Add directory="/usr/lib64/R/library/RInside/lib" />
+		</Linker>
 		<Unit filename="ActorCreator.h" />
 		<Unit filename="BaseDispatchActor.h" />
 		<Unit filename="BaseException.h" />
@@ -62,6 +69,8 @@
 		<Unit filename="ValueUtil.h" />
 		<Unit filename="dllapi.cpp" />
 		<Unit filename="dllapi.h" />
+		<Unit filename="embedR.cpp" />
+		<Unit filename="embedR.h" />
 		<Unit filename="os.h" />
 		<Extensions>
 			<code_completion />

@@ -177,17 +177,17 @@ RcppExport SEXP thsDay(SEXP code,SEXP marcket,SEXP start)
 
   return NDF;
 }
-RcppExport SEXP thsMin(SEXP code,SEXP marcket,SEXP start)
+Rcpp::DataFrame readMin(std::string day,std::string path)
 {
-  Rcpp::DataFrame NDF;
-  std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min/"+Rcpp::as<std::string>(code)+".min";
-  std::string startStr;
+    Rcpp::DataFrame NDF;
+
+    std::string startStr;
         
-  std::string tmpStr=Rcpp::as<std::string>(start);
+
   boost::gregorian::date startDate;
-  if(tmpStr.length()>0)
+  if(day.length()>0)
     {
-      startDate=boost::gregorian::date(boost::gregorian::from_string(tmpStr));
+      startDate=boost::gregorian::date(boost::gregorian::from_string(day));
     }
 
   std::list<KData> dataList=GetFileData(path,"min");
@@ -230,17 +230,15 @@ RcppExport SEXP thsMin(SEXP code,SEXP marcket,SEXP start)
 
   return NDF;
 }
-RcppExport SEXP thsMinOfDay(SEXP code,SEXP marcket,SEXP day)
+Rcpp::DataFrame readMinofDay(std::string day,std::string path)
 {
   Rcpp::DataFrame NDF;
-  std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min/"+Rcpp::as<std::string>(code)+".min";
+
   std::string startStr;
-        
-  std::string tmpStr=Rcpp::as<std::string>(day);
   boost::gregorian::date startDate;
-  if(tmpStr.length()>0)
+  if(day.length()>0)
     {
-      startDate=boost::gregorian::date(boost::gregorian::from_string(tmpStr));
+      startDate=boost::gregorian::date(boost::gregorian::from_string(day));
     }
 
   std::list<KData> dataList=GetFileData(path,"min");
@@ -282,4 +280,29 @@ RcppExport SEXP thsMinOfDay(SEXP code,SEXP marcket,SEXP day)
 			    Rcpp::Named("money")=moneyV);
 
   return NDF;
+}
+
+RcppExport SEXP thsMin(SEXP code,SEXP marcket,SEXP start)
+{
+    std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min/"+Rcpp::as<std::string>(code)+".min";
+    std::string tmpStr=Rcpp::as<std::string>(start);
+    return readMin(tmpStr,path);
+}
+RcppExport SEXP thsMinOfDay(SEXP code,SEXP marcket,SEXP day)
+{
+    std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min/"+Rcpp::as<std::string>(code)+".min";
+    std::string tmpStr=Rcpp::as<std::string>(day);
+    return readMinofDay(tmpStr,path);
+}
+RcppExport SEXP thsMin5(SEXP code,SEXP marcket,SEXP start)
+{
+    std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min5/"+Rcpp::as<std::string>(code)+".mn5";
+    std::string tmpStr=Rcpp::as<std::string>(start);
+    return readMin(tmpStr,path);
+}
+RcppExport SEXP thsMin5OfDay(SEXP code,SEXP marcket,SEXP day)
+{
+    std::string path=DIR+"/"+Rcpp::as<std::string>(marcket)+"/min5/"+Rcpp::as<std::string>(code)+".mn5";
+    std::string tmpStr=Rcpp::as<std::string>(day);
+    return readMinofDay(tmpStr,path);
 }

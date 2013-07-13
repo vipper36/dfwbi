@@ -176,6 +176,7 @@ int main(int argc,char**argv)
                     }
                     if(manName.length()==0)
                         manName=manType;
+		    std::cout<<"actor type:"<<manType<<std::endl;
                     manActor=factory->CreateActor(manType);
                     manActor.Push(MapMessage(MapMessage::ATTR,manAttMap),receiver.GetAddress());
                     manActor.Push(AddressMessage(AddressMessage::PARENT,"",receiver.GetAddress()),receiver.GetAddress());
