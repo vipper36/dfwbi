@@ -1,7 +1,7 @@
-BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization -lboost_regex
-BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/
+BOOSTLIB=-L/usr/local/lib -lboost_system -lboost_program_options -ltherond -lboost_thread -lboost_date_time -lboost_serialization -lboost_regex -lpthread -lboost_signals
+BOOSTINC= -I/usr/local/include -I/usr/include/libxml++-2.6/ -I/usr/include/glibmm-2.4 -I/usr/include/glib-2.0 -I/usr/lib64/glibmm-2.4/include/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/libxml++-2.6/include/ -I/usr/local/include/External/
 LOCALINC=-I./stock -I./frame -I./fetch -I./search -I./grammer -I./search/ictclas
-XMLLIB=-lxml++-2.6 -licuuc -lxslt
+XMLLIB=-lxml++-2.6 -licuuc -lxslt -lxml2 -lglibmm-2.4
 #WTLIB=-lwt -lwthttp
 WTLIB=-lwt -lwtfcgi
 FCGILIB=-lfastcgipp -lmysqlclient
@@ -12,8 +12,8 @@ CC=gcc
 AR=ar -r
 CXX=g++
 LINK=ld
-CFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
-CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_USE_BOOST_THREADS=1 -D_DEBUG
+CFLAGS= -g -fPIC -D_XLNX64 -DTHERON_BOOST=1 -D_DEBUG
+CXXFLAGS= -g -fPIC -D_XLNX64 -DTHERON_BOOST=1 -D_DEBUG
 DESC=stockserver
 DESC2=stockonce
 DESC3=tools.fcgi

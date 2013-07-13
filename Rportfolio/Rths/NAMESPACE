@@ -8,6 +8,10 @@ export(thsMin
 )
 export(thsMinOfDay
 )
+export(thsMin5
+)
+export(thsMin5OfDay
+)
 
 #importFrom( utils, capture.output )
 

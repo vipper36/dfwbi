@@ -2,7 +2,7 @@
 #define DISPATCHACTOR_H
 #include "ContextManager.h"
 #include "MqMessage.h"
-template<typename Actor>
+template<typename TActor>
 class DispatchActor: public Theron::Actor
 {
 public:
@@ -18,12 +18,12 @@ public:
         ContextManager *cm=ContextManager::Instance();
         for(int i=0; i<param.count; i++)
         {
-            Theron::ActorRef worker(cm->getTheronContext()->CreateActor<Actor>());
+            Theron::ActorRef worker(cm->getTheronContext()->CreateActor<TActor>());
             m_actorList.push_back(worker);
         }
         m_cit=m_actorList.begin();
-        RegisterHandler(this, &DispatchActor<Actor>::MQMessageHandler);
-        RegisterHandler(this, &DispatchActor<Actor>::WMessageHandler);
+        RegisterHandler(this, &DispatchActor<TActor>::MQMessageHandler);
+        RegisterHandler(this, &DispatchActor<TActor>::WMessageHandler);
     }
 
     virtual ~DispatchActor() {}
