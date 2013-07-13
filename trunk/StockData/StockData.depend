@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1373690710 source:/home/xiao/workspace/dfwbi/StockData/main.cpp
+	<iostream>
+	"client.h"
+	"stock.h"
+	"request.h"
+
+1373691014 /home/xiao/workspace/dfwbi/StockData/client.h
+	<boost/asio.hpp>
+	<boost/bind.hpp>
+	<iostream>
+	<queue>
+	<boost/smart_ptr.hpp>
+	<climits>
+	"response.h"
+	"request.h"
+	"ResHandler.h"
+
+1373382663 /home/xiao/workspace/dfwbi/StockData/response.h
+	<boost/smart_ptr.hpp>
+
+1373691277 /home/xiao/workspace/dfwbi/StockData/ResHandler.h
+	<iostream>
+	<boost/iostreams/device/array.hpp>
+	<boost/iostreams/stream.hpp>
+	"mongo/client/dbclient.h"
+	<boost/uuid/sha1.hpp>
+	<sstream>
+	"response.h"
+
+1373385223 /home/xiao/workspace/dfwbi/StockData/stock.h
+	<fstream>
+	<set>
+	<vector>
+	<boost/date_time/gregorian/gregorian.hpp>
+	<boost/date_time/posix_time/posix_time_types.hpp>
+
+1373381768 /home/xiao/workspace/dfwbi/StockData/request.h
+	"stock.h"
+
