@@ -5,7 +5,12 @@
 #include <boost/iostreams/stream.hpp>
 #include "mongo/client/dbclient.h"
 #include <boost/uuid/sha1.hpp>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/device/file.hpp>
 #include <sstream>
+#include <fstream>
 #include "response.h"
 namespace StockMarket
 {
@@ -30,18 +35,51 @@ public:
         if(res.getHead().cmd==StockMarket::CMD_STOCK_LIST)
         {
             boost::iostreams::stream_buffer<boost::iostreams::array_source>  buf(res.getData().get(), res.getHead().len1);
-            std::istream in(&buf);
-            HandleList(in);
+            if(res.getHead().zip==0x0c)
+            {
+                std::istream in(&buf);
+                HandleList(in);
+            }else
+            {
+                boost::iostreams::filtering_istream in;
+                in.push(boost::iostreams::zlib_decompressor());
+                in.push(buf);
+                HandleList(in);
+            }
+
         }
         else if(res.getHead().cmd==StockMarket::CMD_STOCK_KLINE&&res.getHead().len1>100)
         {
+
             boost::iostreams::stream_buffer<boost::iostreams::array_source>  buf(res.getData().get(), res.getHead().len1);
-            std::istream in(&buf);
-            if(seqCode.find(res.getHead().seq_id)!=seqCode.end())
+            if(res.getHead().zip==0x0c)
             {
-                std::cout << "seq:"<<res.getHead().seq_id<<" code:"<<seqCode[res.getHead().seq_id]<<"..\n";
-                HandleKLine(in,seqCode[res.getHead().seq_id]);
+                std::istream in(&buf);
+                if(seqCode.find(res.getHead().seq_id)!=seqCode.end())
+                {
+                    std::cout << "seq:"<<res.getHead().seq_id<<" code:"<<seqCode[res.getHead().seq_id]<<"..\n";
+                    HandleKLine(in,seqCode[res.getHead().seq_id]);
+                }
+            }else
+            {
+//                stringstream ss;
+//                ss<<res.getHead().seq_id;
+//                boost::iostreams::filtering_ostream fos;
+//                fos.push(boost::iostreams::zlib_decompressor());
+//                fos.push(boost::iostreams::file_sink(ss.str().c_str()));
+//                boost::iostreams::write(fos, res.getData().get(), res.getHead().len1);
+
+                boost::iostreams::filtering_istream in;
+                in.push(boost::iostreams::zlib_decompressor());
+                in.push(buf);
+                if(seqCode.find(res.getHead().seq_id)!=seqCode.end())
+                {
+                    std::cout << "seq:"<<res.getHead().seq_id<<" code:"<<seqCode[res.getHead().seq_id]<<"..\n";
+                    HandleKLine(in,seqCode[res.getHead().seq_id]);
+                }
+
             }
+
         }
 
     }
@@ -98,7 +136,7 @@ private:
         while(!in.eof())
         {
             last.date=readInt(in);
-            if(last.date>19000000)
+            if(validDate(last.date))
             {
                 int dltaopen=readLong(in);
                 int dltaclose=readLong(in);
@@ -117,15 +155,28 @@ private:
                 last.high=last.open+dltahigh;
                 last.low=last.open+dltalow;
                 last.mount=mount;
-//                std::cout << "date:"<<last.date;
-//                std::cout << "open:"<<last.open<<"----"<<dltaopen<<"\n";
-//                std::cout << "close:"<<last.close<<"----"<<dltaclose<<"\n";
-//                std::cout << "high:"<<last.high<<"----"<<dltahigh<<"\n";
-//                std::cout << "low:"<<last.low<<"----"<<dltalow<<"\n";
+                std::cout << "date:"<<last.date;
+                std::cout << "open:"<<last.open<<"----"<<dltaopen<<"\n";
+                std::cout << "close:"<<last.close<<"----"<<dltaclose<<"\n";
+                std::cout << "high:"<<last.high<<"----"<<dltahigh<<"\n";
+                std::cout << "low:"<<last.low<<"----"<<dltalow<<"\n";
                 insertKline(code,last);
             }
 
         }
+    }
+    bool validDate(int date)
+    {
+        int year=date/10000;
+        int month=(date-year*10000)/100;
+        int day=date-year*10000-month*100;
+        if(year<1950||year>2100)
+            return false;
+        if(month>12||month<1)
+            return false;
+        if(day>31||day<1)
+            return false;
+
     }
     std::string sha1(std::string src)
     {

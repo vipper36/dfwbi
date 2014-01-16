@@ -1,13 +1,10 @@
 include ../config.mk
-GECKO_DEFINES  = -DXPCOM_GLUE_USE_NSPR
-
-
 IDLH= nsIJsCom.idl
 all: idl
 	@echo $@ update to date
-idl:$(IDLH) $(IDLI) 
-	$(IDL) -m typelib -w -v $(IDL_INCLUDE) $(IDLH)
+idl:$(IDLH) 
+	$(typelib) $(IDL_INCLUDE) $(IDLH).idl -o $(IDLH).xpt
 install:
-	@cp *.js *.xpt $(GECKO_COM)
+	@cp *.js *.xpt ../SetGUI/components
 clean:
 	@-rm -rf $(DESC) $(DESD) $(DESE) *.o *.o *.a *~ "*#" 2>/dev/null

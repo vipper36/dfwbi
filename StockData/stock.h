@@ -76,6 +76,8 @@ struct MarketInfo
     }
     static short get_market_from_code(const char* pCode)
     {
+        if(strcmp(pCode,"99999")==0||strcmp(pCode,"399300")==0||strcmp(pCode,"399001")==0)
+            return 0;
         if(pCode[0] == '0')
         {
             if(pCode[1] == '0')
@@ -148,6 +150,7 @@ struct Transact
         vol=t.vol;
         count=t.count;
         bs=t.bs;
+        return true;
     }
 };
 struct Bid			// ел©з

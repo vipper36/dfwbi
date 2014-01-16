@@ -25,16 +25,53 @@ int main(int argc, char* argv[])
             req.header.seq_id=c.getSeq(StockMarket::CMD_STOCK_LIST);
             c.send(req);
         }
-//        std::string code="000005";
-//        uint seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
-//        std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
-//
-//        StockMarket::StockKLineStruct req(code,1,4,seq);
-//        c.send(req);
+
         if(strcmp("false",argv[3])==0)
         {
             c.setType(false);
+            std::string code="999999";
+            uint seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+            std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+            StockMarket::StockKLineStruct req1(code,1,4,seq);
+            c.send(req1);
+            code="399300";
+            seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+            std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+            StockMarket::StockKLineStruct req2(code,1,4,seq);
+            c.send(req2);
+            code="399001";
+            seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+            std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+            StockMarket::StockKLineStruct req3(code,1,4,seq);
+            c.send(req3);
+        }else
+        {
+            for(int i=12; i>=0; i--)
+            {
+                std::string code="999999";
+                uint seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+                std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+                StockMarket::StockKLineStruct req1(code,1,4,seq,i);
+                c.send(req1);
+                code="399300";
+                seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+                std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+                StockMarket::StockKLineStruct req2(code,1,4,seq,i);
+                c.send(req2);
+                code="399001";
+                seq=c.getSeq(StockMarket::CMD_STOCK_KLINE);
+                std::cout << "query code: " << code <<"seq:"<<seq<< "\n";
+
+                StockMarket::StockKLineStruct req3(code,1,4,seq,i);
+                c.send(req3);
+            }
         }
+
         c.start(r.resolve(tcp::resolver::query(argv[1], argv[2])));
 
         io_service.run();

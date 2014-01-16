@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1373690710 source:/home/xiao/workspace/dfwbi/StockData/main.cpp
+1381801830 source:/home/xiao/workspace/dfwbi/StockData/main.cpp
 	<iostream>
 	"client.h"
 	"stock.h"
 	"request.h"
 
-1373691014 /home/xiao/workspace/dfwbi/StockData/client.h
+1381630585 /home/xiao/workspace/dfwbi/StockData/client.h
 	<boost/asio.hpp>
 	<boost/bind.hpp>
 	<iostream>
@@ -19,22 +19,27 @@
 1373382663 /home/xiao/workspace/dfwbi/StockData/response.h
 	<boost/smart_ptr.hpp>
 
-1373691277 /home/xiao/workspace/dfwbi/StockData/ResHandler.h
+1381846723 /home/xiao/workspace/dfwbi/StockData/ResHandler.h
 	<iostream>
 	<boost/iostreams/device/array.hpp>
 	<boost/iostreams/stream.hpp>
 	"mongo/client/dbclient.h"
 	<boost/uuid/sha1.hpp>
+	<boost/iostreams/filtering_streambuf.hpp>
+	<boost/iostreams/filtering_stream.hpp>
+	<boost/iostreams/filter/zlib.hpp>
+	<boost/iostreams/device/file.hpp>
 	<sstream>
+	<fstream>
 	"response.h"
 
-1373385223 /home/xiao/workspace/dfwbi/StockData/stock.h
+1381681733 /home/xiao/workspace/dfwbi/StockData/stock.h
 	<fstream>
 	<set>
 	<vector>
 	<boost/date_time/gregorian/gregorian.hpp>
 	<boost/date_time/posix_time/posix_time_types.hpp>
 
-1373381768 /home/xiao/workspace/dfwbi/StockData/request.h
+1379004118 /home/xiao/workspace/dfwbi/StockData/request.h
 	"stock.h"
 

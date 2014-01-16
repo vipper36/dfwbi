@@ -3,20 +3,21 @@ AR=ar -r
 CXX=g++
 
 
-DEF=-DXUL_BIN=\"/usr/lib64/xulrunner-1.9.1.5/\" -DXUL_PATH=\"/usr/lib64/xulrunner-devel-1.9.1.5/lib/libxpcom.so\"
+DEF=-DXUL_BIN=\"/usr/lib64/xulrunner-devel-17.0.8/\" -DXUL_PATH=\"/usr/lib64/xulrunner-devel-17.0.8/lib/libxpcom.so\"
 
 CXXFLAG=-g -fno-rtti -fno-exceptions -fPIC -fshort-wchar
 
 CPPFLAGS += -g -fno-rtti -fno-exceptions  -fPIC -shared
 
 # Change this to point at your Gecko SDK directory. 
-GECKO_SDK_PATH = /usr/lib64/xulrunner-devel-1.9.1.5/
+GECKO_SDK_PATH = /usr/lib64/xulrunner-devel-17.0.8/
 GECKO_COM = $(GECKO_SDK_PATH)/bin/components/
-IDL=$(GECKO_SDK_PATH)/bin/xpidl
+header=$(GECKO_SDK_PATH)/sdk/bin/header.py
+typelib=$(GECKO_SDK_PATH)/sdk/bin/typelib.py
 # GCC only define which allows us to not have to #include mozilla-config 
 # in every .cpp file.  If your not using GCC remove this line and add 
 # #include "mozilla-config.h" to each of your .cpp files. 
-GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/mozilla-config.h 
+GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/xpcom-config.h 
 
 IDL_INCLUDE= -I $(GECKO_SDK_PATH)/include -I $(GECKO_SDK_PATH)/sdk/include -I ../include
 GECKO_INCLUDES =-I $(GECKO_SDK_PATH)/include	\

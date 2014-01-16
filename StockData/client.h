@@ -153,9 +153,9 @@ private:
             // Wait 10 seconds before sending the next heartbeat.
             heartbeat_timer_.expires_from_now(boost::posix_time::seconds(2));
             heartbeat_timer_.async_wait(boost::bind(&client::start_heartbeat, this));
+            StockMarket::MarketInfo::MarketType m=handler.getMarcket();
             while(true)
             {
-                StockMarket::MarketInfo::MarketType m=handler.getMarcket();
                 if(m<0)
                     break;
                 std::cout << "query marcket: " << m<<" offset"<< handler.getOffset(m)<< "\n";
@@ -181,9 +181,13 @@ private:
                 for(int i=0; i<=12; i++)
                 {
                     std::string code=handler.getStock();
-                    std::cout << "query code: " << code << "\n";
-                    StockMarket::StockKLineStruct req(code,1,4,getSeq(StockMarket::CMD_STOCK_KLINE));
-                    send(req);
+                    if(code.length()>0)
+                    {
+                        std::cout << "query code: " << code << "\n";
+                        StockMarket::StockKLineStruct req(code,1,4,getSeq(StockMarket::CMD_STOCK_KLINE));
+                        send(req);
+                    }
+
                 }
             }
 
