@@ -149,8 +149,7 @@ open:function(url,script){
         this.listener.urlscript.push(us);
     }
 };
-var components = [JsCom];
-if ("generateNSGetFactory" in XPCOMUtils)
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory(components);  // Firefox 4.0 and higher
+if (XPCOMUtils.generateNSGetFactory)
+  var NSGetFactory = XPCOMUtils.generateNSGetFactory([JsCom]);  // Firefox 4.0 and higher
 else
-  var NSGetModule = XPCOMUtils.generateNSGetModule(components);    // Firefox 3.x
+  var NSGetModule = XPCOMUtils.generateNSGetModule([JsCom]);    // Firefox 3.x

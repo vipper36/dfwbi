@@ -74,8 +74,8 @@ struct StockHeartBeatStruct
 struct StockListStruct
 {
     StockListStruct(MarketInfo::MarketType market_code, ushort record_offset, ushort record_count,uint seq=0)
-        : header(CMD_STOCK_LIST, sizeof(StockListStruct),seq),
-          offset(record_offset), count(record_count),unknown1(0),unknown2(0)
+        : header(CMD_STOCK_LIST, sizeof(StockListStruct),seq),unknown1(0),
+          offset(record_offset), count(record_count),unknown2(0)
     {
         block = MarketInfo::get_block_from_market_type(market_code);
     }

@@ -1,9 +1,10 @@
 CC=gcc
 AR=ar -r
-CXX=g++
-CXXFLAG=-g -g -fno-rtti -fno-exceptions -fPIC -fshort-wchar
-IDL=/usr/local/xulrunner-sdk/bin/xpidl
-CPPFLAGS +=-g -g -fno-rtti -fno-exceptions  -fPIC -shared
+CXX=g++ 
+CXXFLAG +=-std=gnu++0x -g -fno-rtti -fPIC -fshort-wchar -D__STDC_LIMIT_MACROS
+header=$(GECKO_SDK_PATH)/sdk/bin/header.py
+typelib=$(GECKO_SDK_PATH)/sdk/bin/typelib.py
+CPPFLAGS +=-std=gnu++0x -g -fno-rtti  -fPIC -shared -D__STDC_LIMIT_MACROS
 
 # Change this to point at your Gecko SDK directory. 
 GECKO_SDK_PATH = /usr/local/xulrunner-sdk
@@ -11,10 +12,11 @@ GECKO_COM = $(GECKO_SDK_PATH)/bin/components/
 # GCC only define which allows us to not have to #include mozilla-config 
 # in every .cpp file.  If your not using GCC remove this line and add 
 # #include "mozilla-config.h" to each of your .cpp files. 
-GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/mozilla-config.h 
+GECKO_CONFIG_INCLUDE = -include $(GECKO_SDK_PATH)/include/xpcom-config.h 
 
 IDL_INCLUDE=-I /usr/local/xulrunner-sdk/idl -I ../include
 GECKO_INCLUDES =-I $(GECKO_SDK_PATH)/sdk/include	\
+		-I $(GECKO_SDK_PATH)/include		\
 		-I $(GECKO_SDK_PATH)/include/xpcom	\
 		-I $(GECKO_SDK_PATH)/include/nspr	\
 		-I $(GECKO_SDK_PATH)/include/string	\
@@ -44,7 +46,7 @@ GECKO_INCLUDES =-I $(GECKO_SDK_PATH)/sdk/include	\
 
 GECKO_LDFLAGS = -L $(GECKO_SDK_PATH)/lib 	\
 		-L $(GECKO_SDK_PATH)/lib -lplds4 -lplc4 -lnspr4	\
-		-L $(GECKO_SDK_PATH)/lib -lxpcomglue_s
+		-L $(GECKO_SDK_PATH)/lib -lxpcomglue_s -lmozalloc -lxul
 
 MAIN_INCLUDES =-I $(GECKO_SDK_PATH)/sdk/include	\
 		-I $(GECKO_SDK_PATH)/include		\
@@ -71,4 +73,4 @@ MAIN_INCLUDES =-I $(GECKO_SDK_PATH)/sdk/include	\
 		-I /usr/include/cairo/			\
 		-I ../include/
 MAIN_LDFLAGS =	-L $(GECKO_SDK_PATH)/lib -lplds4 -lplc4	\
-		-L $(GECKO_SDK_PATH)/lib -lxpcomglue -lxpcom -lnspr4 -lmozjs -lxul
+		-L $(GECKO_SDK_PATH)/lib -lxpcomglue -lxpcom -lnspr4 -lmozjs -lxul -lmozalloc
