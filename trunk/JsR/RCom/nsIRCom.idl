@@ -1,0 +1,9 @@
+#include "nsISupports.idl"
+interface nsISupportsArray;
+[scriptable, uuid(cc70ea23-ac24-4622-8372-98dba77231e0)]
+interface nsIRCom:nsISupports
+{
+    long connect(in AUTF8String host,in long port);
+    AUTF8String eval(in AUTF8String expr);
+    void close();
+};
