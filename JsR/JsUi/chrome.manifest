@@ -1,0 +1,8 @@
+content jsui chrome/content/
+binary-component components/libRCom.so
+interfaces components/nsIRCom.xpt
+interfaces components/nsIJsCom.xpt
+component {4c7d8c9f-c8bb-4f53-bd5f-3d737302e9a3} components/nsJsCom.js
+contract @xiao.xf.com/JsCom;1 {4c7d8c9f-c8bb-4f53-bd5f-3d737302e9a3}
+contract @com.xiao.xpcom/nsIRCom;1 {cc70ea23-ac24-4622-8372-98dba77231e0}
+
