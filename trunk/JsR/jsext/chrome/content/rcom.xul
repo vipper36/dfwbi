@@ -5,7 +5,7 @@
    id     = "rcom"
    title  = "rCom"
    xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="main.js"/>
+  <script src="chrome://jsext/content/main.js"/>
   
   
   <vbox flex="1">
