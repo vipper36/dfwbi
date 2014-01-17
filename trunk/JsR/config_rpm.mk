@@ -3,14 +3,14 @@ AR=ar -r
 CXX=g++
 
 
-DEF=-DXUL_BIN=\"/usr/lib64/xulrunner-devel-17.0.8/\" -DXUL_PATH=\"/usr/lib64/xulrunner-devel-17.0.8/lib/libxpcom.so\"
+DEF=-DXUL_BIN=\"/usr/lib64/xulrunner-devel-17.0.10/\" -DXUL_PATH=\"/usr/lib64/xulrunner-devel-17.0.10/lib/libxpcom.so\"
 
 CXXFLAG=-g -fno-rtti -fno-exceptions -fPIC -fshort-wchar
 
 CPPFLAGS += -g -fno-rtti -fno-exceptions  -fPIC -shared
 
 # Change this to point at your Gecko SDK directory. 
-GECKO_SDK_PATH = /usr/lib64/xulrunner-devel-17.0.8/
+GECKO_SDK_PATH = /usr/lib64/xulrunner-devel-17.0.10/
 GECKO_COM = $(GECKO_SDK_PATH)/bin/components/
 header=$(GECKO_SDK_PATH)/sdk/bin/header.py
 typelib=$(GECKO_SDK_PATH)/sdk/bin/typelib.py

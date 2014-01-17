@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+   id     = "rcom"
+   title  = "rCom"
+   xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="main.js"/>
+  
+  
+  <vbox flex="1">
+	      <hbox>
+		<label value="jQuery:"/>
+	      </hbox>
+	      <textbox multiline="true" id="testscript-jquery" newlines="pasteintact"
+	      flex="3"/>
+	      <button id="ExecuteWin" label="Execute" oncommand="jsexcutewin();"/>
+  </vbox>
+
+</window>
