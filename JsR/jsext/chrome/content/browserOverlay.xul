@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <menupopup id="viewSidebarMenu">
+    <menuitem key="key_openrcom"
+              observes="viewrcom"/>
+  </menupopup>
+  <keyset id="mainKeyset">
+    <key id="key_openrcom"
+         command="viewrcom"
+         keycode=""/>
+  </keyset>
+  <broadcasterset id="mainBroadcasterSet">
+    <broadcaster id="viewrcom"
+                 autoCheck="false"
+                 label="rCom"
+                 type="checkbox"
+                 group="sidebar"
+                 sidebarurl="chrome://jsext/content/rcom.xul"
+                 sidebartitle="rCom"
+                 oncommand="toggleSidebar('viewrcom');"/>
+  </broadcasterset>
+</overlay>
