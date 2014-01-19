@@ -6,15 +6,47 @@
    title  = "rCom"
    xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script src="chrome://jsext/content/main.js"/>
-  
-  
   <vbox flex="1">
+    <hbox flex="1">
+      <tabbox id="extra-info-tab" flex="1">
+	<tabs id="comment-tab">
+	  <tab label="设置"/>
+	  <tab label="执行脚本"/>
+	</tabs>
+	<tabpanels style="background-color: White;" flex="3">
+	  <tabpanel>
+	    <vbox flex="1">
 	      <hbox>
-		<label value="jQuery:"/>
+		<label value="R服务地址:"/>
+		<textbox multiline="false" id="ipaddr" value="127.0.0.1" newlines="pasteintact" flex="3"/>
+	      </hbox>
+	      <hbox>
+		<label value="R服务端口:"/>
+		<textbox multiline="false" id="port" value="6311" newlines="pasteintact" flex="3"/>
+	      </hbox>
+	      <hbox>
+		<button id="connect" label="连接" oncommand="connR();" flex="3"/>
+		<button id="close" label="关闭" oncommand="closeR();" flex="3" disabled="true"/>
+	      </hbox>
+	    </vbox>
+	  </tabpanel>
+	  <tabpanel>
+	    <vbox flex="1">
+	      <hbox>
+		<label value="编写脚本"/>
 	      </hbox>
 	      <textbox multiline="true" id="testscript-jquery" newlines="pasteintact"
-	      flex="3"/>
-	      <button id="ExecuteWin" label="Execute" oncommand="jsexcutewin();"/>
+		       flex="3"/>
+	      <button id="execute" label="执行脚本" oncommand="jsexcutewin();"/>
+	    </vbox>
+	  </tabpanel>
+	  
+	  
+	</tabpanels>
+      </tabbox>
+    </hbox>
   </vbox>
+  
+  
 
 </window>

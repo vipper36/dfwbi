@@ -114,7 +114,6 @@ WebProgressListener.prototype = {
     }
 }; 
 function JsCom() { 
-    rCom.connect("127.0.0.1",6311);
 }
 
 JsCom.prototype = {
@@ -126,6 +125,7 @@ JsCom.prototype = {
     progress:null,
     listener:null,
     navready:false,
+    rstatus:-1,
     SetBrowerInfo: function(nav,progress) {
         this.nav=nav;
         this.progress=progress;
@@ -160,6 +160,19 @@ JsCom.prototype = {
     open:function(url,script){
         var us=new UrlScript(url,script);
         this.listener.urlscript.push(us);
+    },
+    openR:function(ip,port){
+	this.closeR();
+	var ret=rCom.connect(ip,port);
+	this.rstatus=ret;
+	return ret;
+    },
+    closeR:function(){
+	if(this.rstatus>0)
+	{
+	    rCom.close();
+	    this.rstatus=-1;
+	}
     }
 };
 if (XPCOMUtils.generateNSGetFactory)

@@ -11,3 +11,27 @@ function jsexcutewin() {
 	var script=document.getElementById("testscript-jquery");
      	jsCom.execWinJs(script.value,browser.contentWindow);
 }
+function connR() {
+	var ipaddr=document.getElementById("ipaddr");
+        var port=document.getElementById("port");
+     	var cStatu=jsCom.openR(ipaddr.value,port.value);
+	if(cStatu<0)
+	{
+	    alert("连接出错!");
+	}
+	else
+	{
+            var closeb=document.getElementById("close");
+	    closeb.disabled=false;
+            var openb=document.getElementById("connect");
+	    openb.disabled=true;
+	}	
+}
+function closeR() {
+     	jsCom.closeR();
+        var closeb=document.getElementById("close");
+	closeb.disabled=true;
+        var openb=document.getElementById("connect");
+	openb.disabled=false;
+
+}
