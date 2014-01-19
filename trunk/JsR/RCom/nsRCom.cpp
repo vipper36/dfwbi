@@ -34,6 +34,7 @@ NS_IMETHODIMP nsRCom::Connect(const nsACString & host, int32_t port, int32_t *_r
         rc = new Rconnection(hostStr.get(),port);
         std::cout << hostStr.get()<<":"<<port<< std::endl;
         *_retval=rc->connect();
+        std::cout << "result:"<<*_retval<< std::endl;
         ret=NS_OK;
     }
     catch (...) {

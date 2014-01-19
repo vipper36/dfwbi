@@ -8,4 +8,6 @@ interface nsIJsCom:nsISupports
     AUTF8String execJs(in AUTF8String script);
     AUTF8String execWinJs(in AUTF8String script,in nsIDOMWindow win);
     void open(in AUTF8String url,in AUTF8String script);
+    long openR(in AUTF8String ip,in long port);
+    void closeR();
 };
